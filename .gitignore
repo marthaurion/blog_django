@@ -1,0 +1,4 @@
+config.json
+*.pyc
+*.pyo
+.idea/

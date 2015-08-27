@@ -1,0 +1,2 @@
+- using a config.json file to store settings
+- uses a postgresql database
