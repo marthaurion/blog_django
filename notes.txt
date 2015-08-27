@@ -1,2 +1,9 @@
 - using a config.json file to store settings
+	- this file is located in the root directory (where manage.py is)
 - uses a postgresql database
+	- set up database connection information in the config.json file
+- template structure is from django tutorial
+    - uses a directory in root for global includes and a folder in each app (there's only one right now, blog) for specific templates
+- trying to use virtualenv and virtualenvwrapper to help with maintaining requirements
+    - using a virtualenv named "blog_django"
+    - wasn't super intuitive to install psycopg2 (ended up having to run "easy_install" on the link to the windows executable)
