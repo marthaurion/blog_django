@@ -7,3 +7,8 @@
 - trying to use virtualenv and virtualenvwrapper to help with maintaining requirements
     - using a virtualenv named "blog_django"
     - wasn't super intuitive to install psycopg2 (ended up having to run "easy_install" on the link to the windows executable)
+    
+    
+- initial models for the blog
+    - post: standard stuff here. Title, slug (for link generation), body, publish date, category (foreign key and will be restricted to one), and excerpt (for the front page).
+    - category: basic tree organization for categories. Title for category, slug (similar to post), and foreign key to category (this will hold the parent for the tree structure)
