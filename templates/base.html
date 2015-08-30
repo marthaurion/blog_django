@@ -1,13 +1,55 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
 <head>
-    <title>{% block title %}{% endblock %}</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Marth's Totally Legit Test Site</title>
+
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}" />
+
 </head>
+
 <body>
-    {% block content %}{% endblock %}
-    {% block footer %}
-    <hr>
-    <p>Thanks for visiting my site.</p>
-    {% endblock %}
-</body>
-</html>
+<div id="wrapper">
+    <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header"><a class="navbar-brand" href="/">Marth's Totally Legit Test Site</a></div>
+
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/">Home</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/articles/create">Create</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="page-wrapper">
+        <div class="container">
+            <div class="row">
+            <div id="content" class="col-sm-8">
+                {% block content %}{% endblock %}
+            </div> <!-- end #content -->
+
+            <div id="sidebar" class="col-sm-3 col-sm-offset-1">
+                {% block sidebar %}{% endblock %}
+            </div> <!-- end #sidebar -->
+
+            </div> <!-- end #row -->
+            <hr />
+            <footer>&copy; Marth's Test Page | Powered by Marth's Free Time</footer> <!-- end #footer -->
+        </div>
+    </div> <!-- end #page-wrapper -->
+</div> <!-- end #wrapper -->
+
+<script src="/js/all.js"></script>
+{% block footer %}{% endblock %}
+
+
+</body></html>
