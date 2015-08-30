@@ -16,3 +16,10 @@
     
 - creating an index page
     - basic view for now that just lists every post with the most recent one first
+    
+    
+- importing stylesheets and templates from a different blog project
+    - now things look more polished with a bootstrap theme (hopefully)
+    - storing bootstrap css and sidebar icons in a "static" folder in the root directory (theoretically all other apps would use this theme)
+    - added a separate "static" folder to the app to store media files used by posts. This will likely change to use cloud storage.
+
