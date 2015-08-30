@@ -23,3 +23,4 @@
     - storing bootstrap css and sidebar icons in a "static" folder in the root directory (theoretically all other apps would use this theme)
     - added a separate "static" folder to the app to store media files used by posts. This will likely change to use cloud storage.
 
+- added some pagination
