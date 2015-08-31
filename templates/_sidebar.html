@@ -5,11 +5,23 @@
     <a href="/feed"><img src="{% static 'icons/rss.png' %}"></a>
 </div>
 
+{% if categories %}
 <div class="sidebar-module">
     <h4>Categories</h4>
     <ul>
+    {% for cat in categories %}
+        <li><a href="{{ cat.get_absolute_url }}">{{ cat.title }}</a></li>
+        {% if cat.category_set.all %}
+            <ul>
+            {% for child in cat.category_set.all %}
+                <li><a href="{{ child.get_absolute_url }}">{{ child.title }}</a></li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endfor %}
     </ul>
 </div>
+{% endif %}
 
 <div class="sidebar-module">
     <h4>Blogroll</h4>

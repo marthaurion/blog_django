@@ -32,4 +32,4 @@ class Category(models.Model):
         return self.title
         
     def get_absolute_url(self):
-        return "/blog/%s/" % self.slug
+        return "/blog/category/%s/" % self.slug
