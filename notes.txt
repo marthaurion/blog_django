@@ -23,4 +23,6 @@
 - added some pagination
 
 - added a category index to show posts in a category
-    - even though categories can have parents, I only look one level down
+    - even though categories can have parents, I only look one level down for displaying the tree structure
+    - however, the site will look all the way down the category tree to find out which categories a post belongs in
+    
