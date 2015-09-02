@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from taggit.managers import TaggableManager
 
 # Create your models here.
 class PostManager(models.Manager):
@@ -13,6 +14,8 @@ class Post(models.Model):
     body = models.TextField()
     category = models.ForeignKey('Category')
     pub_date = models.DateTimeField('date published', default=timezone.now)
+    tags = TaggableManager()
+    
     objects = models.Manager()
     published = PostManager()
     

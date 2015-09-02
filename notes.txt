@@ -26,3 +26,6 @@
     - even though categories can have parents, I only look one level down for displaying the tree structure
     - however, the site will look all the way down the category tree to find out which categories a post belongs in
     
+- added tags, using django-taggit package
+    - tags are just added to the Post model with the manager
+    - created a tag index in urls and views that is basically a copy of the category index without the child searching
