@@ -29,3 +29,6 @@
 - added tags, using django-taggit package
     - tags are just added to the Post model with the manager
     - created a tag index in urls and views that is basically a copy of the category index without the child searching
+    
+- created flatpages for about and contact pages. These pages are just stubs for now. I'll add functionality later.
+    - these pages exist on the database, so I dumped their data and stored it in the fixtures folder. They can be brought back with 'manage.py loaddata fixtures/flatpages.json'

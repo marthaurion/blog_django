@@ -38,6 +38,7 @@ def get_secret(setting, secrets=secrets):
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_secret("SECRET_KEY")
+SITE_ID = 1
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -54,6 +55,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.flatpages',
     'blog',
     'taggit',
 )
@@ -67,6 +70,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
 ROOT_URLCONF = 'blog_django.urls'
