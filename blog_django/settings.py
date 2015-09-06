@@ -59,6 +59,7 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'blog',
     'taggit',
+    'storages',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -127,3 +128,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+AWS_STORAGE_BUCKET_NAME = 'marthaurion'
+AWS_ACCESS_KEY_ID = get_secret("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = get_secret("AWS_SECRET_ACCESS_KEY")
