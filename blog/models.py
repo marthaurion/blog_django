@@ -52,3 +52,7 @@ class Category(models.Model):
     
     def get_absolute_url(self):
         return "/blog/category/%s/" % self.slug
+        
+        
+class Media(models.Model):
+    image = models.ImageField()
