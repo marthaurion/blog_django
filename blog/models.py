@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from taggit.managers import TaggableManager
+from sorl.thumbnail import ImageField, get_thumbnail
 
 # Create your models here.
 class PostManager(models.Manager):
@@ -56,7 +57,8 @@ class Category(models.Model):
         
 class Media(models.Model):
     pub_date = models.DateTimeField('date published', default=timezone.now)
-    image = models.ImageField(upload_to="%Y/%m/%d")
+    image = models.ImageField(upload_to="uploads/%Y/%m/%d")
+    thumb = models.ImageField(upload_to="thumbs/%Y/%m/%d")
     
     class Meta:
         ordering = ['-pub_date']
