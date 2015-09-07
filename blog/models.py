@@ -55,4 +55,12 @@ class Category(models.Model):
         
         
 class Media(models.Model):
-    image = models.ImageField()
+    pub_date = models.DateTimeField('date published', default=timezone.now)
+    image = models.ImageField(upload_to="%Y/%m/%d")
+    
+    class Meta:
+        ordering = ['-pub_date']
+        verbose_name_plural = "media"
+        
+    def __str__(self):
+        return self.image.name
