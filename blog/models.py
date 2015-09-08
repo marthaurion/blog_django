@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
 from taggit.managers import TaggableManager
-from sorl.thumbnail import ImageField, get_thumbnail
 
 # Create your models here.
 class PostManager(models.Manager):
