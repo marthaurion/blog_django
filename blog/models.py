@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from taggit.managers import TaggableManager
+from django.utils.timezone import localtime
 
 # Create your models here.
 class PostManager(models.Manager):
@@ -26,7 +27,8 @@ class Post(models.Model):
         return self.title
         
     def get_absolute_url(self):
-        return "/blog/%s/%s/" % (self.pub_date.strftime("%Y/%m/%d"), self.slug)
+        local_pub_date = localtime(self.pub_date)
+        return "/blog/%s/%s/" % (local_pub_date.strftime("%Y/%m/%d"), self.slug)
 
 class Category(models.Model):
     title = models.CharField(max_length=200)
