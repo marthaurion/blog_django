@@ -6,14 +6,14 @@ from django.utils.timezone import localtime
 # Create your models here.
 class PostManager(models.Manager):
     def get_queryset(self):
-        return super(PostManager, self).get_queryset().filter(pub_date__lte=timezone.now)
+        return super(PostManager, self).get_queryset().filter(pub_date__lte=timezone.now())
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique_for_date='pub_date')
     excerpt = models.CharField(max_length=200)
     body = models.TextField()
-    category = models.ForeignKey('Category')
+    category = models.ForeignKey('Category', on_delete=models.CASCADE)
     pub_date = models.DateTimeField('date published', default=timezone.now)
     tags = TaggableManager()
     
@@ -33,7 +33,7 @@ class Post(models.Model):
 class Category(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField()
-    parent = models.ForeignKey('self', null=True, blank=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     
     class Meta:
         ordering = ['title']
