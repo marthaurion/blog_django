@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import json
 import dj_database_url
 from unipath import Path
 
@@ -22,16 +21,6 @@ STATIC_ROOT = BASE_DIR.child("static")
 STATICFILES_DIRS = (
     BASE_DIR.child("assets"),
 )
-
-with open(BASE_DIR.child("config.json")) as f:
-    secrets = json.loads(f.read())
-
-def get_secret(setting, secrets=secrets):
-    try:
-        return secrets[setting]
-    except KeyError:
-        error_msg = "Set the {0} environment variable".format(setting)
-        raise ImproperlyConfigured(error_msg)
 
 
 # Quick-start development settings - unsuitable for production
