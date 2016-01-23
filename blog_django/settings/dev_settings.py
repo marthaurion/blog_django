@@ -16,7 +16,7 @@ from unipath import Path
 
 from django.core.exceptions import ImproperlyConfigured
 
-BASE_DIR = Path(__file__).ancestor(2)
+BASE_DIR = Path(__file__).ancestor(3)
 STATIC_ROOT = BASE_DIR.child("static")
 STATICFILES_DIRS = (
     BASE_DIR.child("assets"),
