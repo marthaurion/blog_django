@@ -11,18 +11,25 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import os
 import json
 from unipath import Path
 
 from django.core.exceptions import ImproperlyConfigured
 
-BASE_DIR = Path(__file__).ancestor(3)
-STATIC_ROOT = BASE_DIR.child("static")
+#BASE_DIR = Path(__file__).ancestor(3)
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+#STATIC_ROOT = BASE_DIR.child("static")
+#STATICFILES_DIRS = (
+#    BASE_DIR.child("assets"),
+#)
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
 STATICFILES_DIRS = (
-    BASE_DIR.child("assets"),
+    os.path.join(os.path.dirname(BASE_DIR), "assets"),
 )
 
-with open(BASE_DIR.child("config.json")) as f:
+#with open(BASE_DIR.child("config.json")) as f:
+with open(os.path.join(os.path.dirname(BASE_DIR), "config.json")) as f:
     secrets = json.loads(f.read())
 
 def get_secret(setting, secrets=secrets):
@@ -79,7 +86,8 @@ ROOT_URLCONF = 'blog_django.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR.child("templates")],
+#        'DIRS': [BASE_DIR.child("templates")],
+        'DIRS': [os.path.join(os.path.dirname(BASE_DIR), "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
