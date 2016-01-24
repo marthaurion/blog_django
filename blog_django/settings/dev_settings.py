@@ -13,22 +13,15 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import json
-from unipath import Path
 
 from django.core.exceptions import ImproperlyConfigured
 
-#BASE_DIR = Path(__file__).ancestor(3)
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-#STATIC_ROOT = BASE_DIR.child("static")
-#STATICFILES_DIRS = (
-#    BASE_DIR.child("assets"),
-#)
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
 STATICFILES_DIRS = (
     os.path.join(os.path.dirname(BASE_DIR), "assets"),
 )
 
-#with open(BASE_DIR.child("config.json")) as f:
 with open(os.path.join(os.path.dirname(BASE_DIR), "config.json")) as f:
     secrets = json.loads(f.read())
 
@@ -86,7 +79,6 @@ ROOT_URLCONF = 'blog_django.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-#        'DIRS': [BASE_DIR.child("templates")],
         'DIRS': [os.path.join(os.path.dirname(BASE_DIR), "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -143,9 +135,9 @@ AWS_SECRET_ACCESS_KEY = get_secret("AWS_SECRET_ACCESS_KEY")
 
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 STATICFILES_LOCATION = 'static'
-STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+STATICFILES_STORAGE = 'blog_django.custom_storages.StaticStorage'
 STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
 
 MEDIAFILES_LOCATION = 'media'
 MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
-DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
+DEFAULT_FILE_STORAGE = 'blog_django.custom_storages.MediaStorage'

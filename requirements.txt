@@ -7,6 +7,5 @@ gunicorn==19.4.5
 Pillow==2.9.0
 psycopg2==2.6.1
 pytz==2015.4
-Unipath==1.1
 wheel==0.24.0
 whitenoise==2.0.6
