@@ -60,6 +60,7 @@ INSTALLED_APPS = (
     'blog',
     'taggit',
     'storages',
+    'versatileimagefield',
 )
 
 MIDDLEWARE_CLASSES = (

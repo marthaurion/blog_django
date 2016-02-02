@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from taggit.managers import TaggableManager
 from django.utils.timezone import localtime
+from versatileimagefield.fields import VersatileImageField
 
 # Create your models here.
 class PostManager(models.Manager):
@@ -55,16 +56,12 @@ class Category(models.Model):
     def get_absolute_url(self):
         return "/blog/category/%s/" % self.slug
 
-
 class Media(models.Model):
     pub_date = models.DateTimeField('date published', default=timezone.now)
-    full_image = models.ImageField(upload_to="full/%Y/%m/%d")
-    post_image = models.ImageField(upload_to="posts/%Y/%m/%d")
-    thumb = models.ImageField(upload_to="thumbs/%Y/%m/%d")
-
+    full_image = VersatileImageField(upload_to="versatile/%Y/%m/%d")
+    
     class Meta:
-        ordering = ['-pub_date']
-        verbose_name_plural = "media"
-
+        verbose_name_plural = 'Media'
+        
     def __str__(self):
-        return self.image.name
+        return self.full_image.name
