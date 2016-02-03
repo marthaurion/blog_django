@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'taggit',
     'storages',
     'versatileimagefield',
+    'disqus',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -74,6 +75,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'blog_django.wsgi.application'
+
+DISQUS_WEBSITE_SHORTNAME = 'marthaurion'
 
 
 # Internationalization
