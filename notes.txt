@@ -36,3 +36,5 @@
 - added support for storing static files in amazon s3 as well as media files. I'm starting to wonder if I really need to store the static css/js files in S3. Would it be more efficient to store it locally? If so, I left the original static url setting as a comment in the settings file. I created a basic Media model for testing. It seems to upload S3 fine, but I need to add more metadata to the model, such as folder organization, upload date, (last update date?), some sort of title. 
 
 - added versatile image field to handle thumbnailing images. Find a solution to the error with name length.
+
+- removed flatpages and switched to using static template pages for about and contact

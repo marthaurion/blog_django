@@ -21,11 +21,9 @@
 
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li {% if not request.get_full_path %}class="active"{% endif %}><a href="{% url 'index' %}">Home</a></li>
-                    {% url 'about' as home_url %}
-                    <li {% if request.get_full_path == home_url %}class="active"{% endif %}><a href="{% url 'about' %}">About</a></li>
-                    {% url 'contact' as home_url %}
-                    <li {% if request.get_full_path == home_url %}class="active"{% endif %}><a href="{% url 'contact' %}">Contact</a></li>
+                    <li {% block nav-blog %}{% endblock %}><a href="{% url 'index' %}">Blog</a></li>
+                    <li {% block nav-about %}{% endblock %}><a href="{% url 'about' %}">About</a></li>
+                    <li {% block nav-contact %}{% endblock %}><a href="{% url 'contact' %}">Contact</a></li>
                 </ul>
             </div>
         </div>
