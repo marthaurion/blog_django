@@ -1,9 +1,11 @@
 from django.conf.urls import include, url
 from . import views
+from .feeds import LatestEntriesFeed
 
 
 urlpatterns = [
     url(r'^$', views.post_index),
+    url(r'^feed/$', LatestEntriesFeed()),
     url(r'^page/(?P<page>\d+)/$', views.post_index),
     url(r'^category/(?P<slug>[-\w]+)/$', views.category_index),
     url(r'^category/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', views.category_index),

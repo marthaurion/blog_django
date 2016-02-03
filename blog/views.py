@@ -3,7 +3,7 @@ from django.core.paginator import Paginator
 from taggit.models import Tag
 from .models import Post, Category
 
-POSTSPERPAGE = 1
+POSTSPERPAGE = 4
 
 # Create your views here.
 def post_index(request, page=1):
