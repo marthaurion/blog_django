@@ -1,0 +1,13 @@
+#content h2 {
+  margin-bottom: 0px;
+}
+.post_date {
+  color: #949289;
+}
+.meta {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.meta p {
+  margin-bottom: 0px;
+}

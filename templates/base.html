@@ -9,7 +9,8 @@
 <title>Marth's Totally Legit Test Site</title>
 
 {% load staticfiles %}
-<link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/mainstuff.css' %}" />
 
 </head>
 
@@ -42,7 +43,7 @@
 
             </div> <!-- end #row -->
             <hr />
-            <footer>&copy; Marth's Test Page | Powered by Marth's Free Time</footer> <!-- end #footer -->
+            <footer>&copy; {% now "Y" %} Marth's Test Page | Powered by Marth's Free Time</footer> <!-- end #footer -->
         </div>
     </div> <!-- end #page-wrapper -->
 </div> <!-- end #wrapper -->
