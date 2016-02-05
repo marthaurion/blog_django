@@ -1,5 +1,6 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render
 from blog.models import Category
+from .forms import ContactForm
 
 # Create your views here.
 def about_page(request):
@@ -7,5 +8,7 @@ def about_page(request):
                               { 'categories': Category.objects.filter(parent__isnull=True) })
 
 def contact_page(request):
-    return render_to_response('contact.html',
-                              { 'categories': Category.objects.filter(parent__isnull=True) })
+    form_class = ContactForm()
+    return render(request,'contact.html',
+                 { 'categories': Category.objects.filter(parent__isnull=True),
+                   'form': form_class })
