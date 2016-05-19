@@ -7,7 +7,7 @@
     <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
     <div class="post_date"><p>Published on {{ post.pub_date|date:"F j, Y" }}</p></div>
     <div class="post_body">
-      {{ post.body }}
+      {{ post.excerpt|safe }}
     </div>
 
     <div class="meta">
@@ -21,7 +21,7 @@
         </p>
     {% endif %}
     </div>
-    
+
     <hr />
 
 {% endfor %}
