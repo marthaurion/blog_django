@@ -17,6 +17,7 @@ class Post(models.Model):
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     pub_date = models.DateTimeField('date published', default=timezone.now)
     tags = TaggableManager()
+    thumb = models.ImageField(upload_to="thumb/%Y/%m/%d", null=True, blank=True)
 
     objects = models.Manager()
     published = PostManager()
@@ -56,9 +57,10 @@ class Category(models.Model):
     def get_absolute_url(self):
         return "/blog/category/%s/" % self.slug
 
+# not really being used right now
 class Media(models.Model):
     pub_date = models.DateTimeField('date published', default=timezone.now)
-    full_image = VersatileImageField(upload_to="versatile/%Y/%m/%d")
+    full_image = VersatileImageField(upload_to="%Y/%m/%d")
     
     class Meta:
         verbose_name_plural = 'Media'
