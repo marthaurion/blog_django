@@ -7,12 +7,7 @@
     <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
     <div class="post_date"><p>Published on {{ post.pub_date|date:"F j, Y" }}</p></div>
     <div class="post_body">
-      <div>
-      {% if post.thumb %}
-        <img src="{{ post.get_thumb_url }}" width=150 height=150 />
-      {% endif %}
-      </div>
-      <p>{{ post.excerpt|safe }}</p>
+      {{ post.excerpt|safe }}
     </div>
 
     {% include 'blog/_post_meta.html' %}

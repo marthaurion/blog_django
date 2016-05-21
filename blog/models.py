@@ -17,7 +17,6 @@ class Post(models.Model):
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     pub_date = models.DateTimeField('date published', default=timezone.now)
     tags = TaggableManager()
-    thumb = models.ImageField(upload_to="thumb/%Y/%m/%d", null=True, blank=True)
 
     objects = models.Manager()
     published = PostManager()
@@ -31,9 +30,6 @@ class Post(models.Model):
     def get_absolute_url(self):
         local_pub_date = localtime(self.pub_date)
         return "/blog/%s/%s/" % (local_pub_date.strftime("%Y/%m/%d"), self.slug)
-    
-    def get_thumb_url(self):
-        return "https://marthaurion.s3.amazonaws.com/media/%s" % self.thumb
 
 class Category(models.Model):
     title = models.CharField(max_length=200)
