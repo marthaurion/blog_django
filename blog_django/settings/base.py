@@ -40,7 +40,6 @@ INSTALLED_APPS = (
     'blog',
     'taggit',
     'storages',
-    'versatileimagefield',
     'disqus',
 )
 
@@ -108,3 +107,8 @@ STATIC_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, STATICFILES_LOCATION)
 MEDIAFILES_LOCATION = 'media'
 MEDIA_URL = "https://%s/%s/" % (AWS_S3_CUSTOM_DOMAIN, MEDIAFILES_LOCATION)
 DEFAULT_FILE_STORAGE = 'blog_django.custom_storages.MediaStorage'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'marthaurionblog@gmail.com'
