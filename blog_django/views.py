@@ -1,4 +1,5 @@
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render_to_response, render, redirect
+from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.template.loader import get_template
 from django.core.mail import send_mail
@@ -22,7 +23,7 @@ def contact_page(request):
             
             recipients = ['marthaurion@gmail.com']
             send_mail(subject, message, sender, recipients)
-            return HttpResponseRedirect('/thanks/')
+            return redirect('thanks')
             
     # otherwise jsut display the form
     else:
@@ -31,3 +32,7 @@ def contact_page(request):
     return render(request,'contact.html',
                  { 'categories': Category.objects.filter(parent__isnull=True),
                    'form': form_class })
+                   
+def contact_success(request):
+    return render_to_response('contact_success.html',
+                              { 'categories': Category.objects.filter(parent__isnull=True) })
