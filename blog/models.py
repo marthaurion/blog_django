@@ -54,3 +54,14 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return "/blog/category/%s/" % self.slug
+        
+        
+class Media(models.Model):
+    full_image = models.ImageField(upload_to="full/%Y/%m/%d", max_length=200, null=True, blank=True)
+    scale_image = models.ImageField(upload_to="scale/%Y/%m/%d", max_length=200, null=True, blank=True)
+    
+    def __str__(self):
+        return self.full_image.name
+        
+    class Meta:
+        verbose_name_plural = "media"
