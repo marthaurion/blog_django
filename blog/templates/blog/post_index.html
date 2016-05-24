@@ -3,18 +3,23 @@
 {% block nav-blog %}class="active"{% endblock %}
 
 {% block content %}
-{% for post in post_list %}
-    <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
-    <div class="post_date"><p>Published on {{ post.pub_date|date:"F j, Y" }}</p></div>
-    <div class="post_body">
-      {{ post.excerpt|safe }}
-    </div>
-
-    {% include 'blog/_post_meta.html' %}
-
-    <hr />
-
-{% endfor %}
+{% if post_list %}
+  {% for post in post_list %}
+      <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+      <div class="post_date"><p>Published on {{ post.pub_date|date:"F j, Y" }}</p></div>
+      <div class="post_body">
+        {{ post.excerpt|safe }}
+      </div>
+  
+      {% include 'blog/_post_meta.html' %}
+  
+      <hr />
+  {% endfor %}
+{% else %}
+  <h2>No posts here.</h2>
+  <br />
+  <p>Well, this is awkward.</p>
+{% endif %}
 
 {% include 'blog/_post_paginator.html' %}
 

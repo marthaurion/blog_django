@@ -38,3 +38,7 @@
 - added versatile image field to handle thumbnailing images. Find a solution to the error with name length.
 
 - removed flatpages and switched to using static template pages for about and contact
+
+- switched versatile image field to regular image field. better to just do the thumbnailing myself.
+
+- added support for displaying all posts for a given year, month, or day.

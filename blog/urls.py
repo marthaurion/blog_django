@@ -11,5 +11,11 @@ urlpatterns = [
     url(r'^category/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', views.category_index),
     url(r'^tag/(?P<slug>[-\w]+)/$', views.tag_index),
     url(r'^tag/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', views.tag_index),
+    url(r'^(?P<year>\d{4})/$', views.post_index_year),
+    url(r'^(?P<year>\d{4})/page/(?P<page>\d+)/$', views.post_index_year),
+    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/$', views.post_index_month),
+    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/page/(?P<page>\d+)/$', views.post_index_month),
+    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/$', views.post_index_day),
+    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/page/(?P<page>\d+)/$', views.post_index_day),
     url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/(?P<slug>[-\w]+)/$', views.post_detail),
 ]
