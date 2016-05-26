@@ -46,9 +46,9 @@ class Category(models.Model):
         children = []
         for child in self.category_set.all():
             children.append(child)
-            temp = child.get_descendants()
-            if len(temp) > 0:
-                children.append(temp)
+            grandchildren = child.get_descendants()
+            for grandchild in grandchildren:
+                children.append(grandchild)
 
         return children
 

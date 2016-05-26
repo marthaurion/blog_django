@@ -15,6 +15,13 @@
             <ul>
             {% for child in cat.category_set.all %}
                 <li><a href="{{ child.get_absolute_url }}">{{ child.title }}</a></li>
+                {% if child.category_set.all %}
+                    <ul>
+                    {% for grandchild in child.category_set.all %}
+                        <li><a href="{{ grandchild.get_absolute_url }}">{{ grandchild.title }}</a></li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
             {% endfor %}
             </ul>
         {% endif %}
