@@ -1,7 +1,5 @@
 from .base_server import *
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = []
-
-INSTALLED_APPS += ("debug_toolbar", )
