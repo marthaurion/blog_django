@@ -57,6 +57,8 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'blog_django.urls'
 
+ALLOWED_HOSTS = ['.herokuapp.com', '.marthaurion.com', '.codebecauseican.com']
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
