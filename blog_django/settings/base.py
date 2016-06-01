@@ -99,6 +99,11 @@ USE_TZ = True
 
 #STATIC_URL = '/static/'
 
+AWS_HEADERS = {
+    'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
+    'Cache-Control': 'max-age=94608000',
+}
+
 AWS_STORAGE_BUCKET_NAME = 'marthaurion'
 
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
