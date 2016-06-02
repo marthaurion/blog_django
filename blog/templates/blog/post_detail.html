@@ -3,10 +3,11 @@
 {% block content %}
     <h2>{{ post.title }}</h2>
     <div class="post_date"><p>Published on {{ post.pub_date|date:"F j, Y" }}</p></div>
+    <hr>
     <div class="post_body">
       {{ post.body_html|safe }}
     </div>
-
+    <hr />
     {% include 'blog/_post_meta.html' %}
     <hr />
 
