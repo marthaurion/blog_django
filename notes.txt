@@ -42,3 +42,10 @@
 - switched versatile image field to regular image field. better to just do the thumbnailing myself.
 
 - added support for displaying all posts for a given year, month, or day.
+
+- added the ability to use {{REPLACE}} in my post body instead of hardcoding the image links.
+
+stuff to do:
+- remove the body_html field from the post admin (probably not necessary because it lets me check that things are working)
+- maybe make it so the replace thing only triggers when the body_html is empty?
+- find a better way to pick images for the post
