@@ -13,4 +13,3 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 from .base_heroku import *
 
 DEBUG = True
-INSTALLED_APPS += ("debug_toolbar", )
