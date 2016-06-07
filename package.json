@@ -1,0 +1,18 @@
+{
+  "name": "blog_django",
+  "version": "1.0.0",
+  "description": "Marth's Django Blog",
+  "dependencies": {
+    "gulp": "^3.9.1"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marthaurion/blog_django.git"
+  },
+  "author": "marthaurion",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marthaurion/blog_django/issues"
+  },
+}
