@@ -131,6 +131,14 @@ AWS_HEADERS = {
 }
 
 AWS_STORAGE_BUCKET_NAME = 'marthaurion'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_CLOUDFRONT_DOMAIN = "dbr635qdrhpoe.cloudfront.net"
+
+STATICFILES_LOCATION = 'static'
+MEDIAFILES_LOCATION = 'media'
+MEDIA_URL = "https://%s/%s/" % (AWS_CLOUDFRONT_DOMAIN, MEDIAFILES_LOCATION)
+DEFAULT_FILE_STORAGE = 'blog_django.custom_storages.MediaStorage'
+
 AWS_ACCESS_KEY_ID = get_secret("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = get_secret("AWS_SECRET_ACCESS_KEY")
 
