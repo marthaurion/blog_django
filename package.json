@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "Marth's Django Blog",
   "dependencies": {
-    "gulp": "^3.9.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^2.0.10",
+    "gulp-concat-css": "^2.3.0"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/marthaurion/blog_django.git"
