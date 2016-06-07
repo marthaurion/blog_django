@@ -46,12 +46,13 @@ class Post(models.Model):
         
     # override save so we can add the linked images to the post
     def save(self, *args, **kwargs):
-        new_body = self.body
-        linked_media = self.media.all()
-        for m in linked_media:
-            link_text = '<a href="%s"><img src="%s" height="%s" width="%s" /></a>' % (m.full_image.url, m.scale_image.url, m.scale_image.height, m.scale_image.width)
-            new_body = new_body.replace("{{REPLACE}}", link_text, 1)
-        self.body_html = new_body
+        if self.pk is not None: # only try to do this if the values have changed because the media links won't work without a pk
+            new_body = self.body
+            linked_media = self.media.all()
+            for m in linked_media:
+                link_text = '<a href="%s"><img src="%s" height="%s" width="%s" /></a>' % (m.full_image.url, m.scale_image.url, m.scale_image.height, m.scale_image.width)
+                new_body = new_body.replace("{{REPLACE}}", link_text, 1)
+            self.body_html = new_body
         super(Post, self).save(*args, **kwargs)
 
 class Category(models.Model):
