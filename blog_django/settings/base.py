@@ -70,7 +70,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'blog_django.urls'
 
-ALLOWED_HOSTS = ['.herokuapp.com', '.marthaurion.com', '.codebecauseican.com']
+ALLOWED_HOSTS = ['.marthaurion.com', '.codebecauseican.com']
 
 TEMPLATES = [
     {
@@ -130,10 +130,7 @@ AWS_HEADERS = {
     'Cache-Control': 'max-age=94608000',
 }
 
-AWS_STORAGE_BUCKET_NAME = 'marthaurion'
-AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_CLOUDFRONT_DOMAIN = "d34zzkuru6phz2.cloudfront.net"
-
 STATICFILES_LOCATION = 'static'
 MEDIAFILES_LOCATION = 'media'
 MEDIA_URL = "https://%s/%s/" % (AWS_CLOUDFRONT_DOMAIN, MEDIAFILES_LOCATION)
