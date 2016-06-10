@@ -132,7 +132,7 @@ AWS_HEADERS = {
 
 AWS_STORAGE_BUCKET_NAME = 'marthaurion'
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-AWS_CLOUDFRONT_DOMAIN = "dbr635qdrhpoe.cloudfront.net"
+AWS_CLOUDFRONT_DOMAIN = "d34zzkuru6phz2.cloudfront.net"
 
 STATICFILES_LOCATION = 'static'
 MEDIAFILES_LOCATION = 'media'
