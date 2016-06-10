@@ -11,9 +11,7 @@
         {{ post.excerpt|safe }}
       </div>
       
-      <p class="lead">
-        <a href="{{ post.get_absolute_url }}" class="btn btn-default btn-xs">Read More</a>
-      </p>
+      <h6><a href="{{ post.get_absolute_url }}">[Read More]</a></h6>
   
       {% include 'blog/_post_meta.html' %}
   
