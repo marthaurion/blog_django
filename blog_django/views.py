@@ -17,9 +17,10 @@ def contact_page(request):
     if request.method == 'POST':
         form_class = ContactForm(request.POST)
         if form_class.is_valid():
-            subject = form_class.cleaned_data['subject']
+            name = form_class.cleaned_data['name']
             message = form_class.cleaned_data['message']
             sender = form_class.cleaned_data['sender']
+            subject = "New message from: " + name
             
             recipients = ['marthaurion@gmail.com']
             send_mail(subject, message, sender, recipients)
