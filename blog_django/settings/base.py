@@ -130,6 +130,7 @@ AWS_HEADERS = {
     'Cache-Control': 'max-age=94608000',
 }
 
+AWS_STORAGE_BUCKET_NAME = 'marthblog'
 AWS_CLOUDFRONT_DOMAIN = "d34zzkuru6phz2.cloudfront.net"
 STATICFILES_LOCATION = 'static'
 MEDIAFILES_LOCATION = 'media'
