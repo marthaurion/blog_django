@@ -7,7 +7,7 @@ from django.utils.timezone import localtime
 class Media(models.Model):
     full_image = models.ImageField(upload_to="full/%Y/%m/%d", max_length=200)
     scale_image = models.ImageField(upload_to="scale/%Y/%m/%d", max_length=200)
-    image_name = models.CharField(max_length=200)
+    image_name = models.CharField(max_length=200, unique=True)
     
     def __str__(self):
         return self.full_image.name
