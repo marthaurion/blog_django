@@ -5,16 +5,16 @@ from django.utils.timezone import localtime
 
 # Create your models here.
 class Media(models.Model):
-    full_image = models.ImageField(upload_to="full/%Y/%m/%d", max_length=200, null=True, blank=True)
-    scale_image = models.ImageField(upload_to="scale/%Y/%m/%d", max_length=200, null=True, blank=True)
-    post_order = models.IntegerField()
+    full_image = models.ImageField(upload_to="full/%Y/%m/%d", max_length=200)
+    scale_image = models.ImageField(upload_to="scale/%Y/%m/%d", max_length=200)
+    image_name = models.CharField(max_length=200)
     
     def __str__(self):
         return self.full_image.name
         
     class Meta:
         verbose_name_plural = "media"
-        ordering = ['post_order']
+        ordering = ['image_name']
         
 class PostManager(models.Manager):
     def get_queryset(self):
@@ -28,7 +28,6 @@ class Post(models.Model):
     body_html = models.TextField(null=True, blank=True)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     pub_date = models.DateTimeField('date published', default=timezone.now)
-    media = models.ManyToManyField(Media)
     tags = TaggableManager()
 
     objects = models.Manager()
@@ -46,13 +45,17 @@ class Post(models.Model):
         
     # override save so we can add the linked images to the post
     def save(self, *args, **kwargs):
-        if self.pk is not None: # only try to do this if the values have changed because the media links won't work without a pk
-            new_body = self.body
-            linked_media = self.media.all()
-            for m in linked_media:
-                link_text = '<a href="%s"><img src="%s" height="%s" width="%s" class="img-responsive" /></a>' % (m.full_image.url, m.scale_image.url, m.scale_image.height, m.scale_image.width)
-                new_body = new_body.replace("{{REPLACE}}", link_text, 1)
-            self.body_html = new_body
+        link_string = '<a href="%s"><img src="%s" height="%s" width="%s" class="img-responsive" /></a>'
+        body_parts = self.body.split("{{REPLACE}}")
+        for i in range(0,len(body_parts)):
+            if i%2 == 0: # skip even pieces because they're not surrounded by replace tokens
+                continue
+            cur_image = body_parts[i]
+            img = Media.objects.filter(image_name=cur_image)[0] # should be only one
+            if img:
+                link_text = link_string % (img.full_image.url, img.scale_image.url, img.scale_image.height, img.scale_image.width)
+                body_parts[i] = link_text
+        self.body_html = "".join(body_parts)
         super(Post, self).save(*args, **kwargs)
 
 class Category(models.Model):
