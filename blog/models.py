@@ -4,25 +4,6 @@ from taggit.managers import TaggableManager
 from django.utils.timezone import localtime
 
 # Create your models here.
-class Media(models.Model):
-    image_name = models.CharField(max_length=200, unique=True)
-    pub_date = models.DateTimeField('date published', default=timezone.now)
-    full_image = models.ImageField(upload_to="full/%Y/%m/%d", max_length=200)
-    scale_image = models.ImageField(upload_to="scale/%Y/%m/%d", max_length=200)
-    
-    def admin_thumbnail(self):
-        return u'<img src="%s" />' % (self.scale_image.url)
-        
-    admin_thumbnail.short_description = 'Image'
-    admin_thumbnail.allow_tags = True
-    
-    def __str__(self):
-        return self.image_name
-        
-    class Meta:
-        verbose_name_plural = "media"
-        ordering = ['-pub_date']
-        
 class PostManager(models.Manager):
     def get_queryset(self):
         return super(PostManager, self).get_queryset().filter(pub_date__lte=timezone.now())
@@ -77,7 +58,7 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
-    def get_descendants(self):
+    def get_descendants(self): # build a list of all descendants for a category
         children = []
         for child in self.category_set.all():
             children.append(child)
@@ -89,3 +70,24 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return "/blog/category/%s/" % self.slug
+        
+        
+class Media(models.Model):
+    image_name = models.CharField(max_length=200, unique=True)
+    pub_date = models.DateTimeField('date published', default=timezone.now)
+    full_image = models.ImageField(upload_to="full/%Y/%m/%d", max_length=200)
+    scale_image = models.ImageField(upload_to="scale/%Y/%m/%d", max_length=200)
+    
+    class Meta:
+        verbose_name_plural = "media"
+        ordering = ['-pub_date']
+    
+    def __str__(self):
+        return self.image_name
+    
+    # this stuff is to show a preview of the image in the admin list
+    def admin_thumbnail(self):
+        return u'<img src="%s" />' % (self.scale_image.url)
+        
+    admin_thumbnail.short_description = 'Image'
+    admin_thumbnail.allow_tags = True
