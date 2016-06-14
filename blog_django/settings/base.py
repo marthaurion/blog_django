@@ -54,6 +54,7 @@ INSTALLED_APPS = (
     'taggit',
     'storages',
     'disqus',
+    'maintenancemode',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -66,6 +67,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'maintenancemode.middleware.MaintenanceModeMiddleware',
 )
 
 ROOT_URLCONF = 'blog_django.urls'
