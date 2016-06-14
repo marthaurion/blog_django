@@ -108,6 +108,10 @@ DATABASES = {
     }
 }
 
+MAINTENANCE_IGNORE_URLS = (
+    r'^/admin/*',
+)
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
