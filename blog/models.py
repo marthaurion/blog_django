@@ -5,12 +5,18 @@ from django.utils.timezone import localtime
 
 # Create your models here.
 class Media(models.Model):
+    image_name = models.CharField(max_length=200, unique=True)
     full_image = models.ImageField(upload_to="full/%Y/%m/%d", max_length=200)
     scale_image = models.ImageField(upload_to="scale/%Y/%m/%d", max_length=200)
-    image_name = models.CharField(max_length=200, unique=True)
+    
+    def admin_thumbnail(self):
+        return u'<img src="%s" />' % (self.scale_image.url)
+        
+    admin_thumbnail.short_description = 'Image'
+    admin_thumbnail.allow_tags = True
     
     def __str__(self):
-        return self.full_image.name
+        return self.image_name
         
     class Meta:
         verbose_name_plural = "media"
