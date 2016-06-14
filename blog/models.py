@@ -6,6 +6,7 @@ from django.utils.timezone import localtime
 # Create your models here.
 class Media(models.Model):
     image_name = models.CharField(max_length=200, unique=True)
+    pub_date = models.DateTimeField('date published', default=timezone.now)
     full_image = models.ImageField(upload_to="full/%Y/%m/%d", max_length=200)
     scale_image = models.ImageField(upload_to="scale/%Y/%m/%d", max_length=200)
     
@@ -20,7 +21,7 @@ class Media(models.Model):
         
     class Meta:
         verbose_name_plural = "media"
-        ordering = ['image_name']
+        ordering = ['-pub_date']
         
 class PostManager(models.Manager):
     def get_queryset(self):
