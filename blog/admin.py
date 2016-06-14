@@ -10,7 +10,7 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = { 'slug': ['title'] }
     
 class MediaAdmin(admin.ModelAdmin):
-    list_display = ('image_name', 'admin_thumbnail', )
+    list_display = ('image_name', 'pub_date', 'admin_thumbnail', )
     
 admin.site.register(Post, PostAdmin)
 admin.site.register(Category, CategoryAdmin)
