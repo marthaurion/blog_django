@@ -90,8 +90,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'blog_django.wsgi.application'
-
 DISQUS_WEBSITE_SHORTNAME = 'marthaurion'
 
 # Database
