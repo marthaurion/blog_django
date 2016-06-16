@@ -5,6 +5,7 @@ from .models import Post, Category, Media
 # Register your models here.
 class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = { 'slug': ['title'] }
+    list_display = ('title', 'get_full_url', 'pub_date', )
 
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = { 'slug': ['title'] }

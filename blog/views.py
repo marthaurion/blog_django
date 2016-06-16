@@ -92,7 +92,8 @@ def post_detail(request, year, month, day, slug):
                                    pub_date__day=pub_date.day,
                                    slug=slug)
     if post.pub_date>timezone.now(): # don't show future posts
-        raise Http404()
+        if not request.user.is_active and not request.user.is_staff: # only block if not an admin
+            raise Http404()
     return render_to_response('blog/post_detail.html',
                                 { 'post': post,
                                   'categories': Category.objects.filter(parent__isnull=True) })

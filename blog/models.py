@@ -31,6 +31,11 @@ class Post(models.Model):
         local_pub_date = localtime(self.pub_date)
         return "/blog/%s/%s/" % (local_pub_date.strftime("%Y/%m/%d"), self.slug)
         
+    def get_full_url(self):
+        return "<a href='%s'>%s</a>" % (self.get_absolute_url(), self.get_absolute_url())
+    get_full_url.short_description = 'Link'
+    get_full_url.allow_tags = True
+        
     # override save so we can add the linked images to the post
     def save(self, *args, **kwargs):
         link_string = '<a href="%s"><img src="%s" height="%s" width="%s" class="img-responsive" /></a>'
