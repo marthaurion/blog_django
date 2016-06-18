@@ -13,7 +13,9 @@ Including another URLconf
     1. Add an import:  from blog import urls as blog_urls
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
+from django.conf import settings
 from django.conf.urls import include, url
+from django.conf.urls.static import static
 from django.contrib import admin
 from . import views
 from blog import views as blog_views
@@ -26,3 +28,6 @@ urlpatterns = [
     url(r'^messagereceived/$', views.contact_success, name='thanks'),
     url(r'^$', blog_views.post_index, name='index'),
 ]
+
+if settings.DEBUG and not settings.MAINTENANCE_MODE: # there is a debug mode for production, but it turns on maintenance mode
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

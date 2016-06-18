@@ -106,6 +106,8 @@ DATABASES = {
     }
 }
 
+MAINTENANCE_MODE = False
+
 MAINTENANCE_IGNORE_URLS = (
     r'^/admin/*',
 )
@@ -127,19 +129,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-#STATIC_URL = '/static/'
-
 AWS_HEADERS = {
     'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
     'Cache-Control': 'max-age=94608000',
 }
 
 AWS_STORAGE_BUCKET_NAME = 'marthblog'
-AWS_CLOUDFRONT_DOMAIN = "d34zzkuru6phz2.cloudfront.net"
+AWS_CLOUDFRONT_DOMAIN = "media.codebecauseican.com"
 STATICFILES_LOCATION = 'static'
 MEDIAFILES_LOCATION = 'media'
-MEDIA_URL = "https://%s/%s/" % (AWS_CLOUDFRONT_DOMAIN, MEDIAFILES_LOCATION)
-DEFAULT_FILE_STORAGE = 'blog_django.custom_storages.MediaStorage'
 
 AWS_ACCESS_KEY_ID = get_secret("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = get_secret("AWS_SECRET_ACCESS_KEY")

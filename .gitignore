@@ -4,4 +4,4 @@ config.json
 .idea/
 static/
 node_modules/
-
+media/
