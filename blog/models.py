@@ -44,8 +44,9 @@ class Post(models.Model):
             if i%2 == 0: # skip even pieces because they're not surrounded by replace tokens
                 continue
             cur_image = body_parts[i]
-            img = Media.objects.filter(image_name=cur_image)[0] # should be only one
-            if img:
+            img_search = Media.objects.filter(image_name=cur_image)
+            if img_search:
+                img = img_search[0] # should be only one
                 link_text = link_string % (img.full_image.url, img.scale_image.url, img.scale_image.height, img.scale_image.width)
                 body_parts[i] = link_text
         self.body_html = "".join(body_parts)
