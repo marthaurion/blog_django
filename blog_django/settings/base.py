@@ -55,6 +55,7 @@ INSTALLED_APPS = (
     'storages',
     'disqus',
     'maintenancemode',
+    'bulk_admin',
 )
 
 MIDDLEWARE_CLASSES = (
