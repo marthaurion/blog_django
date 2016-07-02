@@ -93,7 +93,7 @@ class Media(models.Model):
     
     # this stuff is to show a preview of the image in the admin list
     def admin_thumbnail(self):
-        return u'<img src="%s" />' % (self.scale_image.url)
+        return u'<img src="%s" height="150" />' % (self.scale_image.url)
         
     admin_thumbnail.short_description = 'Image'
     admin_thumbnail.allow_tags = True
