@@ -2,6 +2,12 @@
   margin-bottom: 0px;
 }
 
+.post_body p {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
 .banner {
   margin-top: 10px;
   margin-bottom: 20px;

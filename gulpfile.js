@@ -4,7 +4,7 @@ var cleanCSS = require('gulp-clean-css');
 
 gulp.task('default',function() {
     return gulp.src(['assets/css/bootstrap.min.css', 'assets/css/mainstuff.css'])
-        .pipe(concatCSS('css/allv2.css'))
+        .pipe(concatCSS('css/allv3.css'))
         .pipe(cleanCSS())
         .pipe(gulp.dest('assets'));
 });
