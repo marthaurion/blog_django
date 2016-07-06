@@ -97,3 +97,9 @@ class Media(models.Model):
         
     admin_thumbnail.short_description = 'Image'
     admin_thumbnail.allow_tags = True
+    
+    def admin_full(self):
+        return u'<img src="%s" height="150" />' % (self.full_image.url)
+        
+    admin_full.short_description = 'Full Image'
+    admin_full.allow_tags = True
