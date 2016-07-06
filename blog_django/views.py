@@ -20,12 +20,10 @@ def contact_page(request):
             name = form_class.cleaned_data['name']
             message = form_class.cleaned_data['message']
             sender = form_class.cleaned_data['sender']
-            subject = "New message from: " + name
-            
-            headers = {'Reply-To': form_class.cleaned_data['sender']}
+            subject = "New message from: " + name + " at " + sender
             
             recipients = ['marthaurion@gmail.com']
-            send_mail(subject, message, sender, recipients, headers)
+            send_mail(subject, message, sender, recipients)
             return redirect('thanks')
             
     # otherwise jsut display the form
