@@ -3,13 +3,11 @@
 {% block nav-blog %}class="active"{% endblock %}
 
 {% block content %}
-{% load disqus_tags %}
 {% if post_list %}
   {% for post in post_list %}
       <h2>{{ post.title }}</h2>
       <div class="post_date">
-        <p class="text-muted">Published on {{ post.pub_date|date:"F j, Y" }}. <a href="{{ post.get_absolute_url }}#disqus_thread" data-disqus-identifier="{{ post.get_absolute_url }}">View Comments</a></p>
-        {% disqus_num_replies %}
+        <p class="text-muted">Published on {{ post.pub_date|date:"F j, Y" }}.</p>
       </div>
       <div class="post_body">
         {{ post.excerpt|safe }}
