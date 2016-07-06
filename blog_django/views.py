@@ -37,3 +37,7 @@ def contact_page(request):
 def contact_success(request):
     return render_to_response('contact_success.html',
                               { 'categories': Category.objects.filter(parent__isnull=True) })
+                              
+def blogroll_page(request):
+    return render_to_response('blogroll.html',
+                              { 'categories': Category.objects.filter(parent__isnull=True) })

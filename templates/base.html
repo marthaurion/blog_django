@@ -10,6 +10,8 @@
 
 {% load staticfiles %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/allv3.css' %}" />
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
 
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -28,12 +30,20 @@
 <div id="wrapper">
     <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
         <div class="container">
-            <div class="navbar-header"><a class="navbar-brand" href="/">Marth's Anime Blog</a></div>
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#marthbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">Marth's Anime Blog</a>
+            </div>
 
-            <div id="navbar" class="navbar-collapse collapse">
+            <div class="collapse navbar-collapse" id="marthbar">
                 <ul class="nav navbar-nav">
-                    <li {% block nav-blog %}{% endblock %}><a href="{% url 'index' %}">Blog</a></li>
+                    <li {% block nav-blog %}{% endblock %}><a href="{% url 'index' %}">Home</a></li>
                     <li {% block nav-about %}{% endblock %}><a href="{% url 'about' %}">About</a></li>
+                    <li {% block nav-blogroll %}{% endblock %}><a href="{% url 'blogroll' %}">Blogroll</a></li>
                     <li {% block nav-contact %}{% endblock %}><a href="{% url 'contact' %}">Contact</a></li>
                 </ul>
             </div>
