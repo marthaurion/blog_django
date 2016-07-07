@@ -5,15 +5,13 @@
 {% block content %}
 {% if post_list %}
   {% for post in post_list %}
-      <h2>{{ post.title }}</h2>
+      <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
       <div class="post_date">
-        <p class="text-muted">Published on {{ post.pub_date|date:"F j, Y" }}.</p>
+        <p class="text-muted">Published on {{ post.pub_date|date:"F j, Y" }}</p>
       </div>
       <div class="post_body">
         {{ post.excerpt|safe }}
       </div>
-      
-      <h6><a href="{{ post.get_absolute_url }}">[Read More]</a></h6>
   
       {% include 'blog/_post_meta.html' %}
   
