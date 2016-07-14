@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from .models import Post
 
 class LatestEntriesFeed(Feed):
-    title = "Blog Feed"
+    title = "Marth's Anime Blog Feed"
     link = "/blog/"
     description = "Updates with new blog posts."
 
