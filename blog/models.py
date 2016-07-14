@@ -54,7 +54,7 @@ class Post(models.Model):
 
 class Category(models.Model):
     title = models.CharField(max_length=200)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
