@@ -20,25 +20,25 @@
     <ul>
     {% for cat in categories %}
         {% if cat.post_set.exists %}
-        <li><a href="{{ cat.get_absolute_url }}">{{ cat.title }}</a></li>
-        {% if cat.category_set.exists %}
-            <ul>
-            {% for child in cat.category_set.all %}
-                {% if child.post_set.exists %}
-                <li><a href="{{ child.get_absolute_url }}">{{ child.title }}</a></li>
-                {% if child.category_set.exists %}
-                    <ul>
-                    {% for grandchild in child.category_set.all %}
-                        {% if grandchild.post_set.exists %}
-                        <li><a href="{{ grandchild.get_absolute_url }}">{{ grandchild.title }}</a></li>
+            <li><a href="{{ cat.get_absolute_url }}">{{ cat.title }}</a></li>
+            {% if cat.category_set.exists %}
+                <ul>
+                {% for child in cat.category_set.all %}
+                    {% if child.post_set.exists %}
+                        <li><a href="{{ child.get_absolute_url }}">{{ child.title }}</a></li>
+                        {% if child.category_set.exists %}
+                            <ul>
+                            {% for grandchild in child.category_set.all %}
+                                {% if grandchild.post_set.exists %}
+                                    <li><a href="{{ grandchild.get_absolute_url }}">{{ grandchild.title }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                            </ul>
                         {% endif %}
-                    {% endfor %}
-                    </ul>
-                {% endif %}
-                {% endif %}
-            {% endfor %}
-            </ul>
-        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                </ul>
+            {% endif %}
         {% endif %}
     {% endfor %}
     </ul>
