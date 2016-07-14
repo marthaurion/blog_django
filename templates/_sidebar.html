@@ -1,4 +1,13 @@
 <div class="sidebar-module">
+    <div class="btn-group btn-group-justified">
+        <a href="#" class="btn btn-default" onclick="setActiveStyleSheet('dark')">Dark</a>
+        <a href="#" class="btn btn-primary" onclick="setActiveStyleSheet('light')">Light</a>
+    </div>
+</div>
+
+<hr>
+
+<div class="sidebar-module">
     {% load staticfiles %}
     <a href="http://www.facebook.com/marth.anime"><img src="{% static 'icons/facebook.png' %}"></a>
     <a href="http://www.twitter.com/marthaurion"><img src="{% static 'icons/twitter.png' %}"></a>
