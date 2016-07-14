@@ -7,7 +7,7 @@
         {% endif %}
         
         {% if post_list.has_previous %}
-            <li><a href="/blog/page/{{ post_list.previous_page_number }}">< Previous</a></li>
+            <li><a href="{{ base_url }}page/{{ post_list.previous_page_number }}">< Previous</a></li>
         {% endif %}
 
         {% if not post_list.has_next %}
@@ -17,7 +17,7 @@
         {% endif %}
         
         {% if post_list.has_next %}
-            <li><a href="/blog/page/{{ post_list.next_page_number }}">Next ></a></li>
+            <li><a href="{{ base_url }}page/{{ post_list.next_page_number }}">Next ></a></li>
         {% endif %}
     </ul>
 </nav>
