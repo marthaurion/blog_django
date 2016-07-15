@@ -2,12 +2,14 @@
   "name": "blog_django",
   "version": "1.0.0",
   "description": "Marth's Django Blog",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-clean-css": "^2.0.10",
-    "gulp-concat-css": "^2.3.0"
+    "gulp-concat": "^2.6.0",
+    "gulp-concat-css": "^2.3.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.4"
   },
   "repository": {
     "type": "git",
