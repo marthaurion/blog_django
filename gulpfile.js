@@ -20,10 +20,10 @@ gulp.task('light',function() {
 });
 
 gulp.task('scripts', function() {  
-    return gulp.src(['assets/js/bootstrap.min.js', 'assets/js/jquery.min.js', 'assets/js/mystuff.js'])
+    return gulp.src(['assets/js/bootstrap.min.js', 'assets/js/mystuff.js'])
         .pipe(concat('all.js'))
         .pipe(gulp.dest('assets/js'))
-        .pipe(rename('all.min.js'))
+        .pipe(rename('allv1.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('assets/js'));
 });
