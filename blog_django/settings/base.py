@@ -56,6 +56,7 @@ INSTALLED_APPS = (
     'disqus',
     'maintenancemode',
     'bulk_admin',
+    'django.contrib.sitemaps',
 )
 
 MIDDLEWARE_CLASSES = (
