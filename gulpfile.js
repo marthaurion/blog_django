@@ -21,7 +21,7 @@ gulp.task('light',function() {
 
 gulp.task('scripts', function() {  
     return gulp.src(['assets/js/bootstrap.min.js', 'assets/js/mystuff.js'])
-        .pipe(concat('all.js'))
+        .pipe(concat('intermediate.js'))
         .pipe(gulp.dest('assets/js'))
         .pipe(rename('allv2.min.js'))
         .pipe(uglify())
