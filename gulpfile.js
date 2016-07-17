@@ -7,14 +7,14 @@ var uglify = require('gulp-uglify');
 
 gulp.task('dark',function() {
     return gulp.src(['assets/css/darkly.css', 'assets/css/mainstuff.css'])
-        .pipe(concatCSS('css/darkv2.css'))
+        .pipe(concatCSS('css/live_darkv1.css'))
         .pipe(cleanCSS())
         .pipe(gulp.dest('assets'));
 });
 
 gulp.task('light',function() {
     return gulp.src(['assets/css/flatly.css', 'assets/css/mainstuff.css'])
-        .pipe(concatCSS('css/lightv2.css'))
+        .pipe(concatCSS('css/live_lightv1.css'))
         .pipe(cleanCSS())
         .pipe(gulp.dest('assets'));
 });
