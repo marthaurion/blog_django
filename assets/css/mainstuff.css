@@ -8,6 +8,11 @@
   font-size: 18px;
 }
 
+.post_body img {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 .banner {
   margin-top: 10px;
   margin-bottom: 20px;

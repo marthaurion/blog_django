@@ -7,14 +7,14 @@ var uglify = require('gulp-uglify');
 
 gulp.task('dark',function() {
     return gulp.src(['assets/css/darkly.css', 'assets/css/mainstuff.css'])
-        .pipe(concatCSS('css/dark1.css'))
+        .pipe(concatCSS('css/darkv2.css'))
         .pipe(cleanCSS())
         .pipe(gulp.dest('assets'));
 });
 
 gulp.task('light',function() {
     return gulp.src(['assets/css/flatly.css', 'assets/css/mainstuff.css'])
-        .pipe(concatCSS('css/light1.css'))
+        .pipe(concatCSS('css/lightv2.css'))
         .pipe(cleanCSS())
         .pipe(gulp.dest('assets'));
 });
@@ -23,7 +23,7 @@ gulp.task('scripts', function() {
     return gulp.src(['assets/js/bootstrap.min.js', 'assets/js/mystuff.js'])
         .pipe(concat('all.js'))
         .pipe(gulp.dest('assets/js'))
-        .pipe(rename('allv1.min.js'))
+        .pipe(rename('allv2.min.js'))
         .pipe(uglify())
         .pipe(gulp.dest('assets/js'));
 });
