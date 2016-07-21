@@ -9,9 +9,9 @@ class PostManager(models.Manager):
         return super(PostManager, self).get_queryset().filter(pub_date__lte=timezone.now())
 
 class Post(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=300)
     slug = models.SlugField(unique_for_date='pub_date')
-    excerpt = models.CharField(max_length=200)
+    excerpt = models.TextField()
     body = models.TextField()
     body_html = models.TextField(null=True, blank=True)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
