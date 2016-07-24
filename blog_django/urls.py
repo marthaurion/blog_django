@@ -17,8 +17,18 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.sitemaps import GenericSitemap
+from django.contrib.sitemaps import views as sitemap_views
 from . import views
+from .sitemaps import StaticViewSitemap, BlogSitemap, IndexSitemap
 from blog import views as blog_views
+
+
+sitemaps = {
+    'home': IndexSitemap,
+    'blog': BlogSitemap,
+    'static': StaticViewSitemap
+}
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -27,6 +37,8 @@ urlpatterns = [
     url(r'^contact/$', views.contact_page, name='contact'),
     url(r'^blogroll/$', views.blogroll_page, name='blogroll'),
     url(r'^messagereceived/$', views.contact_success, name='thanks'),
+    url(r'^sitemap\.xml$', sitemap_views.index, {'sitemaps': sitemaps}),
+    url(r'^sitemap-(?P<section>.+)\.xml$', sitemap_views.sitemap, {'sitemaps': sitemaps}),
     url(r'^$', blog_views.post_index, name='index'),
 ]
 
