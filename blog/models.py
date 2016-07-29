@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from datetime import timedelta
 from taggit.managers import TaggableManager
 from django.utils.timezone import localtime
 
@@ -8,6 +9,11 @@ class PostManager(models.Manager):
     def get_queryset(self):
         return super(PostManager, self).get_queryset().filter(pub_date__lte=timezone.now())
 
+def default_start_time():
+    now = timezone.now()
+    start = now.replace(hour=21, minute=0, second=0, microsecond=0)
+    return start if start > now else start + timedelta(days=1)
+
 class Post(models.Model):
     title = models.CharField(max_length=300)
     slug = models.SlugField(unique_for_date='pub_date')
@@ -15,7 +21,7 @@ class Post(models.Model):
     body = models.TextField()
     body_html = models.TextField(null=True, blank=True)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
-    pub_date = models.DateTimeField('date published', default=timezone.now)
+    pub_date = models.DateTimeField('date published', default=default_start_time)
     tags = TaggableManager()
 
     objects = models.Manager()
