@@ -6,21 +6,21 @@ var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');  
 
 gulp.task('dark',function() {
-    return gulp.src(['assets/css/darkly.css', 'assets/css/mainstuff.css'])
+    return gulp.src(['assets/css/src/darkly.css', 'assets/css/src/mainstuff.css'])
         .pipe(concatCSS('css/live_darkv1.css'))
         .pipe(cleanCSS())
         .pipe(gulp.dest('assets'));
 });
 
 gulp.task('light',function() {
-    return gulp.src(['assets/css/flatly.css', 'assets/css/mainstuff.css'])
+    return gulp.src(['assets/css/src/flatly.css', 'assets/css/src/mainstuff.css'])
         .pipe(concatCSS('css/live_lightv1.css'))
         .pipe(cleanCSS())
         .pipe(gulp.dest('assets'));
 });
 
 gulp.task('scripts', function() {  
-    return gulp.src(['assets/js/bootstrap.min.js', 'assets/js/mystuff.js'])
+    return gulp.src(['assets/js/src/bootstrap.min.js', 'assets/js/src/mystuff.js'])
         .pipe(concat('intermediate.js'))
         .pipe(gulp.dest('assets/js'))
         .pipe(rename('allv2.min.js'))
