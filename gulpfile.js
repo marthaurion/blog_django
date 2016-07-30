@@ -6,15 +6,15 @@ var rename = require('gulp-rename');
 var uglify = require('gulp-uglify');  
 
 gulp.task('dark',function() {
-    return gulp.src(['assets/css/src/darkly.css', 'assets/css/src/mainstuff.css'])
-        .pipe(concatCSS('css/live_darkv1.css'))
+    return gulp.src(['assets/css/src/fonts.css', 'assets/css/src/darkly.css', 'assets/css/src/mainstuff.css'])
+        .pipe(concatCSS('css/live/darkv2.css'))
         .pipe(cleanCSS())
         .pipe(gulp.dest('assets'));
 });
 
 gulp.task('light',function() {
-    return gulp.src(['assets/css/src/flatly.css', 'assets/css/src/mainstuff.css'])
-        .pipe(concatCSS('css/live_lightv1.css'))
+    return gulp.src(['assets/css/src/fonts.css', 'assets/css/src/flatly.css', 'assets/css/src/mainstuff.css'])
+        .pipe(concatCSS('css/live/lightv2.css'))
         .pipe(cleanCSS())
         .pipe(gulp.dest('assets'));
 });
