@@ -86,7 +86,7 @@ class Category(models.Model):
         
 class Media(models.Model):
     image_name = models.CharField(max_length=200, unique=True)
-    pub_date = models.DateTimeField('date published', default=timezone.now)
+    pub_date = models.DateTimeField('date published', default=timezone.now, editable=False)
     full_image = models.ImageField(upload_to="full/%Y/%m/%d", max_length=200)
     scale_image = models.ImageField(upload_to="scale/%Y/%m/%d", max_length=200)
     
