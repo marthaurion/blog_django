@@ -3,6 +3,7 @@ from django.utils import timezone
 from datetime import timedelta
 from taggit.managers import TaggableManager
 from django.utils.timezone import localtime
+import markdown
 
 # Create your models here.
 class PostManager(models.Manager):
@@ -41,11 +42,11 @@ class Post(models.Model):
         return "<a href='%s'>%s</a>" % (self.get_absolute_url(), self.get_absolute_url())
     get_full_url.short_description = 'Link'
     get_full_url.allow_tags = True
-        
-    # override save so we can add the linked images to the post
-    def save(self, *args, **kwargs):
+    
+    # takes the text of the post and replaces the {{REPLACE}} strings with the proper image text
+    def process_image_links(self, body):
         link_string = '<a href="%s"><img src="%s" height="%s" width="%s" class="img-responsive" /></a>'
-        body_parts = self.body.split("{{REPLACE}}")
+        body_parts = body.split("{{REPLACE}}")
         for i in range(0,len(body_parts)):
             if i%2 == 0: # skip even pieces because they're not surrounded by replace tokens
                 continue
@@ -55,7 +56,12 @@ class Post(models.Model):
                 img = img_search[0] # should be only one
                 link_text = link_string % (img.full_image.url, img.scale_image.url, img.scale_image.height, img.scale_image.width)
                 body_parts[i] = link_text
-        self.body_html = "".join(body_parts)
+        return "".join(body_parts)
+        
+    # override save so we can add the linked images to the post
+    def save(self, *args, **kwargs):
+        image_processed = self.process_image_links(self.body)
+        self.body_html = markdown.markdown(image_processed)
         super(Post, self).save(*args, **kwargs)
 
 class Category(models.Model):
