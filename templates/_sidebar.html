@@ -19,25 +19,7 @@
     <h4>Categories</h4>
     <ul>
     {% for cat in categories %}
-        <li><a href="{{ cat.get_absolute_url }}">{{ cat.title }}</a></li>
-        {% with children=cat.category_set.all %}
-            {% if children %}
-                <ul>
-                {% for child in children %}
-                    <li><a href="{{ child.get_absolute_url }}">{{ child.title }}</a></li>
-                    {% with grandchildren=child.category_set.all %}
-                        {% if grandchildren %}
-                            <ul>
-                            {% for grandchild in grandchildren %}
-                                <li><a href="{{ grandchild.get_absolute_url }}">{{ grandchild.title }}</a></li>
-                            {% endfor %}
-                            </ul>
-                        {% endif %}
-                    {% endwith %}
-                {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
+        {{ cat.display_category|safe }}
     {% endfor %}
     </ul>
 </div>

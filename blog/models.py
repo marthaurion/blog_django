@@ -76,7 +76,8 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
-    def get_descendants(self): # build a list of all descendants for a category
+     # build a list of all descendants for a category
+    def get_descendants(self):
         children = []
         for child in self.category_set.all():
             children.append(child)
@@ -88,7 +89,17 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return "/blog/category/%s/" % self.slug
-        
+    
+    # returns the html for this category and all sub-categories to display
+    def display_category(self):
+        html_string = '<li><a href="%s">%s</a></li>\n' % (self.get_absolute_url(), self.title)
+        children = self.category_set.all()
+        if children:
+            html_string += '<ul>\n'
+            for child in children:
+                html_string += child.display_category()
+            html_string += '</ul>\n'
+        return html_string
         
 class Media(models.Model):
     image_name = models.CharField(max_length=200, unique=True)
