@@ -70,7 +70,7 @@ class Category(models.Model):
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
-        ordering = ['title']
+        ordering = ['slug']
         verbose_name_plural = "categories"
 
     def __str__(self):
