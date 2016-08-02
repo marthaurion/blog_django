@@ -1,5 +1,5 @@
 boto==2.38.0
-Django==1.9.1
+Django==1.10
 django-bulk-admin==0.1.1
 django-disqus==0.5
 django-maintenancemode==0.11.2
