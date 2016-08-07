@@ -3,6 +3,7 @@ from django.utils import timezone
 from datetime import timedelta
 from taggit.managers import TaggableManager
 from django.utils.timezone import localtime
+from versatileimagefield.fields import VersatileImageField
 import markdown
 
 # Create your models here.
@@ -44,9 +45,8 @@ class Post(models.Model):
     get_full_url.allow_tags = True
     
     # takes the text of the post and replaces the {{REPLACE}} strings with the proper image text
-    def process_image_links(self, body):
+    def process_image_links(self, body_parts):
         link_string = '<a href="%s"><img src="%s" height="%s" width="%s" class="img-responsive" /></a>'
-        body_parts = body.split("{{REPLACE}}")
         for i in range(0,len(body_parts)):
             if i%2 == 0: # skip even pieces because they're not surrounded by replace tokens
                 continue
@@ -60,9 +60,22 @@ class Post(models.Model):
         
     # override save so we can add the linked images to the post
     def save(self, *args, **kwargs):
-        image_processed = self.process_image_links(self.body)
+        body_parts = self.body.split("{{REPLACE}}")
+        image_processed = self.process_image_links(body_parts)
         self.body_html = markdown.markdown(image_processed)
+        
         super(Post, self).save(*args, **kwargs)
+
+    # get the first image from the body text
+    def get_first_image(self):
+        body_parts = self.body.split("{{REPLACE}}", 2) # only split twice because we're getting the first image, which is the second piece
+        if len(body_parts) > 1:
+            img_name = body_parts[1]
+            img_search = Media.objects.filter(image_name=img_name) # find the image model
+            if img_search:
+                return img_search[0] # should be only one
+        return None
+        
 
 class Category(models.Model):
     title = models.CharField(max_length=200)
@@ -104,8 +117,8 @@ class Category(models.Model):
 class Media(models.Model):
     image_name = models.CharField(max_length=200, unique=True)
     pub_date = models.DateTimeField('date published', default=timezone.now, editable=False)
-    full_image = models.ImageField(upload_to="full/%Y/%m/%d", max_length=200)
-    scale_image = models.ImageField(upload_to="scale/%Y/%m/%d", max_length=200)
+    full_image = VersatileImageField(upload_to="full/%Y/%m/%d", max_length=200)
+    scale_image = VersatileImageField(upload_to="scale/%Y/%m/%d", max_length=200)
     
     class Meta:
         verbose_name_plural = "media"

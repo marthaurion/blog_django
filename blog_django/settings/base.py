@@ -57,6 +57,7 @@ INSTALLED_APPS = (
     'maintenancemode',
     'bulk_admin',
     'django.contrib.sitemaps',
+    'versatileimagefield',
 )
 
 MIDDLEWARE_CLASSES = (

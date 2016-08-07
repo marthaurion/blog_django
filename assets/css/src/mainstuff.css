@@ -29,8 +29,14 @@
 .meta {
   margin-top: 10px;
   margin-bottom: 10px;
+  clear: left;
 }
 
 .sidebar-module ul {
   padding-left: 20px;
+}
+
+.first_image {
+  margin: 10px;
+  float: left;
 }
