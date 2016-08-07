@@ -12,6 +12,8 @@
         <div class="post_date">
           <p class="text-muted">Published on {{ post.pub_date|date:"F j, Y" }}</p>
         </div>
+        
+        {% comment "taking this out for now" %}
         <div class="first_image">
           {% with first_img=post.get_first_image %}
             {% if first_img %}
@@ -21,6 +23,9 @@
             {% endif %}
           {% endwith %}
         </div>
+        {% endcomment %}
+        
+        
         <div class="post_body">
           {{ post.excerpt|safe }}
         </div>
