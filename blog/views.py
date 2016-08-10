@@ -1,4 +1,5 @@
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render
+from django.http import Http404
 from django.core.paginator import Paginator
 from taggit.models import Tag
 from .models import Post, Category
@@ -62,11 +63,10 @@ def post_index_helper(request, page, posts, title=None, base_url=None):
     if base_url is None:
         base_url = '/blog/'
     
-    return render_to_response('blog/post_index.html',
-                               { 'post_list': paginator.page(page),
-                                 'page_title': title,
-                                 'base_url': base_url,
-                                 'categories': Category.objects.filter(parent__isnull=True) })
+    return render(request, 'blog/post_index.html',
+                    { 'post_list': paginator.page(page),
+                    'page_title': title,
+                    'base_url': base_url })
 
 # display posts by category
 def category_index(request, slug, page=1):
@@ -88,11 +88,10 @@ def category_index(request, slug, page=1):
     if page > 1:
         title = title + "| Page " + str(page)
     
-    return render_to_response('blog/post_index.html',
-                               { 'post_list': paginator.page(page),
-                                 'page_title': title,
-                                 'base_url': '/blog/category/'+slug+'/',
-                                 'categories': Category.objects.filter(parent__isnull=True) })
+    return render(request, 'blog/post_index.html',
+                    { 'post_list': paginator.page(page),
+                    'page_title': title,
+                    'base_url': '/blog/category/'+slug+'/' })
 
 # display posts by tag
 def tag_index(request, slug, page=1):
@@ -111,11 +110,10 @@ def tag_index(request, slug, page=1):
     if page > 1:
         title = title + "| Page " + str(page)
     
-    return render_to_response('blog/post_index.html',
-                               { 'post_list': paginator.page(page),
-                                 'page_title': title,
-                                 'base_url': '/blog/tag/'+slug+'/',
-                                 'categories': Category.objects.filter(parent__isnull=True) })
+    return render(request, 'blog/post_index.html',
+                    { 'post_list': paginator.page(page),
+                    'page_title': title,
+                    'base_url': '/blog/tag/'+slug+'/' })
 
 # display a single post                      
 def post_detail(request, year, month, day, slug):
@@ -130,6 +128,4 @@ def post_detail(request, year, month, day, slug):
     if post.pub_date>timezone.now(): # don't show future posts
         if not request.user.is_active and not request.user.is_staff: # only block if not an admin
             raise Http404()
-    return render_to_response('blog/post_detail.html',
-                                { 'post': post,
-                                  'categories': Category.objects.filter(parent__isnull=True) })
+    return render(request, 'blog/post_detail.html', { 'post': post })

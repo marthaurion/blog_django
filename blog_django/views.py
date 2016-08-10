@@ -1,4 +1,4 @@
-from django.shortcuts import render_to_response, render, redirect
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.template.loader import get_template
@@ -9,8 +9,7 @@ from .forms import ContactForm
 
 # Create your views here.
 def about_page(request):
-    return render_to_response('about.html',
-                              { 'categories': Category.objects.filter(parent__isnull=True) })
+    return render(request, 'about.html')
 
 def contact_page(request):
     # process form data if request is a post
@@ -31,13 +30,10 @@ def contact_page(request):
         form_class = ContactForm()
 
     return render(request,'contact.html',
-                 { 'categories': Category.objects.filter(parent__isnull=True),
-                   'form': form_class })
+                 { 'form': form_class })
                    
 def contact_success(request):
-    return render_to_response('contact_success.html',
-                              { 'categories': Category.objects.filter(parent__isnull=True) })
+    return render(request, 'contact_success.html')
                               
 def blogroll_page(request):
-    return render_to_response('blogroll.html',
-                              { 'categories': Category.objects.filter(parent__isnull=True) })
+    return render(request, 'blogroll.html')
