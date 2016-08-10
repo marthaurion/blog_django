@@ -1,9 +1,9 @@
 var gulp = require('gulp');
 var concatCSS = require('gulp-concat-css');
 var cleanCSS = require('gulp-clean-css');
-var concat = require('gulp-concat');  
-var rename = require('gulp-rename');  
-var uglify = require('gulp-uglify');  
+var concat = require('gulp-concat');
+var rename = require('gulp-rename');
+var uglify = require('gulp-uglify');
 
 gulp.task('dark',function() {
     return gulp.src(['assets/css/src/fonts.css', 'assets/css/src/darkly.css', 'assets/css/src/mainstuff.css'])
