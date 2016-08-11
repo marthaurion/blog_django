@@ -156,3 +156,11 @@ class Media(models.Model):
         
     admin_full.short_description = 'Full Image'
     admin_full.allow_tags = True
+    
+    
+def populate_first_image():
+    for post in Post.published.all():
+        first = post.get_first_image()
+        if first:
+            post.first_image = first
+            post.save()
