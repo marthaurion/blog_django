@@ -27,7 +27,7 @@ class Post(models.Model):
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     pub_date = models.DateTimeField('date published', default=default_start_time)
     tags = TaggableManager()
-    first_image = VersatileImageField(null=True, blank=True)
+    first_image = VersatileImageField(null=True, blank=True, max_length=200)
 
     objects = models.Manager()
     published = PostManager()
