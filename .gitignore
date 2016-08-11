@@ -5,3 +5,4 @@ config.json
 static/
 node_modules/
 media/
+gulpfile.js
