@@ -1,9 +1,11 @@
 from django.db import models
 from django.utils import timezone
+from django.dispatch import receiver
 from datetime import timedelta
 from taggit.managers import TaggableManager
 from django.utils.timezone import localtime
 from versatileimagefield.fields import VersatileImageField
+from versatileimagefield.image_warmer import VersatileImageFieldWarmer
 import markdown
 
 # Create your models here.
@@ -76,6 +78,17 @@ class Post(models.Model):
                 return img_search[0] # should be only one
         return None
         
+@receiver(models.signals.post_save, sender=Post)
+def warm_Post_first_image(sender, instance, **kwargs):
+    first = instance.get_first_image()
+    if first:
+        post_img_warmer = VersatileImageFieldWarmer(
+            instance_or_queryset=first,
+            rendition_key_set='first_image',
+            image_attr='full_image'
+        )
+        num_created, failed_to_create = post_img_warmer.warm()
+    
 
 class Category(models.Model):
     title = models.CharField(max_length=200)

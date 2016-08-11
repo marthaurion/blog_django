@@ -151,3 +151,13 @@ EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'marthaurionblog@gmail.com'
+
+VERSATILEIMAGEFIELD_SETTINGS = {
+    'create_images_on_demand': False,
+}
+
+VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
+    'first_image': [
+        ('first_image_thumb', 'thumbnail__200x200'),
+    ]
+}
