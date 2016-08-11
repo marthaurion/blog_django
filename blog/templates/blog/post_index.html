@@ -14,9 +14,9 @@
         </div>
         
         <div class="first_image">
-          {% with first_img=post.get_first_image %}
+          {% with first_img=post.first_image %}
             {% if first_img %}
-              {% with img_thumb=first_img.full_image.thumbnail.200x200 %}
+              {% with img_thumb=first_img.thumbnail.200x200 %}
               <img class="img-responsive" src="{{ img_thumb }}" alt="{{ post.title }}" height="{{ img_thumb.height }}" width="{{ img_thumb.width }}"/>
               {% endwith %}
             {% endif %}

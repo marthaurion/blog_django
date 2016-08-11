@@ -27,6 +27,7 @@ class Post(models.Model):
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     pub_date = models.DateTimeField('date published', default=default_start_time)
     tags = TaggableManager()
+    first_image = VersatileImageField(null=True, blank=True)
 
     objects = models.Manager()
     published = PostManager()
@@ -65,6 +66,9 @@ class Post(models.Model):
         body_parts = self.body.split("{{REPLACE}}")
         image_processed = self.process_image_links(body_parts)
         self.body_html = markdown.markdown(image_processed)
+        first_img = self.get_first_image()
+        if first_img:
+            self.first_image = first_img.full_image
         
         super(Post, self).save(*args, **kwargs)
 
