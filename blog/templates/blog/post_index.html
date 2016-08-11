@@ -13,20 +13,18 @@
           <p class="text-muted">Published on {{ post.pub_date|date:"F j, Y" }}</p>
         </div>
         
-        {% comment "taking this out for now" %}
-        <div class="first_image">
+        <div class="media-left">
           {% with first_img=post.get_first_image %}
             {% if first_img %}
               {% with img_thumb=first_img.full_image.thumbnail.200x200 %}
-              <img src="{{ img_thumb }}" alt="{{ post.title }}" height="{{ img_thumb.height }}" width="{{ img_thumb.width }}"/>
+              <img class="media-object" src="{{ img_thumb }}" alt="{{ post.title }}" height="{{ img_thumb.height }}" width="{{ img_thumb.width }}"/>
               {% endwith %}
             {% endif %}
           {% endwith %}
         </div>
-        {% endcomment %}
         
         
-        <div class="post_body">
+        <div class="media-body post_body">
           {{ post.excerpt|safe }}
         </div>
     
