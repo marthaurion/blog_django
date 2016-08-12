@@ -2,6 +2,11 @@
   margin-bottom: 0px;
 }
 
+@media (max-width: 991px) {
+  .post_body {
+    clear: left;
+  }
+}
 .post_body p {
   margin-top: 10px;
   margin-bottom: 10px;

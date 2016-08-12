@@ -9,8 +9,8 @@
 <title>{% block title %}Marth's Anime Blog{% endblock %}</title>
 
 {% load staticfiles %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/live/darkv4.css' %}" title="dark" />
-<link rel="alternate stylesheet" type="text/css" href="{% static 'css/live/lightv4.css' %}" title="light" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/live/darkv5.css' %}" title="dark" />
+<link rel="alternate stylesheet" type="text/css" href="{% static 'css/live/lightv5.css' %}" title="light" />
 <script type="text/javascript" src="{% static 'js/jquery1.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/allv3.min.js' %}" async></script>
 <script>
@@ -67,7 +67,7 @@
                 {% block content %}{% endblock %}
             </div> <!-- end #content -->
 
-            <div id="sidebar" class="col-sm-3">
+            <div id="sidebar" class="col-md-3 col-sm-12">
                 {% include '_sidebar.html' %}
             </div> <!-- end #sidebar -->
 
