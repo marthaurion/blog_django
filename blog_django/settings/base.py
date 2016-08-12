@@ -155,7 +155,6 @@ EMAIL_HOST_USER = 'marthaurionblog@gmail.com'
 VERSATILEIMAGEFIELD_SETTINGS = {
     'create_images_on_demand': False,
     'jpeg_resize_quality': 100,
-    'sized_directory_name': '__resized__',
 }
 
 VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
