@@ -27,7 +27,7 @@ class Post(models.Model):
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     pub_date = models.DateTimeField('date published', default=default_start_time)
     tags = TaggableManager()
-    first_image = VersatileImageField(null=True, blank=True, max_length=200)
+    first_image = VersatileImageField(null=True, editable=False, max_length=200)
 
     objects = models.Manager()
     published = PostManager()
@@ -42,10 +42,19 @@ class Post(models.Model):
         local_pub_date = localtime(self.pub_date)
         return "/blog/%s/%s/" % (local_pub_date.strftime("%Y/%m/%d"), self.slug)
         
+    # add a link to the blog post on the admin list display to make it easier to preview the post
     def get_full_url(self):
         return "<a href='%s'>%s</a>" % (self.get_absolute_url(), self.get_absolute_url())
     get_full_url.short_description = 'Link'
     get_full_url.allow_tags = True
+    
+    def admin_first_image(self): # show the first image on the admin list so we can make sure it gets set
+        if not self.first_image:
+            return u'None'
+        return u'<img src="%s" height="150" />' % (self.first_image.url)
+        
+    admin_first_image.short_description = 'First Image'
+    admin_first_image.allow_tags = True
     
     # takes the text of the post and replaces the {{REPLACE}} strings with the proper image text
     def process_image_links(self, body_parts):
