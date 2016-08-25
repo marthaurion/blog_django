@@ -41,10 +41,12 @@
 
             <div class="collapse navbar-collapse" id="marthbar">
                 <ul class="nav navbar-nav">
-                    <li {% block nav-blog %}{% endblock %}><a href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'index' %}">Home</a></li>
                     <li {% block nav-about %}{% endblock %}><a href="{% url 'about' %}">About</a></li>
                     <li {% block nav-blogroll %}{% endblock %}><a href="{% url 'blogroll' %}">Blogroll</a></li>
                     <li {% block nav-contact %}{% endblock %}><a href="{% url 'contact' %}">Contact</a></li>
+                    <li><a href="/blog/category/editorial">Editorials</a></li>
+                    <li><a href="/blog/category/reviews">Reviews</a></li>
                 </ul>
             </div>
         </div>
