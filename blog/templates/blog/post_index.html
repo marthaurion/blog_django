@@ -3,6 +3,10 @@
 {% block title %}{{ page_title }}{% endblock %}
 
 {% block content %}
+{% if page_header %}
+  <h2>{{ page_header }}</h2>
+  <hr />
+{% endif %}
 {% if post_list %}
   {% for post in post_list %}
     <div class="well">
@@ -32,7 +36,7 @@
       <hr />
   {% endfor %}
 {% else %}
-  <h2>No posts here.</h2>
+  <h3>No posts here.</h3>
   <br />
   <p>Well, this is awkward.</p>
 {% endif %}

@@ -107,6 +107,7 @@ class Category(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(unique=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    active = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['slug']
@@ -131,10 +132,20 @@ class Category(models.Model):
     
     # returns the html for this category and all sub-categories to display
     def display_category(self):
-        html_string = '<li><a href="%s">%s</a></li>\n' % (self.get_absolute_url(), self.title)
         children = self.category_set.all()
         if children:
-            html_string += '<ul>\n'
+            prefix = '<span class="list-prefix"><a href="#%s" data-toggle="collapse">&#9654;</a> &nbsp;</span>' % (self.slug)
+        else:
+            prefix = '<span class="list-prefix">&#8212; &nbsp;</span>'
+        
+        html_string = '<li>%s<a href="%s">%s</a></li>\n' % (prefix, self.get_absolute_url(), self.title)
+        if children:
+            if self.active:
+                active_string = " in"
+            else:
+                active_string = ""
+            html_string += '<ul id="%s" class="list-unstyled collapse%s">\n' % (self.slug, active_string)
+            
             for child in children:
                 html_string += child.display_category()
             html_string += '</ul>\n'

@@ -37,11 +37,24 @@
   clear: left;
 }
 
-.sidebar-module ul {
+.sidebar-module {
+  font-size: 18px;
+}
+
+.sidebar-module ul > ul {
   padding-left: 20px;
 }
 
 .first_image {
   margin: 10px;
   float: left;
+}
+
+.list-prefix a {
+  text-decoration: none;
+  color: white;
+}
+
+.blog-tag {
+  font-size: 100%;
 }

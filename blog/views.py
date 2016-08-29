@@ -52,20 +52,22 @@ def post_index_helper(request, page, posts, title=None, base_url=None):
     elif page > paginator.num_pages:
         page = paginator.num_pages
     
+    page_header = None
     if title is None:
+        title = "Marth's Anime Blog"
         if page > 1:
-            title = "Page " + str(page)
-        else:
-            title = "Marth's Anime Blog"
-    elif page > 1:
-        title = title + "| Page " + str(page)
+            title += " - Page " + str(page)
+    else:
+        page_header = title
+        if page > 1:
+            title = title + " - Page " + str(page)
     
     if base_url is None:
         base_url = '/blog/'
     
     return render(request, 'blog/post_index.html',
                     { 'post_list': paginator.page(page),
-                    'page_title': title,
+                    'page_title': title, 'page_header': page_header,
                     'base_url': base_url })
 
 # display posts by category
@@ -84,13 +86,14 @@ def category_index(request, slug, page=1):
         page = paginator.num_pages
     
     
-    title = "Posts for " + category.title + " Category"
+    page_header = "Posts for Category: " + category.title
+    title = page_header
     if page > 1:
-        title = title + "| Page " + str(page)
+        title = title + " - Page " + str(page)
     
     return render(request, 'blog/post_index.html',
                     { 'post_list': paginator.page(page),
-                    'page_title': title,
+                    'page_title': title, 'page_header': page_header,
                     'base_url': '/blog/category/'+slug+'/' })
 
 # display posts by tag
@@ -106,13 +109,13 @@ def tag_index(request, slug, page=1):
     elif page > paginator.num_pages:
         page = paginator.num_pages
     
-    title = "Posts for " + tag.name + " Tag"
+    title = "Posts for Tag: " + tag.name
     if page > 1:
-        title = title + "| Page " + str(page)
+        title = title + " - Page " + str(page)
     
     return render(request, 'blog/post_index.html',
                     { 'post_list': paginator.page(page),
-                    'page_title': title,
+                    'page_title': title, 'page_header': title,
                     'base_url': '/blog/tag/'+slug+'/' })
 
 # display a single post                      

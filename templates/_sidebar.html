@@ -16,8 +16,8 @@
 
 {% if categories %}
 <div class="sidebar-module">
-    <h4>Categories</h4>
-    <ul>
+    <h4><strong>Categories</strong></h4>
+    <ul class="list-unstyled">
     {% for cat in categories %}
         {{ cat.display_category|safe }}
     {% endfor %}
@@ -26,8 +26,8 @@
 {% endif %}
 
 <div class="sidebar-module">
-    <h4>Blogroll</h4>
-    <ul>
+    <h4><strong>Blogroll</strong></h4>
+    <ul class="list-unstyled">
         <li><a href="https://100wordanime.wordpress.com/">100WordAnime</a></li>
         <li><a href="http://www.animenano.com/">Anime Nano</a></li>
         <li><a href="https://theholybookofhappypeach.wordpress.com/">Happy Peach</a></li>
