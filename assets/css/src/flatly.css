@@ -321,8 +321,9 @@ img {
 .thumbnail a > img,
 .carousel-inner > .item > img,
 .carousel-inner > .item > a > img {
-  display: inline;
+  display: inline-block;
   max-width: 100%;
+  height: auto;
 }
 .img-rounded {
   border-radius: 6px;
