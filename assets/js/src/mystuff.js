@@ -62,3 +62,12 @@ window.onunload = function(e) {
 var cookie = readCookie("style");
 var title = cookie ? cookie : getPreferredStyleSheet();
 setActiveStyleSheet(title);
+
+function handleClick()
+{
+  this.textContent = (this.textContent == '►' ? '▼' : '►');
+}
+var collapsibles = document.getElementsByClassName('collapsible');
+for(var i = 0; i < collapsibles.length; i++) {
+  collapsibles[i].onclick=handleClick;
+}

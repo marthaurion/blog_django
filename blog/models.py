@@ -133,17 +133,20 @@ class Category(models.Model):
     # returns the html for this category and all sub-categories to display
     def display_category(self):
         children = self.category_set.all()
+        if self.active:
+            active_string = " in"
+            prefix_character = "&#9660;"
+        else:
+            active_string = ""
+            prefix_character = "&#9658;"
+        
         if children:
-            prefix = '<span class="list-prefix"><a href="#%s" data-toggle="collapse">&#9654;</a> &nbsp;</span>' % (self.slug)
+            prefix = '<span class="list-prefix"><a class="collapsible" href="#%s" data-toggle="collapse">%s</a> &nbsp;</span>' % (self.slug, prefix_character)
         else:
             prefix = '<span class="list-prefix">&#8212; &nbsp;</span>'
         
         html_string = '<li>%s<a href="%s">%s</a></li>\n' % (prefix, self.get_absolute_url(), self.title)
         if children:
-            if self.active:
-                active_string = " in"
-            else:
-                active_string = ""
             html_string += '<ul id="%s" class="list-unstyled collapse%s">\n' % (self.slug, active_string)
             
             for child in children:
