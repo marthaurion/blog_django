@@ -141,9 +141,9 @@ class Category(models.Model):
             prefix_character = "&#9658;"
         
         if children:
-            prefix = '<span class="list-prefix"><a class="collapsible" href="#%s" data-toggle="collapse">%s</a> &nbsp;</span>' % (self.slug, prefix_character)
+            prefix = '<a class="collapsible" href="#%s" data-toggle="collapse">%s</a> &nbsp;' % (self.slug, prefix_character)
         else:
-            prefix = '<span class="list-prefix">&#8212; &nbsp;</span>'
+            prefix = '&#8212; &nbsp;'
         
         html_string = '<li>%s<a href="%s">%s</a></li>\n' % (prefix, self.get_absolute_url(), self.title)
         if children:
