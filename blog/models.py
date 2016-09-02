@@ -158,7 +158,7 @@ class Media(models.Model):
     image_name = models.CharField(max_length=200, unique=True)
     pub_date = models.DateTimeField('date published', default=timezone.now, editable=False)
     full_image = VersatileImageField(upload_to="full/%Y/%m/%d", max_length=200)
-    scale_image = VersatileImageField(upload_to="scale/%Y/%m/%d", max_length=200)
+    scale_image = VersatileImageField(max_length=200, null=True, editable=False)
     
     class Meta:
         verbose_name_plural = "media"
@@ -169,6 +169,8 @@ class Media(models.Model):
     
     # this stuff is to show a preview of the image in the admin list
     def admin_thumbnail(self):
+        if not self.scale_image:
+            return u'None'
         return u'<img src="%s" height="150" />' % (self.scale_image.url)
         
     admin_thumbnail.short_description = 'Image'
@@ -180,6 +182,20 @@ class Media(models.Model):
     admin_full.short_description = 'Full Image'
     admin_full.allow_tags = True
     
+    def save(self, *args, **kwargs):
+        super(Media, self).save(*args, **kwargs)
+        
+        self.scale_image = self.full_image.thumbnail['750x540'].name
+        super(Media, self).save(*args, **kwargs)
+    
+@receiver(models.signals.post_save, sender=Media)
+def warm_Media_images(sender, instance, **kwargs):
+    media_img_warmer = VersatileImageFieldWarmer(
+        instance_or_queryset=instance,
+        rendition_key_set='scaled_image',
+        image_attr='full_image'
+    )
+    num_created, failed_to_create = media_img_warmer.warm()
     
 def populate_first_image():
     for post in Post.published.all():
@@ -187,3 +203,12 @@ def populate_first_image():
         if first:
             post.first_image = first
             post.save()
+
+
+def populate_scaled_image():
+    media_img_warmer = VersatileImageFieldWarmer(
+        instance_or_queryset=Media.objects.all(),
+        rendition_key_set='scaled_image',
+        image_attr='full_image'
+    )
+    num_created, failed_to_create = media_img_warmer.warm()

@@ -160,5 +160,8 @@ VERSATILEIMAGEFIELD_SETTINGS = {
 VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
     'first_image': [
         ('first_image_thumb', 'thumbnail__200x200'),
+    ],
+    'scaled_image': [
+        ('scaled_image_thumb', 'thumbnail__750x540')
     ]
 }
