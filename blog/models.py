@@ -20,7 +20,7 @@ def default_start_time():
 
 class Post(models.Model):
     title = models.CharField(max_length=300)
-    slug = models.SlugField(unique_for_date='pub_date')
+    slug = models.SlugField(unique_for_date='pub_date', max_length=300)
     excerpt = models.TextField()
     body = models.TextField()
     body_html = models.TextField(null=True, blank=True)
