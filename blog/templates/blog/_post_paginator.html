@@ -1,23 +1,19 @@
 <nav>
     <ul class="pager">
-        {% if not post_list.has_previous %}
+        {% if page_obj.has_previous %}
+            <li><a href="{{ base_url }}page/{{ page_obj.previous_page_number }}">< Previous</a></li>
+        {% else %}
             <li class="disabled">
                 <span>< Previous</span>
             </li>
         {% endif %}
-        
-        {% if post_list.has_previous %}
-            <li><a href="{{ base_url }}page/{{ post_list.previous_page_number }}">< Previous</a></li>
-        {% endif %}
 
-        {% if not post_list.has_next %}
+        {% if page_obj.has_next %}
+            <li><a href="{{ base_url }}page/{{ page_obj.next_page_number }}">Next ></a></li>
+        {% else %}
             <li class="disabled">
                 <span>Next ></span>
             </li>
-        {% endif %}
-        
-        {% if post_list.has_next %}
-            <li><a href="{{ base_url }}page/{{ post_list.next_page_number }}">Next ></a></li>
         {% endif %}
     </ul>
 </nav>

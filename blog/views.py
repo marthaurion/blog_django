@@ -10,120 +10,189 @@ from .models import Post, Category
 # experimental imports
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
+from django.views.generic.dates import ArchiveIndexView, YearArchiveView, MonthArchiveView, DayArchiveView
 
 POSTSPERPAGE = 7
 
-# Create your views here.
-# each of the index views has a slightly different filter function, so I split them out
-
-# all
-def post_index(request, page=1):
-    posts = Post.published.all()
-    return post_index_helper(request, page, posts)
-
-# by year
-def post_index_year(request, year, page=1):
-    posts = Post.published.filter(pub_date__year=year)
-    dt = datetime.datetime(int(year), 1, 1)
-    title_string = "Posts from " + dt.strftime('%Y')
-    base_url = '/blog/'+year+'/'
-    return post_index_helper(request, page, posts, title_string, base_url)
+# display every published post
+class PostIndexView(ArchiveIndexView):
+    model = Post
+    date_field = 'pub_date'
+    paginate_by = POSTSPERPAGE
+    context_object_name = 'post_list'
+    template_name = 'blog/post_index.html'
     
-# by month
-def post_index_month(request, year, month, page=1):
-    posts = Post.published.filter(pub_date__year=year,
-                                pub_date__month=month)
-    dt = datetime.datetime(int(year), int(month), 1)
-    title_string = "Posts from " + dt.strftime('%B %Y')
-    base_url = '/blog/'+year+'/'+month+'/'
-    return post_index_helper(request, page, posts, title_string, base_url)
-    
-# by day
-def post_index_day(request, year, month, day, page=1):
-    posts = Post.published.filter(pub_date__year=year,
-                                pub_date__month=month,
-                                pub_date__day=day)
-    dt = datetime.datetime(int(year), int(month), int(day))
-    title_string = "Posts from " + dt.strftime('%B %d, %Y')
-    base_url = '/blog/'+year+'/'+month+'/'+day+'/'
-    return post_index_helper(request, page, posts, title_string, base_url)
-
-# shared code for all of the index calls
-def post_index_helper(request, page, posts, title=None, base_url=None):
-    paginator = Paginator(posts, POSTSPERPAGE)
-    
-    page = int(page)
-    if page < 1:
-        page = 1
-    elif page > paginator.num_pages:
-        page = paginator.num_pages
-    
-    page_header = None
-    if title is None:
+    def get_context_data(self, **kwargs):
+        context = super(PostIndexView, self).get_context_data(**kwargs)
+        working_page = 1
+        if 'page' in self.kwargs:
+            working_page = int(self.kwargs['page'])
+        
         title = "Marth's Anime Blog"
-        if page > 1:
-            title += " - Page " + str(page)
-    else:
+        if working_page > 1:
+            title += ' - Page ' + str(working_page)
+        
+        context['page_title'] = title
+        context['base_url'] = '/blog/'
+        return context
+
+
+# display all posts published in a given year
+class PostYearView(YearArchiveView):
+    model = Post
+    date_field = 'pub_date'
+    paginate_by = POSTSPERPAGE
+    context_object_name = 'post_list'
+    template_name = 'blog/post_index.html'
+    make_object_list = True
+    
+    def get_context_data(self, **kwargs):
+        context = super(PostYearView, self).get_context_data(**kwargs)
+        year = self.kwargs['year']
+        
+        working_page = 1
+        if 'page' in self.kwargs:
+            working_page = int(self.kwargs['page'])
+        
+        dt = datetime.datetime(int(year), 1, 1)
+        title = "Posts from " + dt.strftime('%Y')
         page_header = title
-        if page > 1:
-            title = title + " - Page " + str(page)
-    
-    if base_url is None:
-        base_url = '/blog/'
-    
-    return render(request, 'blog/post_index.html',
-                    { 'post_list': paginator.page(page),
-                    'page_title': title, 'page_header': page_header,
-                    'base_url': base_url })
+        if working_page > 1:
+            title += ' - Page ' + str(working_page)
+        
+        context['page_title'] = title
+        context['page_header'] = page_header
+        context['base_url'] = '/blog/'+year+'/'
+        return context
 
-# display posts by category
-def category_index(request, slug, page=1):
-    category = Category.objects.get(slug=slug)
-    category_list = category.get_descendants()
-    category_list.append(category)
-    posts = Post.published.filter(category__in=category_list)
-    
-    paginator = Paginator(posts, POSTSPERPAGE)
-    
-    page = int(page)
-    if page < 1:
-        page = 1
-    elif page > paginator.num_pages:
-        page = paginator.num_pages
-    
-    
-    page_header = "Posts for Category: " + category.title
-    title = page_header
-    if page > 1:
-        title = title + " - Page " + str(page)
-    
-    return render(request, 'blog/post_index.html',
-                    { 'post_list': paginator.page(page),
-                    'page_title': title, 'page_header': page_header,
-                    'base_url': '/blog/category/'+slug+'/' })
 
-# display posts by tag
-def tag_index(request, slug, page=1):
-    tag = Tag.objects.get(slug=slug)
-    posts = Post.published.filter(tags__in=[tag])
+# display all posts published in a given month
+class PostMonthView(MonthArchiveView):
+    model = Post
+    date_field = 'pub_date'
+    paginate_by = POSTSPERPAGE
+    context_object_name = 'post_list'
+    template_name = 'blog/post_index.html'
+    month_format = "%m"
+    make_object_list = True
     
-    paginator = Paginator(posts, POSTSPERPAGE)
+    def get_context_data(self, **kwargs):
+        context = super(PostMonthView, self).get_context_data(**kwargs)
+        year = self.kwargs['year']
+        month = self.kwargs['month']
+        
+        working_page = 1
+        if 'page' in self.kwargs:
+            working_page = int(self.kwargs['page'])
+        
+        dt = datetime.datetime(int(year), int(month), 1)
+        title = "Posts from " + dt.strftime('%B %Y')
+        page_header = title
+        if working_page > 1:
+            title += ' - Page ' + str(working_page)
+        
+        context['page_title'] = title
+        context['page_header'] = page_header
+        context['base_url'] = '/blog/'+year+'/'+month+'/'
+        return context
+
+
+# display all posts published on a given day
+class PostDayView(DayArchiveView):
+    model = Post
+    date_field = 'pub_date'
+    paginate_by = POSTSPERPAGE
+    context_object_name = 'post_list'
+    template_name = 'blog/post_index.html'
+    month_format = "%m"
+    make_object_list = True
     
-    page = int(page)
-    if page < 1:
-        page = 1
-    elif page > paginator.num_pages:
-        page = paginator.num_pages
+    def get_context_data(self, **kwargs):
+        context = super(PostDayView, self).get_context_data(**kwargs)
+        year = self.kwargs['year']
+        month = self.kwargs['month']
+        day = self.kwargs['day']
+        
+        working_page = 1
+        if 'page' in self.kwargs:
+            working_page = int(self.kwargs['page'])
+        
+        dt = datetime.datetime(int(year), int(month), int(day))
+        title = "Posts from " + dt.strftime('%B %d, %Y')
+        page_header = title
+        if working_page > 1:
+            title += ' - Page ' + str(working_page)
+        
+        context['page_title'] = title
+        context['page_header'] = page_header
+        context['base_url'] = '/blog/'+year+'/'+month+'/'+day+'/'
+        return context
+
+
+# display all posts for a category
+class CategoryListView(ListView):
+    paginate_by = POSTSPERPAGE
+    context_object_name = 'post_list'
+    template_name = 'blog/post_index.html'
     
-    title = "Posts for Tag: " + tag.name
-    if page > 1:
-        title = title + " - Page " + str(page)
+    def get_queryset(self):
+        category = Category.objects.get(slug=self.kwargs['slug'])
+        category_list = category.get_descendants()
+        category_list.append(category)
+        posts = Post.published.filter(category__in=category_list)
+        return posts
+        
+    def get_context_data(self, **kwargs):
+        context = super(CategoryListView, self).get_context_data(**kwargs)
+        slug = self.kwargs['slug']
+        
+        working_page = 1
+        if 'page' in self.kwargs:
+            working_page = int(self.kwargs['page'])
+        
+        category = Category.objects.get(slug=slug)
+        title = "Posts for Category: " + category.title
+        page_header = title
+        if working_page > 1:
+            title = title + " - Page " + str(working_page)
+            
+        context['page_title'] = title
+        context['page_header'] = page_header
+        context['base_url'] = '/blog/category/'+slug+'/'
+        return context
+
+
+# display all posts for a tag
+class TagListView(ListView):
+    paginate_by = POSTSPERPAGE
+    context_object_name = 'post_list'
+    template_name = 'blog/post_index.html'
     
-    return render(request, 'blog/post_index.html',
-                    { 'post_list': paginator.page(page),
-                    'page_title': title, 'page_header': title,
-                    'base_url': '/blog/tag/'+slug+'/' })
-                    
+    def get_queryset(self):
+        posts = Post.published.filter(tags__slug__in=[self.kwargs['slug']])
+        return posts
+        
+    def get_context_data(self, **kwargs):
+        context = super(TagListView, self).get_context_data(**kwargs)
+        slug = self.kwargs['slug']
+        
+        working_page = 1
+        if 'page' in self.kwargs:
+            working_page = int(self.kwargs['page'])
+        
+        tag = Tag.objects.get(slug=slug)
+        title = "Posts for Tag: " + tag.name
+        page_header = title
+        if working_page > 1:
+            title = title + " - Page " + str(working_page)
+            
+        context['page_title'] = title
+        context['page_header'] = page_header
+        context['base_url'] = '/blog/tag/'+slug+'/'
+        
+        return context
+
 
 # display a single post
 class PostDetailView(DetailView):

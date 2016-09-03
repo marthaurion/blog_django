@@ -21,7 +21,7 @@ from django.contrib.sitemaps import GenericSitemap
 from django.contrib.sitemaps import views as sitemap_views
 from . import views
 from .sitemaps import StaticViewSitemap, BlogSitemap, IndexSitemap
-from blog import views as blog_views
+from blog.views import PostIndexView
 
 
 sitemaps = {
@@ -39,7 +39,7 @@ urlpatterns = [
     url(r'^messagereceived/$', views.contact_success, name='thanks'),
     url(r'^sitemap\.xml$', sitemap_views.index, {'sitemaps': sitemaps}),
     url(r'^sitemap-(?P<section>.+)\.xml$', sitemap_views.sitemap, {'sitemaps': sitemaps}),
-    url(r'^$', blog_views.post_index, name='index'),
+    url(r'^$', PostIndexView.as_view(), name='index'),
 ]
 
 if settings.DEBUG and not settings.MAINTENANCE_MODE: # there is a debug mode for production, but it turns on maintenance mode

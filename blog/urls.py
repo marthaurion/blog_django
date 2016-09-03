@@ -1,22 +1,21 @@
 from django.conf.urls import include, url
-from . import views
 from .feeds import LatestEntriesFeed
-from .views import PostDetailView
+from .views import PostDetailView, TagListView, CategoryListView, PostIndexView, PostYearView, PostMonthView, PostDayView
 
 
 urlpatterns = [
-    url(r'^$', views.post_index),
+    url(r'^$', PostIndexView.as_view()),
     url(r'^feed/$', LatestEntriesFeed()),
-    url(r'^page/(?P<page>\d+)/$', views.post_index),
-    url(r'^category/(?P<slug>[-\w]+)/$', views.category_index),
-    url(r'^category/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', views.category_index),
-    url(r'^tag/(?P<slug>[-\w]+)/$', views.tag_index),
-    url(r'^tag/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', views.tag_index),
-    url(r'^(?P<year>\d{4})/$', views.post_index_year),
-    url(r'^(?P<year>\d{4})/page/(?P<page>\d+)/$', views.post_index_year),
-    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/$', views.post_index_month),
-    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/page/(?P<page>\d+)/$', views.post_index_month),
-    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/$', views.post_index_day),
-    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/page/(?P<page>\d+)/$', views.post_index_day),
+    url(r'^page/(?P<page>\d+)/$', PostIndexView.as_view()),
+    url(r'^category/(?P<slug>[-\w]+)/$', CategoryListView.as_view()),
+    url(r'^category/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', CategoryListView.as_view()),
+    url(r'^tag/(?P<slug>[-\w]+)/$', TagListView.as_view()),
+    url(r'^tag/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', TagListView.as_view()),
+    url(r'^(?P<year>\d{4})/$', PostYearView.as_view()),
+    url(r'^(?P<year>\d{4})/page/(?P<page>\d+)/$', PostYearView.as_view()),
+    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/$', PostMonthView.as_view()),
+    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/page/(?P<page>\d+)/$', PostMonthView.as_view()),
+    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/$', PostDayView.as_view()),
+    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/page/(?P<page>\d+)/$', PostDayView.as_view()),
     url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/(?P<slug>[-\w]+)/$', PostDetailView.as_view()),
 ]
