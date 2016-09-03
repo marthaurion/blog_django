@@ -1,6 +1,7 @@
 from django.conf.urls import include, url
 from . import views
 from .feeds import LatestEntriesFeed
+from .views import PostDetailView
 
 
 urlpatterns = [
@@ -17,5 +18,5 @@ urlpatterns = [
     url(r'^(?P<year>\d{4})/(?P<month>\d{2})/page/(?P<page>\d+)/$', views.post_index_month),
     url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/$', views.post_index_day),
     url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/page/(?P<page>\d+)/$', views.post_index_day),
-    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/(?P<slug>[-\w]+)/$', views.post_detail),
+    url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/(?P<slug>[-\w]+)/$', PostDetailView.as_view()),
 ]

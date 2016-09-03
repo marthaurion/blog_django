@@ -47,5 +47,5 @@
 
 stuff to do:
 - remove the body_html field from the post admin (probably not necessary because it lets me check that things are working)
-- maybe make it so the replace thing only triggers when the body_html is empty?
-- find a better way to pick images for the post
+- consider switching to class-based views. not sure if it's worth the trouble
+- models file probably needs to be cleaned up
