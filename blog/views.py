@@ -4,14 +4,12 @@ from django.shortcuts import get_object_or_404, render
 from django.http import Http404
 from django.core.paginator import Paginator
 from django.utils import timezone
-from taggit.models import Tag
-from .models import Post, Category
-
-# experimental imports
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.dates import ArchiveIndexView, YearArchiveView, MonthArchiveView, DayArchiveView
+from taggit.models import Tag
+from .models import Post, Category
+
 
 POSTSPERPAGE = 7
 
