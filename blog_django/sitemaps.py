@@ -1,5 +1,6 @@
 from django.contrib import sitemaps
 from django.core.urlresolvers import reverse
+
 from blog.models import Post
 
 class BlogSitemap(sitemaps.Sitemap):

@@ -46,6 +46,4 @@
 - added the ability to use {{REPLACE}} in my post body instead of hardcoding the image links.
 
 stuff to do:
-- remove the body_html field from the post admin (probably not necessary because it lets me check that things are working)
 - consider adding index on pub_date
-- consider rewriting imports to be ordered like: standard python libraries > core Django > third party apps > local imports

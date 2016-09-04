@@ -1,18 +1,21 @@
+from datetime import timedelta
+
 from django.db import models
 from django.utils import timezone
 from django.dispatch import receiver
-from datetime import timedelta
-from taggit.managers import TaggableManager
 from django.utils.timezone import localtime
+
+import markdown
+from taggit.managers import TaggableManager
 from versatileimagefield.fields import VersatileImageField
 from versatileimagefield.image_warmer import VersatileImageFieldWarmer
-import markdown
 
-# Create your models here.
+# manager to pull all posts that aren't published in the future
 class PostManager(models.Manager):
     def get_queryset(self):
         return super(PostManager, self).get_queryset().filter(pub_date__lte=timezone.now())
 
+# returns either today at 4pm (server time) or tomorrow at 4pm if it's currently after 4pm
 def default_start_time():
     now = timezone.now()
     start = now.replace(hour=21, minute=0, second=0, microsecond=0)
@@ -76,6 +79,7 @@ class Post(models.Model):
             if img_search:
                 return img_search[0] # should be only one
         return None
+        
         
 @receiver(models.signals.post_save, sender=Post)
 def warm_Post_first_image(sender, instance, **kwargs):
@@ -168,6 +172,7 @@ def warm_Media_images(sender, instance, **kwargs):
     )
     num_created, failed_to_create = media_img_warmer.warm()
     
+# gets used if we need to populate the first image field for every model in the database
 def populate_first_image():
     for post in Post.published.all():
         first = post.get_first_image()

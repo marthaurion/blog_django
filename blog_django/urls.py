@@ -20,10 +20,10 @@ from django.contrib import admin
 from django.contrib.sitemaps import GenericSitemap
 from django.contrib.sitemaps import views as sitemap_views
 
-from .sitemaps import StaticViewSitemap, BlogSitemap, IndexSitemap
-from .views import AboutView, BlogrollView, ContactView, ContactSuccessView
 from blog.views import PostIndexView
 
+from .sitemaps import StaticViewSitemap, BlogSitemap, IndexSitemap
+from .views import AboutView, BlogrollView, ContactView, ContactSuccessView
 
 sitemaps = {
     'home': IndexSitemap,

@@ -1,8 +1,6 @@
 import datetime, time
 
-from django.shortcuts import get_object_or_404, render
 from django.http import Http404
-from django.core.paginator import Paginator
 from django.utils import timezone
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView

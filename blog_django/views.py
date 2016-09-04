@@ -1,12 +1,6 @@
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.template.loader import get_template
-from django.core.mail import send_mail
-from django.template import Context
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
-from blog.models import Category
+
 from .forms import ContactForm
 
 # Create your views here.

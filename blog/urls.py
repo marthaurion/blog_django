@@ -1,4 +1,5 @@
 from django.conf.urls import include, url
+
 from .feeds import LatestEntriesFeed
 from .views import PostDetailView, TagListView, CategoryListView, PostIndexView, PostYearView, PostMonthView, PostDayView
 

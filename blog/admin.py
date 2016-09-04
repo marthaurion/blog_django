@@ -1,7 +1,8 @@
 from django.contrib import admin
 
+from bulk_admin import BulkModelAdmin
+
 from .models import Post, Category, Media
-import bulk_admin
 
 # Register your models here.
 
@@ -25,12 +26,14 @@ class PostAdmin(admin.ModelAdmin):
     admin_first_image.short_description = 'First Image'
     admin_first_image.allow_tags = True
 
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = { 'slug': ['title'] }
-    
+
+
 @admin.register(Media)
-class MediaAdmin(bulk_admin.BulkModelAdmin):
+class MediaAdmin(BulkModelAdmin):
     list_display = ('image_name', 'pub_date', 'admin_thumbnail', 'admin_full', )
     
     # this stuff is to show a preview of the image in the admin list
