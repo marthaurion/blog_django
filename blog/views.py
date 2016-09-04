@@ -7,19 +7,23 @@ from django.utils import timezone
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.dates import ArchiveIndexView, YearArchiveView, MonthArchiveView, DayArchiveView
+
 from taggit.models import Tag
+
 from .models import Post, Category
 
 
-POSTSPERPAGE = 7
-
-# display every published post
-class PostIndexView(ArchiveIndexView):
-    model = Post
-    date_field = 'pub_date'
-    paginate_by = POSTSPERPAGE
+# for some of the shared stuff in these views
+class PostListMixin(object):
+    paginate_by = 7
     context_object_name = 'post_list'
     template_name = 'blog/post_index.html'
+
+
+# display every published post
+class PostIndexView(PostListMixin, ArchiveIndexView):
+    model = Post
+    date_field = 'pub_date'
     
     def get_context_data(self, **kwargs):
         context = super(PostIndexView, self).get_context_data(**kwargs)
@@ -37,12 +41,9 @@ class PostIndexView(ArchiveIndexView):
 
 
 # display all posts published in a given year
-class PostYearView(YearArchiveView):
+class PostYearView(PostListMixin, YearArchiveView):
     model = Post
     date_field = 'pub_date'
-    paginate_by = POSTSPERPAGE
-    context_object_name = 'post_list'
-    template_name = 'blog/post_index.html'
     make_object_list = True
     
     def get_context_data(self, **kwargs):
@@ -66,12 +67,9 @@ class PostYearView(YearArchiveView):
 
 
 # display all posts published in a given month
-class PostMonthView(MonthArchiveView):
+class PostMonthView(PostListMixin, MonthArchiveView):
     model = Post
     date_field = 'pub_date'
-    paginate_by = POSTSPERPAGE
-    context_object_name = 'post_list'
-    template_name = 'blog/post_index.html'
     month_format = "%m"
     make_object_list = True
     
@@ -97,12 +95,9 @@ class PostMonthView(MonthArchiveView):
 
 
 # display all posts published on a given day
-class PostDayView(DayArchiveView):
+class PostDayView(PostListMixin, DayArchiveView):
     model = Post
     date_field = 'pub_date'
-    paginate_by = POSTSPERPAGE
-    context_object_name = 'post_list'
-    template_name = 'blog/post_index.html'
     month_format = "%m"
     make_object_list = True
     
@@ -129,11 +124,7 @@ class PostDayView(DayArchiveView):
 
 
 # display all posts for a category
-class CategoryListView(ListView):
-    paginate_by = POSTSPERPAGE
-    context_object_name = 'post_list'
-    template_name = 'blog/post_index.html'
-    
+class CategoryListView(PostListMixin, ListView):
     def get_queryset(self):
         category = Category.objects.get(slug=self.kwargs['slug'])
         category_list = category.get_descendants()
@@ -162,11 +153,7 @@ class CategoryListView(ListView):
 
 
 # display all posts for a tag
-class TagListView(ListView):
-    paginate_by = POSTSPERPAGE
-    context_object_name = 'post_list'
-    template_name = 'blog/post_index.html'
-    
+class TagListView(PostListMixin, ListView):
     def get_queryset(self):
         posts = Post.published.filter(tags__slug__in=[self.kwargs['slug']])
         return posts

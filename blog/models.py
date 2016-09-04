@@ -41,20 +41,6 @@ class Post(models.Model):
     def get_absolute_url(self):
         local_pub_date = localtime(self.pub_date)
         return "/blog/%s/%s/" % (local_pub_date.strftime("%Y/%m/%d"), self.slug)
-        
-    # add a link to the blog post on the admin list display to make it easier to preview the post
-    def get_full_url(self):
-        return "<a href='%s'>%s</a>" % (self.get_absolute_url(), self.get_absolute_url())
-    get_full_url.short_description = 'Link'
-    get_full_url.allow_tags = True
-    
-    def admin_first_image(self): # show the first image on the admin list so we can make sure it gets set
-        if not self.first_image:
-            return u'None'
-        return u'<img src="%s" height="150" />' % (self.first_image.url)
-        
-    admin_first_image.short_description = 'First Image'
-    admin_first_image.allow_tags = True
     
     # takes the text of the post and replaces the {{REPLACE}} strings with the proper image text
     def process_image_links(self, body_parts):
@@ -166,21 +152,6 @@ class Media(models.Model):
     
     def __str__(self):
         return self.image_name
-    
-    # this stuff is to show a preview of the image in the admin list
-    def admin_thumbnail(self):
-        if not self.scale_image:
-            return u'None'
-        return u'<img src="%s" height="150" />' % (self.scale_image.url)
-        
-    admin_thumbnail.short_description = 'Image'
-    admin_thumbnail.allow_tags = True
-    
-    def admin_full(self):
-        return u'<img src="%s" height="150" />' % (self.full_image.url)
-        
-    admin_full.short_description = 'Full Image'
-    admin_full.allow_tags = True
     
     def save(self, *args, **kwargs):
         super(Media, self).save(*args, **kwargs)
