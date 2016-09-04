@@ -8,7 +8,7 @@ django-taggit==0.21.2
 django-versatileimagefield==1.6
 Markdown==2.6.6
 mock==2.0.0
-pbr==1.10.1
+pbr==1.10.0
 pilkit==1.1.13
 Pillow==3.3.1
 psycopg2==2.6.2
