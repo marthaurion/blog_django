@@ -21,6 +21,7 @@ from django.contrib.sitemaps import GenericSitemap
 from django.contrib.sitemaps import views as sitemap_views
 from . import views
 from .sitemaps import StaticViewSitemap, BlogSitemap, IndexSitemap
+from .views import AboutView, BlogrollView, ContactView, ContactSuccessView
 from blog.views import PostIndexView
 
 
@@ -33,10 +34,10 @@ sitemaps = {
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^blog/', include('blog.urls')),
-    url(r'^about/$', views.about_page, name='about'),
-    url(r'^contact/$', views.contact_page, name='contact'),
-    url(r'^blogroll/$', views.blogroll_page, name='blogroll'),
-    url(r'^messagereceived/$', views.contact_success, name='thanks'),
+    url(r'^about/$', AboutView.as_view(), name='about'),
+    url(r'^contact/$', ContactView.as_view(), name='contact'),
+    url(r'^blogroll/$', BlogrollView.as_view(), name='blogroll'),
+    url(r'^messagereceived/$', ContactSuccessView.as_view(), name='thanks'),
     url(r'^sitemap\.xml$', sitemap_views.index, {'sitemaps': sitemaps}),
     url(r'^sitemap-(?P<section>.+)\.xml$', sitemap_views.sitemap, {'sitemaps': sitemaps}),
     url(r'^$', PostIndexView.as_view(), name='index'),

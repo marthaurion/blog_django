@@ -23,11 +23,11 @@ class Post(models.Model):
     slug = models.SlugField(unique_for_date='pub_date', max_length=300)
     excerpt = models.TextField()
     body = models.TextField()
-    body_html = models.TextField(null=True, blank=True)
+    body_html = models.TextField(blank=True)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     pub_date = models.DateTimeField('date published', default=default_start_time)
     tags = TaggableManager()
-    first_image = VersatileImageField(null=True, editable=False, max_length=200)
+    first_image = VersatileImageField(editable=False, max_length=200)
 
     objects = models.Manager()
     published = PostManager()
@@ -158,7 +158,7 @@ class Media(models.Model):
     image_name = models.CharField(max_length=200, unique=True)
     pub_date = models.DateTimeField('date published', default=timezone.now, editable=False)
     full_image = VersatileImageField(upload_to="full/%Y/%m/%d", max_length=200)
-    scale_image = VersatileImageField(max_length=200, null=True, editable=False)
+    scale_image = VersatileImageField(max_length=200, editable=False)
     
     class Meta:
         verbose_name_plural = "media"
