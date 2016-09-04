@@ -23,7 +23,7 @@ class Post(models.Model):
     slug = models.SlugField(unique_for_date='pub_date', max_length=300)
     excerpt = models.TextField()
     body = models.TextField()
-    body_html = models.TextField(blank=True)
+    body_html = models.TextField(editable=False)
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     pub_date = models.DateTimeField('date published', default=default_start_time)
     tags = TaggableManager()
