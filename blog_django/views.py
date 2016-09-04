@@ -10,28 +10,6 @@ from blog.models import Category
 from .forms import ContactForm
 
 # Create your views here.
-def contact_page(request):
-    # process form data if request is a post
-    if request.method == 'POST':
-        form_class = ContactForm(request.POST)
-        if form_class.is_valid():
-            name = form_class.cleaned_data['name']
-            message = form_class.cleaned_data['message']
-            sender = form_class.cleaned_data['sender']
-            subject = "New message from: " + name + " at " + sender
-            
-            recipients = ['marthaurion@gmail.com']
-            send_mail(subject, message, sender, recipients)
-            return redirect('thanks')
-            
-    # otherwise jsut display the form
-    else:
-        form_class = ContactForm()
-
-    return render(request,'contact.html',
-                 { 'form': form_class })
-
-
 class AboutView(TemplateView):
     template_name = 'about.html'
 
