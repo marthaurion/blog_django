@@ -30,7 +30,7 @@ class Post(models.Model):
     category = models.ForeignKey('Category', on_delete=models.CASCADE)
     pub_date = models.DateTimeField('date published', default=default_start_time)
     tags = TaggableManager()
-    first_image = VersatileImageField(editable=False, max_length=200)
+    first_image = VersatileImageField(editable=False, max_length=400)
 
     objects = models.Manager()
     published = PostManager()
@@ -147,8 +147,8 @@ class Category(models.Model):
 class Media(models.Model):
     image_name = models.CharField(max_length=200, unique=True)
     pub_date = models.DateTimeField('date published', default=timezone.now, editable=False)
-    full_image = VersatileImageField(upload_to="full/%Y/%m/%d", max_length=200)
-    scale_image = VersatileImageField(max_length=200, editable=False)
+    full_image = VersatileImageField(upload_to="full/%Y/%m/%d", max_length=400)
+    scale_image = VersatileImageField(max_length=400, editable=False)
     
     class Meta:
         verbose_name_plural = "media"
