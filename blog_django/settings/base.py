@@ -75,7 +75,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'blog_django.urls'
 
-ALLOWED_HOSTS = ['.marthaurion.com', '.codebecauseican.com']
+ALLOWED_HOSTS = ['.marthaurion.com', 'localhost']
 
 TEMPLATES = [
     {
