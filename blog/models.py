@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.dispatch import receiver
 from django.utils.timezone import localtime
+from django.db.models import Count
 
 import markdown
 from taggit.managers import TaggableManager
@@ -125,10 +126,10 @@ class Category(models.Model):
         children = self.category_set.all()
         if self.active:
             active_string = " in"
-            prefix_character = "&#9660;"
+            prefix_character = "[&minus;]"
         else:
             active_string = ""
-            prefix_character = "&#9658;"
+            prefix_character = "[+]"
         
         if children:
             prefix = '<a class="collapsible" href="#%s" data-toggle="collapse">%s</a> &nbsp;' % (self.slug, prefix_character)
