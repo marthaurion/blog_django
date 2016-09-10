@@ -7,6 +7,7 @@ from django.utils.timezone import localtime
 from django.db.models import Count
 
 import markdown
+from mptt.models import MPTTModel, TreeForeignKey
 from taggit.managers import TaggableManager
 from versatileimagefield.fields import VersatileImageField
 from versatileimagefield.image_warmer import VersatileImageFieldWarmer
@@ -94,11 +95,15 @@ def warm_Post_first_image(sender, instance, **kwargs):
         num_created, failed_to_create = post_img_warmer.warm()
     
 
-class Category(models.Model):
+class Category(MPTTModel):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
+    #parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     active = models.BooleanField(default=False)
+
+    class MPTTMeta:
+        order_insertion_by = ['slug']
 
     class Meta:
         ordering = ['slug']
@@ -107,43 +112,25 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
-     # build a list of all descendants for a category
-    def get_descendants(self):
-        children = []
-        for child in self.category_set.all():
-            children.append(child)
-            grandchildren = child.get_descendants()
-            for grandchild in grandchildren:
-                children.append(grandchild)
-
-        return children
-
     def get_absolute_url(self):
         return "/blog/category/%s/" % self.slug
     
-    # returns the html for this category and all sub-categories to display
-    def display_category(self):
-        children = self.category_set.all()
+    def get_display(self):
         if self.active:
-            active_string = " in"
             prefix_character = "[&minus;]"
         else:
-            active_string = ""
             prefix_character = "[+]"
         
-        if children:
-            prefix = '<a class="collapsible" href="#%s" data-toggle="collapse">%s</a> &nbsp;' % (self.slug, prefix_character)
-        else:
+        if self.is_leaf_node():
             prefix = '&#8212; &nbsp;'
-        
-        html_string = '<li>%s<a href="%s">%s</a></li>\n' % (prefix, self.get_absolute_url(), self.title)
-        if children:
-            html_string += '<ul id="%s" class="list-unstyled collapse%s">\n' % (self.slug, active_string)
-            
-            for child in children:
-                html_string += child.display_category()
-            html_string += '</ul>\n'
-        return html_string
+        else:
+            prefix = '<a class="collapsible" href="#%s" data-toggle="collapse">%s</a> &nbsp;' % (self.pk, prefix_character)
+        return '<li>%s<a href="%s">%s</a></li>\n' % (prefix, self.get_absolute_url(), self.title)
+    
+    def get_active_string(self):
+        if self.active:
+            return " in"
+        return ""
         
 class Media(models.Model):
     image_name = models.CharField(max_length=200, unique=True)

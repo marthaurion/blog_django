@@ -125,8 +125,7 @@ class PostDayView(PostListMixin, DayArchiveView):
 class CategoryListView(PostListMixin, ListView):
     def get_queryset(self):
         category = Category.objects.get(slug=self.kwargs['slug'])
-        category_list = category.get_descendants()
-        category_list.append(category)
+        category_list = category.get_descendants(include_self=True)
         posts = Post.published.filter(category__in=category_list)
         return posts
         

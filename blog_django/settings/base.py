@@ -58,6 +58,7 @@ INSTALLED_APPS = (
     'bulk_admin',
     'django.contrib.sitemaps',
     'versatileimagefield',
+    'mptt',
 )
 
 MIDDLEWARE_CLASSES = (

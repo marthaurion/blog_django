@@ -17,10 +17,16 @@
 {% if categories %}
 <div class="sidebar-module">
     <h4><strong>Categories</strong></h4>
+    {% load mptt_tags %}
     <ul class="list-unstyled">
-    {% for cat in categories %}
-        {{ cat.display_category|safe }}
-    {% endfor %}
+        {% recursetree categories %}
+            {{ node.get_display|safe }}
+            {% if not node.is_leaf_node %}
+                <ul id="{{ node.id }}" class="list-unstyled collapse{{ node.get_active_string }}">
+                    {{ children }}
+                </ul>
+            {% endif %}
+        {% endrecursetree %}
     </ul>
 </div>
 {% endif %}
