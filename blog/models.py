@@ -96,7 +96,7 @@ def warm_Post_first_image(sender, instance, **kwargs):
 
 class Category(models.Model):
     title = models.CharField(max_length=200)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(max_length=200, unique=True)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     active = models.BooleanField(default=False)
 
