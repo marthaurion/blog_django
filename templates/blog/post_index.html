@@ -41,6 +41,10 @@
   <p>Well, this is awkward.</p>
 {% endif %}
 
-{% include 'blog/_post_paginator.html' %}
+{% if search %}
+  {% include 'blog/_search_paginator.html' %}
+{% else %}
+  {% include 'blog/_post_paginator.html' %}
+{% endif %}
 
 {% endblock %}

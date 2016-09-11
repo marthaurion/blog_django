@@ -1,0 +1,19 @@
+<nav>
+    <ul class="pager">
+        {% if page_obj.has_previous %}
+            <li><a href="?q={{ query|urlencode }}&amp;page={{ page_obj.previous_page_number }}">< Previous</a></li>
+        {% else %}
+            <li class="disabled">
+                <span>< Previous</span>
+            </li>
+        {% endif %}
+
+        {% if page_obj.has_next %}
+            <li><a href="?q={{ query|urlencode }}&amp;page={{ page_obj.next_page_number }}">Next ></a></li>
+        {% else %}
+            <li class="disabled">
+                <span>Next ></span>
+            </li>
+        {% endif %}
+    </ul>
+</nav>

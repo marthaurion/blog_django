@@ -1,5 +1,6 @@
 import datetime, time
 
+from django.contrib.postgres.search import SearchVector
 from django.http import Http404
 from django.utils import timezone
 from django.views.generic.detail import DetailView
@@ -14,6 +15,7 @@ from .models import Post, Category
 # for some of the shared stuff in these views
 class PostListMixin(object):
     paginate_by = 7
+    allow_empty = True
     context_object_name = 'post_list'
     template_name = 'blog/post_index.html'
 
@@ -189,3 +191,32 @@ class PostDetailView(DetailView):
             if not self.request.user.is_active and not self.request.user.is_superuser: # only block if not an admin
                 raise Http404()
         return obj
+
+
+class SearchResultsView(PostListMixin, ListView):
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        
+        posts = Post.published.annotate(
+            search=SearchVector('title', 'body_html'),
+        ).filter(search=query)
+        return posts
+        
+    def get_context_data(self, **kwargs):
+        context = super(SearchResultsView, self).get_context_data(**kwargs)
+        
+        working_page = 1
+        if 'page' in self.kwargs:
+            working_page = int(self.kwargs['page'])
+        
+        title = "Search Results"
+        page_header = title
+        if working_page > 1:
+            title = title + " - Page " + str(working_page)
+            
+        context['page_title'] = title
+        context['page_header'] = page_header
+        context['search'] = True
+        context['query'] = self.request.GET.get('q')
+        
+        return context

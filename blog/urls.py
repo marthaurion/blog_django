@@ -1,12 +1,13 @@
 from django.conf.urls import include, url
 
 from .feeds import LatestEntriesFeed
-from .views import PostDetailView, TagListView, CategoryListView, PostIndexView, PostYearView, PostMonthView, PostDayView
+from .views import PostDetailView, TagListView, CategoryListView, PostIndexView, PostYearView, PostMonthView, PostDayView, SearchResultsView
 
 
 urlpatterns = [
     url(r'^$', PostIndexView.as_view()),
     url(r'^feed/$', LatestEntriesFeed()),
+    url(r'^results/$', SearchResultsView.as_view(), name='blog_search_list'),
     url(r'^page/(?P<page>\d+)/$', PostIndexView.as_view()),
     url(r'^category/(?P<slug>[-\w]+)/$', CategoryListView.as_view()),
     url(r'^category/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', CategoryListView.as_view()),

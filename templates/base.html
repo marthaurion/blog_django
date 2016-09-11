@@ -48,6 +48,14 @@
                     <li><a href="/blog/category/editorial">Editorials</a></li>
                     <li><a href="/blog/category/reviews">Reviews</a></li>
                 </ul>
+                <form class="navbar-form" id="searchform" action="{% url 'blog_search_list' %}" method="get" accept-charset="utf-8">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="srch-term">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </nav>
