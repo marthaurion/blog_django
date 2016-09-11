@@ -29,7 +29,7 @@ class Post(models.Model):
     excerpt = models.TextField()
     body = models.TextField()
     body_html = models.TextField(editable=False)
-    category = models.ForeignKey('Category', on_delete=models.CASCADE)
+    category = TreeForeignKey('Category', on_delete=models.CASCADE)
     pub_date = models.DateTimeField('date published', default=default_start_time)
     tags = TaggableManager()
     first_image = VersatileImageField(editable=False, max_length=400)

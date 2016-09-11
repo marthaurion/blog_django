@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from bulk_admin import BulkModelAdmin
+from mptt.admin import MPTTModelAdmin
 
 from .models import Post, Category, Media
 
@@ -9,6 +10,7 @@ from .models import Post, Category, Media
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = { 'slug': ['title'] }
+    search_fields = ['title']
     list_display = ('title', 'get_full_url', 'pub_date', 'admin_first_image', )
     
     # add a link to the blog post on the admin list display to make it easier to preview the post
@@ -28,12 +30,13 @@ class PostAdmin(admin.ModelAdmin):
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(MPTTModelAdmin):
     prepopulated_fields = { 'slug': ['title'] }
 
 
 @admin.register(Media)
 class MediaAdmin(BulkModelAdmin):
+    search_fields = ['image_name']
     list_display = ('image_name', 'pub_date', 'admin_thumbnail', 'admin_full', )
     
     # this stuff is to show a preview of the image in the admin list
