@@ -14,6 +14,17 @@
     <a href="http://feeds.feedburner.com/marthaurion/rzFS"><img src="{% static 'icons/rss.png' %}" alt="rss feed" width=64 height=64></a>
 </div>
 
+<div class="sidebar-module">
+    <form id="searchform" action="{% url 'blog_search_list' %}" method="get" accept-charset="utf-8">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Search" name="q" id="srch-term">
+            <div class="input-group-btn">
+                <button class="btn btn-default" type="submit">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+
 {% if categories %}
 <div class="sidebar-module">
     <h4><strong>Categories</strong></h4>
@@ -48,7 +59,7 @@
 </div>
 
 <div class="sidebar-module">
-    <h4>Email Subscriptions</h4>
+    <h4><strong>Email Subscriptions</strong></h4>
     <form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open('https://feedburner.google.com/fb/a/mailverify?uri=marthaurion/rzFS', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true">
         <p>Enter your email address and get a notification for each new post.</p>
         <p><input type="text" class="form-control" name="email" placeholder="Email Address" /></p>

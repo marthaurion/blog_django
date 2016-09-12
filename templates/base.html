@@ -9,8 +9,8 @@
 <title>{% block title %}Marth's Anime Blog{% endblock %}</title>
 
 {% load staticfiles %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/live/darkv10.css' %}" title="dark" />
-<link rel="alternate stylesheet" type="text/css" href="{% static 'css/live/lightv10.css' %}" title="light" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/live/darkv11.css' %}" title="dark" />
+<link rel="alternate stylesheet" type="text/css" href="{% static 'css/live/lightv11.css' %}" title="light" />
 <script type="text/javascript" src="{% static 'js/jquery1.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/allv6.min.js' %}" async></script>
 <script>
@@ -48,14 +48,6 @@
                     <li><a href="/blog/category/editorial">Editorials</a></li>
                     <li><a href="/blog/category/reviews">Reviews</a></li>
                 </ul>
-                <form class="navbar-form" id="searchform" action="{% url 'blog_search_list' %}" method="get" accept-charset="utf-8">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search" name="q" id="srch-term">
-                        <div class="input-group-btn">
-                            <button class="btn btn-default" type="submit">Submit</button>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
     </nav>
