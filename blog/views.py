@@ -197,9 +197,16 @@ class SearchResultsView(PostListMixin, ListView):
     def get_queryset(self):
         query = self.request.GET.get('q')
         
-        posts = Post.published.annotate(
-            search=SearchVector('title', 'body_html'),
-        ).filter(search=query)
+        posts = Post.published.extra(
+            select={'rank': "ts_rank_cd(to_tsvector('english', title || ' ' || body_html), plainto_tsquery(%s), 32)"},
+            select_params=(query,),
+            where=("to_tsvector('english', title || ' ' || body_html) @@ plainto_tsquery(%s)",),
+            params=(query,),
+            order_by=('-rank',)
+        )
+        #posts = Post.published.annotate(
+            #search=SearchVector('title', 'body_html'),
+        #).filter(search=query)
         return posts
         
     def get_context_data(self, **kwargs):
