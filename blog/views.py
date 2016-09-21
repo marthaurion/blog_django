@@ -2,6 +2,7 @@ import datetime, time
 
 from django.contrib.postgres.search import SearchVector
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
@@ -126,7 +127,7 @@ class PostDayView(PostListMixin, DayArchiveView):
 # display all posts for a category
 class CategoryListView(PostListMixin, ListView):
     def get_queryset(self):
-        category = Category.objects.get(slug=self.kwargs['slug'])
+        category = get_object_or_404(Category, slug=self.kwargs['slug'])
         category_list = category.get_descendants(include_self=True)
         posts = Post.published.filter(category__in=category_list)
         return posts
