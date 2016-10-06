@@ -172,7 +172,10 @@ def populate_first_image():
 class Link(models.Model):
     title = models.CharField(max_length=150)
     url = models.URLField()
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
+    
+    class Meta:
+        ordering = ['title']
     
     def __str__(self):
         return self.title
