@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.flatpages',
     'django.contrib.postgres',
+    'captcha',
     'blog',
     'taggit',
     'storages',

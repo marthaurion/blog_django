@@ -40,6 +40,7 @@ urlpatterns = [
     url(r'^messagereceived/$', ContactSuccessView.as_view(), name='thanks'),
     url(r'^sitemap\.xml$', sitemap_views.index, {'sitemaps': sitemaps}),
     url(r'^sitemap-(?P<section>.+)\.xml$', sitemap_views.sitemap, {'sitemaps': sitemaps}),
+    url(r'^captcha/', include('captcha.urls')),
     url(r'^$', PostIndexView.as_view(), name='index'),
 ]
 
