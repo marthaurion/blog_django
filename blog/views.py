@@ -15,7 +15,7 @@ from .models import Post, Category
 
 # for some of the shared stuff in these views
 class PostListMixin(object):
-    paginate_by = 7
+    paginate_by = 10
     allow_empty = True
     context_object_name = 'post_list'
     template_name = 'blog/post_index.html'
