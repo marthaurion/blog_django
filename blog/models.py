@@ -7,6 +7,7 @@ from django.utils.timezone import localtime
 from django.db.models import Count
 
 import markdown
+import pytz
 from mptt.models import MPTTModel, TreeForeignKey
 from taggit.managers import TaggableManager
 from versatileimagefield.fields import VersatileImageField
@@ -19,9 +20,12 @@ class PostManager(models.Manager):
 
 # returns either today at 4pm (server time) or tomorrow at 4pm if it's currently after 4pm
 def default_start_time():
-    now = timezone.now()
-    start = now.replace(hour=21, minute=0, second=0, microsecond=0)
-    return start if start > now else start + timedelta(days=1)
+    now = localtime(timezone.now())
+    start = now.replace(hour=16, minute=0, second=0, microsecond=0)
+    if now >= start:
+        start = start + timedelta(days=1)
+    start = start.astimezone(pytz.utc)
+    return start
 
 class Post(models.Model):
     title = models.CharField(max_length=300)
