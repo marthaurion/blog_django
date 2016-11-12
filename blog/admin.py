@@ -23,7 +23,7 @@ class PostAdmin(admin.ModelAdmin):
     def admin_first_image(self, instance):
         if not instance.first_image:
             return u'None'
-        return u'<img src="%s" height="150" width="300" />' % (instance.first_image.url)
+        return u'<img src="%s" width="300" />' % (instance.first_image.url)
         
     admin_first_image.short_description = 'First Image'
     admin_first_image.allow_tags = True
@@ -43,13 +43,13 @@ class MediaAdmin(BulkModelAdmin):
     def admin_thumbnail(self, instance):
         if not instance.scale_image:
             return u'None'
-        return u'<img src="%s" height="150" width="300" />' % (instance.scale_image.url)
+        return u'<img src="%s" width="300" />' % (instance.scale_image.url)
         
     admin_thumbnail.short_description = 'Image'
     admin_thumbnail.allow_tags = True
     
     def admin_full(self, instance):
-        return u'<img src="%s" height="150" width="300" />' % (instance.full_image.url)
+        return u'<img src="%s" width="300" />' % (instance.full_image.url)
         
     admin_full.short_description = 'Full Image'
     admin_full.allow_tags = True
