@@ -137,7 +137,7 @@ class Category(MPTTModel):
         return ""
         
 class Media(models.Model):
-    image_name = models.CharField(max_length=200, unique=True)
+    image_name = models.SlugField(max_length=200, unique=True)
     pub_date = models.DateTimeField('date published', default=timezone.now, editable=False)
     full_image = VersatileImageField(upload_to="full/%Y/%m/%d", max_length=400)
     scale_image = VersatileImageField(max_length=400, editable=False)
@@ -148,6 +148,9 @@ class Media(models.Model):
     
     def __str__(self):
         return self.image_name
+        
+    def get_blog_url(self):
+        return "/blog/media/"+self.image_name
     
     def save(self, *args, **kwargs):
         super(Media, self).save(*args, **kwargs)

@@ -4,14 +4,23 @@ from django.contrib.postgres.search import SearchVector
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.views.generic.base import RedirectView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.dates import ArchiveIndexView, YearArchiveView, MonthArchiveView, DayArchiveView
 
 from taggit.models import Tag
 
-from .models import Post, Category
+from .models import Post, Category, Media
 
+
+class MediaRedirectView(RedirectView):
+    permanent = True
+    
+    def get_redirect_url(self, *args, **kwargs):
+        media = get_object_or_404(Media, image_name=kwargs['name'])
+        return media.full_image.url
+        
 
 # for some of the shared stuff in these views
 class PostListMixin(object):
