@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block title %}{{ img.image_name }} | Image{% endblock %}
+
+{% block content %}
+    {{ img.get_link_html|safe }}
+    <hr />
+{% endblock %}

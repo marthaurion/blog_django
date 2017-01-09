@@ -151,6 +151,13 @@ class Media(models.Model):
         
     def get_blog_url(self):
         return "/blog/media/"+self.image_name
+        
+    def get_link_html(self):
+        link_string = '<a href="%s"><img src="%s" height="%s" width="%s" class="img-responsive" /></a>'
+        if self.full_image is None or self.scale_image is None:
+            return '<img src="#" alt="Image not found" />'
+        link_string = '<a href="%s"><img src="%s" height="%s" width="%s" class="img-responsive" /></a>'
+        return link_string % (self.full_image.url, self.scale_image.url, self.scale_image.height, self.scale_image.width)
     
     def save(self, *args, **kwargs):
         super(Media, self).save(*args, **kwargs)
