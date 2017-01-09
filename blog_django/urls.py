@@ -22,13 +22,14 @@ from django.contrib.sitemaps import views as sitemap_views
 
 from blog.views import PostIndexView
 
-from .sitemaps import StaticViewSitemap, BlogSitemap, IndexSitemap
+from .sitemaps import StaticViewSitemap, BlogSitemap, IndexSitemap, MediaSitemap
 from .views import AboutView, BlogrollView, ContactView, ContactSuccessView
 
 sitemaps = {
     'home': IndexSitemap,
     'blog': BlogSitemap,
-    'static': StaticViewSitemap
+    'static': StaticViewSitemap,
+    'media': MediaSitemap
 }
 
 urlpatterns = [
@@ -39,7 +40,7 @@ urlpatterns = [
     url(r'^blogroll/$', BlogrollView.as_view(), name='blogroll'),
     url(r'^messagereceived/$', ContactSuccessView.as_view(), name='thanks'),
     url(r'^sitemap\.xml$', sitemap_views.index, {'sitemaps': sitemaps}),
-    url(r'^sitemap-(?P<section>.+)\.xml$', sitemap_views.sitemap, {'sitemaps': sitemaps}),
+    url(r'^sitemap-(?P<section>.+)\.xml$', sitemap_views.sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     url(r'^captcha/', include('captcha.urls')),
     url(r'^$', PostIndexView.as_view(), name='index'),
 ]

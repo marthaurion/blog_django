@@ -37,7 +37,13 @@ class CategoryAdmin(MPTTModelAdmin):
 @admin.register(Media)
 class MediaAdmin(BulkModelAdmin):
     search_fields = ['image_name']
-    list_display = ('image_name', 'pub_date', 'admin_thumbnail', 'admin_full', )
+    list_display = ('image_name', 'pub_date', 'admin_url', 'admin_thumbnail', 'admin_full', )
+    
+    def admin_url(self, instance):
+        return "<a href='%s'>%s</a>" % (instance.get_blog_url(), instance.get_blog_url())
+        
+    admin_url.short_description = 'Image URL'
+    admin_url.allow_tags = True
     
     # this stuff is to show a preview of the image in the admin list
     def admin_thumbnail(self, instance):

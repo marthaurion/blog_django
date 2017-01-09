@@ -186,3 +186,8 @@ class Link(models.Model):
     
     def __str__(self):
         return self.title
+        
+        
+class Mapping(models.Model):
+    source = models.URLField()
+    dest = models.URLField()
