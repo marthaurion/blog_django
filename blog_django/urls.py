@@ -23,7 +23,7 @@ from django.contrib.sitemaps import views as sitemap_views
 from blog.views import PostIndexView
 
 from .sitemaps import StaticViewSitemap, BlogSitemap, IndexSitemap, MediaSitemap
-from .views import AboutView, BlogrollView, ContactView, ContactSuccessView
+from .views import AboutView, BlogrollView, ContactView, ContactSuccessView, TestAuth, TestToken
 
 sitemaps = {
     'home': IndexSitemap,
@@ -42,6 +42,8 @@ urlpatterns = [
     url(r'^sitemap\.xml$', sitemap_views.index, {'sitemaps': sitemaps}),
     url(r'^sitemap-(?P<section>.+)\.xml$', sitemap_views.sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     url(r'^captcha/', include('captcha.urls')),
+    url(r'^authorize/', TestAuth.as_view()),
+    url(r'^token/', TestToken.as_view()),
     url(r'^$', PostIndexView.as_view(), name='index'),
 ]
 

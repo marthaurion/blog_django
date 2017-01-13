@@ -168,3 +168,6 @@ VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
         ('scaled_image_thumb', 'thumbnail__750x540')
     ]
 }
+
+OAUTH_CLIENT_ID = get_secret('OAUTH_CLIENT_ID')
+OAUTH_CLIENT_SECRET = get_secret('OAUTH_CLIENT_SECRET')
