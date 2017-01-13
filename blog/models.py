@@ -183,6 +183,15 @@ def populate_first_image():
             post.save()
 
 
+def warm_all_media():
+    media_img_warmer = VersatileImageFieldWarmer(
+        instance_or_queryset=Media.objects.all(),
+        rendition_key_set='scaled_image',
+        image_attr='full_image'
+    )
+    num_created, failed_to_create = media_img_warmer.warm()
+
+
 class Link(models.Model):
     title = models.CharField(max_length=150)
     url = models.URLField()
