@@ -207,3 +207,15 @@ class Link(models.Model):
 class Mapping(models.Model):
     source = models.URLField()
     dest = models.URLField()
+    
+    
+class Comment(MPTTModel):
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
+    post = models.ForeignKey('Post', related_name='comments')
+    approved = models.BooleanField(default=False)
+    pub_date = models.DateTimeField('date published', default=timezone.now, editable=False)
+    author = models.CharField(max_length=200)
+    text = models.TextField()
+
+    def __str__(self):
+        return self.pk
