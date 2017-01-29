@@ -7,6 +7,7 @@ from django.utils.timezone import localtime
 from django.db.models import Count
 
 import markdown
+import hashlib
 import pytz
 from mptt.models import MPTTModel, TreeForeignKey
 from taggit.managers import TaggableManager
@@ -230,6 +231,14 @@ class Commenter(models.Model):
     email = models.EmailField()
     website = models.URLField()
     approved = models.BooleanField(default=False)
+    
+    def get_profile_url(self):
+        email_hash = hashlib.md5(self.email.lower().encode('utf-8')).hexdigest()
+        return "https://www.gravatar.com/%s" % (email_hash)
+    
+    def get_image_url(self):
+        email_hash = hashlib.md5(self.email.lower().encode('utf-8')).hexdigest()
+        return "https://www.gravatar.com/avatar/%s?s=%s" % (email_hash, str(64))
     
     def __str__(self):
         return self.username
