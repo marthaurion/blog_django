@@ -214,8 +214,22 @@ class Comment(MPTTModel):
     post = models.ForeignKey('Post', related_name='comments')
     approved = models.BooleanField(default=False)
     pub_date = models.DateTimeField('date published', default=timezone.now, editable=False)
-    author = models.CharField(max_length=200)
+    author = models.ForeignKey('Commenter', related_name='comments')
     text = models.TextField()
+    
+    def approve(self):
+        self.approved = True
+        self.save()
 
     def __str__(self):
-        return self.pk
+        return self.text
+
+
+class Commenter(models.Model):
+    username = models.CharField(max_length=200)
+    email = models.EmailField()
+    website = models.URLField()
+    approved = models.BooleanField(default=False)
+    
+    def __str__(self):
+        return self.username

@@ -3,7 +3,7 @@ from django.contrib import admin
 from bulk_admin import BulkModelAdmin
 from mptt.admin import MPTTModelAdmin
 
-from .models import Post, Category, Media, Link
+from .models import Post, Category, Media, Link, Comment, Commenter
 
 # Register your models here.
 
@@ -63,4 +63,14 @@ class MediaAdmin(BulkModelAdmin):
     
 @admin.register(Link)
 class LinkAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Commenter)
+class CommenterAdmin(admin.ModelAdmin):
     pass
