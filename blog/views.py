@@ -212,18 +212,20 @@ class PostDetailView(FormMixin, DetailView):
         form = self.get_form()
         if form.is_valid():
             commenter = Commenter.objects.filter(email=form.cleaned_data['email'])
-            if not commenter:
+            if not commenter: # if no commenter is found for the email in the form, create one
                 author = Commenter()
                 author.email = form.cleaned_data['email']
                 author.username = form.cleaned_data['username']
                 author.website = form.cleaned_data['website']
                 author.save()
-            else:
+            else: # if we find a commenter with the email, use it
                 author = commenter[0]
             comment = Comment()
-            comment.post = self.object
+            comment.post = self.object # use the post attached to this view as the post for this comment
             comment.author = author
-            comment.text = form.cleaned_data['text']
+            if author.approved: # if the author is always approved, mark the comment as approved
+                comment.approved = True
+            comment.text = form.cleaned_data['text'] # pull from the form
             comment.save()
             
             return self.form_valid(form)

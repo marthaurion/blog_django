@@ -15,7 +15,7 @@
     
     {% include 'blog/_post_comments.html' %}
     
-    <div class="well">
+    <div class="well" id="comment-form">
         <h4><strong>Leave a comment</strong></h4>
         <form class="form-group" action="{{ post.get_absolute_url }}" method="post">
             {% csrf_token %}

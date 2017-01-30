@@ -22,7 +22,9 @@
                 </h4>
                 <small class="text-muted">{{ node.pub_date }}</small>
                 <p>{{ node.text|escape|urlize|linebreaksbr }}</p>
-                <p><a href="#">Reply</a></p>
+                {% if node.level < 2  %}
+                    <p><a href="#comment{{ node.pk }}" class="comment-reply-link">Reply</a></p>
+                {% endif %}
             {% if not node.is_leaf_node %}
                 {{ children }}
             {% endif %}
