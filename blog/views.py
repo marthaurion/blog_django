@@ -5,12 +5,14 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import FormMixin
 from django.views.generic.list import ListView
 from django.views.generic.dates import ArchiveIndexView, YearArchiveView, MonthArchiveView, DayArchiveView
 
 from taggit.models import Tag
 
-from .models import Post, Category, Media
+from .models import Post, Category, Media, Comment, Commenter
+from .forms import CommentForm
 
 
 class MediaDetailView(DetailView):
@@ -188,10 +190,14 @@ class TagListView(PostListMixin, ListView):
 
 
 # display a single post
-class PostDetailView(DetailView):
+class PostDetailView(FormMixin, DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
     month_format = "%m"
+    form_class = CommentForm
+    
+    def get_success_url(self):
+        return self.object.get_absolute_url()
     
     # override get object so that it gives a 404 error if you're looking at a post in the future and you're not an admin
     def get_object(self, *args, **kwargs):
@@ -200,6 +206,32 @@ class PostDetailView(DetailView):
             if not self.request.user.is_active and not self.request.user.is_superuser: # only block if not an admin
                 raise Http404()
         return obj
+        
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
+        if form.is_valid():
+            commenter = Commenter.objects.filter(email=form.cleaned_data['email'])
+            if not commenter:
+                author = Commenter()
+                author.email = form.cleaned_data['email']
+                author.username = form.cleaned_data['username']
+                author.website = form.cleaned_data['website']
+                author.save()
+            else:
+                author = commenter[0]
+            comment = Comment()
+            comment.post = self.object
+            comment.author = author
+            comment.text = form.cleaned_data['text']
+            comment.save()
+            
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+            
+    def form_valid(self, form):
+        return super(PostDetailView, self).form_valid(form)
 
 
 class SearchResultsView(PostListMixin, ListView):

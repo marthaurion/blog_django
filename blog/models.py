@@ -229,8 +229,13 @@ class Comment(MPTTModel):
 class Commenter(models.Model):
     username = models.CharField(max_length=200)
     email = models.EmailField()
-    website = models.URLField()
+    website = models.URLField(null=True, blank=True)
     approved = models.BooleanField(default=False)
+    
+    def get_commenter_text(self):
+        if self.website:
+            return '<a href="%s">%s</a>' % (self.website, self.username)
+        return self.username
     
     def get_profile_url(self):
         email_hash = hashlib.md5(self.email.lower().encode('utf-8')).hexdigest()

@@ -1,0 +1,39 @@
+{% if post.comments.all %}
+    {% load mptt_tags %}
+    <ul class="media-list">
+    {% recursetree post.comments.all %}
+        {% if not node.is_child_node %}
+            <li class="media" id="comment{{ node.pk }}">
+        {% else %}
+            <div class="media" id="comment{{ node.pk }}">
+        {% endif %}
+            <div class="media-left">
+                <a href="{{ node.author.get_profile_url }}">
+                    <img class="media-object" src="{{ node.author.get_image_url }}" alt="testing" height="64" width="64" />
+                </a>
+            </div>
+            <div class="media-body">
+                <h4 class="media-heading">
+                    {% if node.author.website %}
+                        <a href="{{ node.author.website }}">{{ node.author.username }}</a>
+                    {% else %}
+                        {{ node.author.username }}
+                    {% endif %}
+                </h4>
+                <small class="text-muted">{{ node.pub_date }}</small>
+                <p>{{ node.text|escape|urlize|linebreaksbr }}</p>
+                <p><a href="#">Reply</a></p>
+            {% if not node.is_leaf_node %}
+                {{ children }}
+            {% endif %}
+            </div>
+        {% if not node.is_child_node %}
+            </li>
+        {% else %}
+            </div>
+        {% endif %}
+    {% endrecursetree %}
+    </ul>
+{% else %}
+    <p>No comments found.</p>
+{% endif %}

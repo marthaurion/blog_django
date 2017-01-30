@@ -13,36 +13,15 @@
     {% include 'blog/_post_meta.html' %}
     <hr />
     
-    {% if post.comments.all %}
-        {% load mptt_tags %}
-        <ul class="media-list">
-        {% recursetree post.comments.all %}
-            {% if not node.is_child_node %}
-                <li class="media" id="comment{{ node.pk }}">
-            {% else %}
-                <div class="media" id="comment{{ node.pk }}">
-            {% endif %}
-                <div class="media-left">
-                    <a href="{{ node.author.get_profile_url }}">
-                        <img class="media-object" src="{{ node.author.get_image_url }}" alt="testing" height="64" width="64" />
-                    </a>
-                </div>
-                <div class="media-body">
-                    <h4 class="media-heading">Test Comment</h4>
-                    <p>{{ node.text|escape|urlize|linebreaks }}</p>
-                    <p><a href="#">Reply</a></p>
-                {% if not node.is_leaf_node %}
-                    {{ children }}
-                {% endif %}
-                </div>
-            {% if not node.is_child_node %}
-                </li>
-            {% else %}
-                </div>
-            {% endif %}
-        {% endrecursetree %}
-        </ul>
-    {% else %}
-        <p>No comments found.</p>
-    {% endif %}
+    {% include 'blog/_post_comments.html' %}
+    
+    <div class="well">
+        <h4><strong>Leave a comment</strong></h4>
+        <form class="form-group" action="{{ post.get_absolute_url }}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" class="btn btn-primary" value="Post Comment" />
+        </form>
+    </div>
+    
 {% endblock %}
