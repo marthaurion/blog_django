@@ -1,6 +1,6 @@
 {% if post.approved_comments %}
     {% load mptt_tags %}
-    <ul class="media-list">
+    <ul class="media-list" id="comment-list">
     {% recursetree post.approved_comments %}
         {% if not node.is_child_node %}
             <li class="media" id="comment{{ node.pk }}">
@@ -42,6 +42,7 @@
 
 <div class="well" id="comment-form">
     <h4><strong>Leave a comment</strong></h4>
+    <p id='cancel-reply' hidden><a href="#comment-form" class='comment-reply-cancel'>Cancel Reply to Comment</a></p>
     <form class="form-group" action="{{ post.get_absolute_url }}" method="post">
         {% csrf_token %}
         {{ form.as_p }}
