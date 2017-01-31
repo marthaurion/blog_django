@@ -10,3 +10,4 @@ class CommentForm(forms.Form):
     email = forms.EmailField(label="Email", required=True, widget=forms.EmailInput(attrs=attrib))
     website = forms.URLField(required=False, widget=forms.URLInput(attrs=attrib))
     text = forms.CharField(required=True, widget=forms.Textarea(attrs=attrib))
+    parent = forms.CharField(required=False, widget=forms.HiddenInput(attrs={'id': 'comment-form-parent'}))

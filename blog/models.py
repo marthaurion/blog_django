@@ -52,6 +52,9 @@ class Post(models.Model):
         local_pub_date = localtime(self.pub_date)
         return "/blog/%s/%s/" % (local_pub_date.strftime("%Y/%m/%d"), self.slug)
     
+    def approved_comments(self):
+        return self.comments.filter(approved=True)
+    
     # takes the text of the post and replaces the {{REPLACE}} strings with the proper image text
     def process_image_links(self, body_parts):
         link_string = '<a href="%s"><img src="%s" height="%s" width="%s" class="img-responsive" /></a>'
@@ -217,6 +220,10 @@ class Comment(MPTTModel):
     pub_date = models.DateTimeField('date published', default=timezone.now, editable=False)
     author = models.ForeignKey('Commenter', related_name='comments')
     text = models.TextField()
+    
+    
+    class Meta:
+        ordering = ['-pub_date']
     
     def approve(self):
         self.approved = True

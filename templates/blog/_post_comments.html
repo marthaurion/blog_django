@@ -1,7 +1,7 @@
-{% if post.comments.all %}
+{% if post.approved_comments %}
     {% load mptt_tags %}
     <ul class="media-list">
-    {% recursetree post.comments.all %}
+    {% recursetree post.approved_comments %}
         {% if not node.is_child_node %}
             <li class="media" id="comment{{ node.pk }}">
         {% else %}
@@ -39,3 +39,12 @@
 {% else %}
     <p>No comments found.</p>
 {% endif %}
+
+<div class="well" id="comment-form">
+    <h4><strong>Leave a comment</strong></h4>
+    <form class="form-group" action="{{ post.get_absolute_url }}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn btn-primary" value="Post Comment" />
+    </form>
+</div>

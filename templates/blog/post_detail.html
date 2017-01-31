@@ -15,13 +15,4 @@
     
     {% include 'blog/_post_comments.html' %}
     
-    <div class="well" id="comment-form">
-        <h4><strong>Leave a comment</strong></h4>
-        <form class="form-group" action="{{ post.get_absolute_url }}" method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" class="btn btn-primary" value="Post Comment" />
-        </form>
-    </div>
-    
 {% endblock %}

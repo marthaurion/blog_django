@@ -221,6 +221,11 @@ class PostDetailView(FormMixin, DetailView):
             else: # if we find a commenter with the email, use it
                 author = commenter[0]
             comment = Comment()
+            
+            if form.cleaned_data['parent']:
+                parent_id = int(form.cleaned_data['parent'].replace('#comment',''))
+                comment.parent = Comment.objects.get(pk=parent_id)
+                
             comment.post = self.object # use the post attached to this view as the post for this comment
             comment.author = author
             if author.approved: # if the author is always approved, mark the comment as approved
