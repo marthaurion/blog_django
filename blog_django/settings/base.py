@@ -168,3 +168,5 @@ VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
         ('scaled_image_thumb', 'thumbnail__750x540')
     ]
 }
+
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"

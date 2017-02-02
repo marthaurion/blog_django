@@ -54,6 +54,3 @@ note: apparently Django 1.10.1 introduced a bug that makes it so the default pub
 
 comments left to do:
 - ability to update username or website if the value entered doesn't match
-- save the form fields in a session to avoid typing them multiple times
-- only show approved comments
-- add ability to cancel the reply and get rid of the comment parent field

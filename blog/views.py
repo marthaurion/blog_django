@@ -199,6 +199,12 @@ class PostDetailView(FormMixin, DetailView):
     def get_success_url(self):
         return self.object.get_absolute_url()
     
+    # override initial values for the form to use session values for a commenter if they exist
+    def get_initial(self):
+        return { 'username': self.request.session.get('comment_username'),
+                'email': self.request.session.get('comment_email'),
+                'website': self.request.session.get('comment_website') }
+    
     # override get object so that it gives a 404 error if you're looking at a post in the future and you're not an admin
     def get_object(self, *args, **kwargs):
         obj = super(PostDetailView, self).get_object(*args, **kwargs)
@@ -207,6 +213,7 @@ class PostDetailView(FormMixin, DetailView):
                 raise Http404()
         return obj
         
+    # override the post function to handle the form values and create a comment
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form()
@@ -220,8 +227,12 @@ class PostDetailView(FormMixin, DetailView):
                 author.save()
             else: # if we find a commenter with the email, use it
                 author = commenter[0]
-            comment = Comment()
             
+            request.session['comment_email'] = author.email  # save commenter information in a session so it can be reused later
+            request.session['comment_username'] = author.username
+            request.session['comment_website'] = author.website
+            
+            comment = Comment()
             if form.cleaned_data['parent']:
                 parent_id = int(form.cleaned_data['parent'].replace('#comment',''))
                 comment.parent = Comment.objects.get(pk=parent_id)
