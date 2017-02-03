@@ -218,15 +218,28 @@ class PostDetailView(FormMixin, DetailView):
         self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
-            commenter = Commenter.objects.filter(email=form.cleaned_data['email'])
+            form_email = form.cleaned_data['email']
+            form_username = form.cleaned_data['username']
+            form_website = form.cleaned_data['website']
+            commenter = Commenter.objects.filter(email=form_email)
             if not commenter: # if no commenter is found for the email in the form, create one
                 author = Commenter()
-                author.email = form.cleaned_data['email']
-                author.username = form.cleaned_data['username']
-                author.website = form.cleaned_data['website']
+                author.email = form_email
+                author.username = form_username
+                author.website = form_website
                 author.save()
             else: # if we find a commenter with the email, use it
                 author = commenter[0]
+                changed = False
+                # if username or website are changed, update them for the author of the comment
+                if form_website and form_website != author.website:
+                    author.website = form_website
+                    changed = True
+                if form_username and form_username != author.username:
+                    author.username = form_username
+                    changed = True
+                if changed:
+                    author.save()
             
             request.session['comment_email'] = author.email  # save commenter information in a session so it can be reused later
             request.session['comment_username'] = author.username
