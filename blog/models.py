@@ -220,17 +220,18 @@ class Comment(MPTTModel):
     pub_date = models.DateTimeField('date published', default=timezone.now, editable=False)
     author = models.ForeignKey('Commenter', related_name='comments')
     text = models.TextField()
+    notify = models.BooleanField(default=False)
     
     
     class Meta:
         ordering = ['-pub_date']
+        
+    def __str__(self):
+        return self.text
     
     def approve(self):
         self.approved = True
         self.save()
-
-    def __str__(self):
-        return self.text
 
 
 class Commenter(models.Model):

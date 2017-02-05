@@ -61,6 +61,7 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'versatileimagefield',
     'mptt',
+    'anymail',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -148,13 +149,6 @@ AWS_SECRET_ACCESS_KEY = get_secret("AWS_SECRET_ACCESS_KEY")
 
 DISQUS_API_KEY = get_secret('DISQUS_API_KEY')
 
-EMAIL_HOST_PASSWORD = get_secret('EMAIL_HOST_PASSWORD')
-
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'marthaurionblog@gmail.com'
-
 VERSATILEIMAGEFIELD_SETTINGS = {
     'create_images_on_demand': False,
     'jpeg_resize_quality': 90,
@@ -170,3 +164,9 @@ VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
 }
 
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+
+EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
+ANYMAIL = {
+    "MAILGUN_API_KEY": get_secret('MAILGUN_API_KEY'),
+    "MAILGUN_SENDER_DOMAIN": 'mail.marthaurion.com',
+}

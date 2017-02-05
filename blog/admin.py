@@ -68,7 +68,7 @@ class LinkAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('author', 'pub_date', 'text', 'approved', )
+    list_display = ('author', 'pub_date', 'text', 'approved', 'notify', )
     list_filter = ['approved']
     actions = ['mark_approved', 'mark_not_approved']
     

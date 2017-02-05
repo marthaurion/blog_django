@@ -255,6 +255,8 @@ class PostDetailView(FormMixin, DetailView):
             if author.approved: # if the author is always approved, mark the comment as approved
                 comment.approved = True
             comment.text = form.cleaned_data['text'] # pull from the form
+            if request.POST.get('notify', False): # if the checkbox is checked, set notify field
+                comment.notify = True
             comment.save()
             
             return self.form_valid(form)
