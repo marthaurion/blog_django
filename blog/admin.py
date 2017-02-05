@@ -86,3 +86,15 @@ class CommentAdmin(admin.ModelAdmin):
 @admin.register(Commenter)
 class CommenterAdmin(admin.ModelAdmin):
     list_display = ('username', 'approved', )
+    list_filter = ['approved']
+    actions = ['mark_approved', 'mark_not_approved']
+    
+    def mark_approved(self, request, queryset):
+        queryset.update(approved=True)
+    
+    mark_approved.short_description = "Approve the selected users"
+    
+    def mark_not_approved(self, request, queryset):
+        queryset.update(approved=False)
+    
+    mark_not_approved.short_description = "Unapprove the selected users"
