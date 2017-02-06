@@ -257,8 +257,7 @@ class Comment(MPTTModel):
         msg.send()
         
     def notify_authors(self, request):
-        recipients = []
-        recipients += self.author.email # first send the notification to the parent comment's author
+        recipients = [self.author.email] # first send the notification to the parent comment's author
         self.send_email_notification(request, recipients)
     
     def send_notifications(self, request):
