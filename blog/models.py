@@ -56,6 +56,13 @@ class Post(models.Model):
     
     def approved_comments(self):
         return self.comments.filter(approved=True)
+        
+    def get_comment_count(self):
+        num = len(self.approved_comments())
+        if num == 0:
+            return "No comments"
+        else:
+            return str(num) + " comments"
     
     # takes the text of the post and replaces the {{REPLACE}} strings with the proper image text
     def process_image_links(self, body_parts):
