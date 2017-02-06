@@ -1,0 +1,5 @@
+<html>
+    <p>New comment made by {{ comment_author }}</p>
+    <p>{{ comment_text|escape|urlize|linebreaksbr }}</p>
+    <p>Check out the comment <a href="{{ comment_url }}">here</a>.</p>
+</html>

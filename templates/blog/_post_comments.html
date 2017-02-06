@@ -20,7 +20,7 @@
                         {{ node.author.username }}
                     {% endif %}
                 </h4>
-                <small class="text-muted">{{ node.pub_date }}</small>
+                <a href="{{ node.get_absolute_url }}"><small class="text-muted">{{ node.pub_date }}</small></a>
                 <p>{{ node.text|escape|urlize|linebreaksbr }}</p>
                 {% if node.level < 2  %}
                     <p><a href="#comment{{ node.pk }}" class="comment-reply-link">Reply</a></p>

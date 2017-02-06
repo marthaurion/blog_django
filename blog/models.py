@@ -5,6 +5,8 @@ from django.utils import timezone
 from django.dispatch import receiver
 from django.utils.timezone import localtime
 from django.db.models import Count
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 import markdown
 import hashlib
@@ -229,9 +231,32 @@ class Comment(MPTTModel):
     def __str__(self):
         return self.text
     
-    def approve(self):
-        self.approved = True
-        self.save()
+    def get_absolute_url(self):
+        base_url = self.post.get_absolute_url()
+        return base_url + '#comment' + str(self.pk)
+    
+    def send_email_notification(self, request, recipients):
+        subject = "New comment on %s" % self.post.title
+        comment_url = request.META['HTTP_HOST'] + self.get_absolute_url()
+        context = { 'comment_author': self.author.username,
+                    'comment_text': self.text,
+                    'comment_url': comment_url
+        }
+        body = "Check out the reply to your comment at %s" % comment_url
+        html_body = render_to_string('blog/comment_body.html', context)
+        msg = EmailMultiAlternatives(subject=subject, from_email="marth@mail.marthaurion.com",
+                                    to=recipients, body=body)
+        msg.attach_alternative(html_body, "text/html")
+        msg.send()
+        
+    def notify_authors(self, request):
+        recipients = []
+        recipients += self.author.email # first send the notification to the parent comment's author
+        self.send_email_notification(request, recipients)
+    
+    def send_notifications(self, request):
+        self.send_email_notification(request, "marthaurion@gmail.com") # first always send notification to me, the admin
+        self.parent.notify_authors(request)
 
 
 class Commenter(models.Model):

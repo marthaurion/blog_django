@@ -259,6 +259,8 @@ class PostDetailView(FormMixin, DetailView):
                 comment.notify = True
             comment.save()
             
+            comment.send_notifications(request)
+            
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
