@@ -259,12 +259,12 @@ class Comment(MPTTModel):
     def notify_authors(self, request):
         recipients = [self.author.email] # first send the notification to the parent comment's author
         recipients = [x for x in recipients if x != "marthaurion@gmail.com"] # get rid of myself
-        self.send_email_notification(request, recipients)
+        return recipients
     
     def send_notifications(self, request):
         self.send_email_notification(request, ["marthaurion@gmail.com"]) # first always send notification to me, the admin
         if self.parent:
-            self.parent.notify_authors(request)
+            self.send_email_notification(request, self.parent.notify_authors(request))
 
 
 class Commenter(models.Model):
