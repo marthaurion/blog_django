@@ -262,7 +262,7 @@ class Comment(MPTTModel):
         self.send_email_notification(request, recipients)
     
     def send_notifications(self, request):
-        self.send_email_notification(request, "marthaurion@gmail.com") # first always send notification to me, the admin
+        self.send_email_notification(request, ["marthaurion@gmail.com"]) # first always send notification to me, the admin
         self.parent.notify_authors(request)
 
 
