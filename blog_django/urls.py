@@ -20,7 +20,10 @@ from django.contrib import admin
 from django.contrib.sitemaps import GenericSitemap
 from django.contrib.sitemaps import views as sitemap_views
 
+from captcha import urls as captcha_urls
+
 from blog.views import PostIndexView
+from blog import urls as blog_urls
 
 from .sitemaps import StaticViewSitemap, BlogSitemap, IndexSitemap, MediaSitemap
 from .views import AboutView, BlogrollView, ContactView, ContactSuccessView
@@ -34,14 +37,14 @@ sitemaps = {
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^blog/', include('blog.urls')),
+    url(r'^blog/', include(blog_urls)),
     url(r'^about/$', AboutView.as_view(), name='about'),
     url(r'^contact/$', ContactView.as_view(), name='contact'),
     url(r'^blogroll/$', BlogrollView.as_view(), name='blogroll'),
     url(r'^messagereceived/$', ContactSuccessView.as_view(), name='thanks'),
     url(r'^sitemap\.xml$', sitemap_views.index, {'sitemaps': sitemaps}),
     url(r'^sitemap-(?P<section>.+)\.xml$', sitemap_views.sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-    url(r'^captcha/', include('captcha.urls')),
+    url(r'^captcha/', include(captcha_urls)),
     url(r'^$', PostIndexView.as_view(), name='index'),
 ]
 
