@@ -242,6 +242,14 @@ class Comment(MPTTModel):
         base_url = self.post.get_absolute_url()
         return base_url + '#comment' + str(self.pk)
     
+    def approve(self):
+        self.approved = True
+        self.save()
+    
+    def unapprove(self):
+        self.approved = False
+        self.save()
+    
     def send_email_notification(self, request, recipients):
         subject = "New comment on %s" % self.post.title
         comment_url = request.META['HTTP_HOST'] + self.get_absolute_url()
@@ -272,6 +280,18 @@ class Commenter(models.Model):
     email = models.EmailField()
     website = models.URLField(null=True, blank=True)
     approved = models.BooleanField(default=False)
+    
+    def approve(self):
+        self.approved = True
+        for comment in Comment.objects.filter(author=self):
+            comment.approve()
+        self.save()
+    
+    def unapprove(self):
+        self.approved = False
+        for comment in Comment.objects.filter(author=self):
+            comment.unapprove()
+        self.save()
     
     def get_commenter_text(self):
         if self.website:

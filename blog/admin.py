@@ -73,12 +73,14 @@ class CommentAdmin(admin.ModelAdmin):
     actions = ['mark_approved', 'mark_not_approved']
     
     def mark_approved(self, request, queryset):
-        queryset.update(approved=True)
+        for comment in queryset:
+            comment.approve()
     
     mark_approved.short_description = "Approve the selected comments"
     
     def mark_not_approved(self, request, queryset):
-        queryset.update(approved=False)
+        for comment in queryset:
+            comment.unapprove()
     
     mark_not_approved.short_description = "Unapprove the selected comments"
 
@@ -90,11 +92,13 @@ class CommenterAdmin(admin.ModelAdmin):
     actions = ['mark_approved', 'mark_not_approved']
     
     def mark_approved(self, request, queryset):
-        queryset.update(approved=True)
+        for commenter in queryset:
+            commenter.approve()
     
     mark_approved.short_description = "Approve the selected users"
     
     def mark_not_approved(self, request, queryset):
-        queryset.update(approved=False)
+        for commenter in queryset:
+            commenter.unapprove()
     
     mark_not_approved.short_description = "Unapprove the selected users"
