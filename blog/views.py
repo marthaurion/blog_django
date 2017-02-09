@@ -196,6 +196,15 @@ class PostDetailView(FormMixin, DetailView):
     month_format = "%m"
     form_class = CommentForm
     
+    def get(self, request, *args, **kwargs):
+        if 'email' in request.GET and 'comment' in request.GET:
+            comment_pk = int(request.GET['comment'])
+            comment = Comment.objects.filter(pk=comment_pk)
+            if len(comment):
+                comment[0].unsubscribe(request.GET['email'])
+            
+        return super(PostDetailView, self).get(request, *args, **kwargs)
+    
     def get_success_url(self):
         return self.object.get_absolute_url()
     

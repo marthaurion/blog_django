@@ -2,4 +2,6 @@
     <p>New comment made by {{ comment_author }}</p>
     <p>{{ comment_text|escape|urlize|linebreaksbr }}</p>
     <p>Check out the comment <a href="{{ comment_url }}">here</a>.</p>
+    <hr>
+    <p><a href="{{ unsubscribe_url }}">Click here to unsubscribe from replies to this comment.</a></p>
 </html>

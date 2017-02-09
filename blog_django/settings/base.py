@@ -170,3 +170,5 @@ ANYMAIL = {
     "MAILGUN_API_KEY": get_secret('MAILGUN_API_KEY'),
     "MAILGUN_SENDER_DOMAIN": 'mail.marthaurion.com',
 }
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'

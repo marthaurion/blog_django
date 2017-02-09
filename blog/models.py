@@ -241,6 +241,11 @@ class Comment(MPTTModel):
     def get_absolute_url(self):
         base_url = self.post.get_absolute_url()
         return base_url + '#comment' + str(self.pk)
+        
+    def get_unsubscribe_url(self):
+        base_url = self.post.get_absolute_url()
+        unsubscribe_query = '?email=%s&comment=%s' % (self.author.email, str(self.pk))
+        return base_url + unsubscribe_query
     
     def approve(self):
         self.approved = True
@@ -250,12 +255,20 @@ class Comment(MPTTModel):
         self.approved = False
         self.save()
     
+    # if the email passed in matches the author, then turn off notifications
+    def unsubscribe(self, email):
+        if email == self.author.email:
+            self.notify = False
+            self.save()
+    
     def send_email_notification(self, request, recipients):
         subject = "New comment on %s" % self.post.title
-        comment_url = request.META['HTTP_HOST'] + self.get_absolute_url()
+        comment_url = request.build_absolute_uri(self.get_absolute_url())
+        unsubscribe_url = request.build_absolute_uri(self.get_unsubscribe_url())
         context = { 'comment_author': self.author.username,
                     'comment_text': self.text,
-                    'comment_url': comment_url
+                    'comment_url': comment_url,
+                    'unsubscribe_url': unsubscribe_url
         }
         body = "Check out the reply to your comment at %s" % comment_url
         html_body = render_to_string('blog/comment_body.html', context)
