@@ -50,3 +50,8 @@ urlpatterns = [
 
 if settings.DEBUG and not settings.MAINTENANCE_MODE: # there is a debug mode for production, but it turns on maintenance mode
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    
+    import debug_toolbar  # if we're on the dev server, include urls for debug toolbar
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]
