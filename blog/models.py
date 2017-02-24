@@ -32,7 +32,7 @@ class Post(models.Model):
     slug = models.SlugField(unique=True, max_length=300)
     excerpt = models.TextField()
     body = models.TextField()
-    body_html = models.TextField(editable=False)
+    body_html = models.TextField()
     category = TreeForeignKey('Category', on_delete=models.CASCADE)
     pub_date = models.DateTimeField('date published', default=default_start_time, db_index=True)
     tags = TaggableManager()

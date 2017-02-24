@@ -12,6 +12,7 @@ class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = { 'slug': ['title'] }
     search_fields = ['title']
     list_display = ('title', 'get_full_url', 'pub_date', 'admin_first_image', )
+    readonly_fields = ('body_html', )
     
     # add a link to the blog post on the admin list display to make it easier to preview the post
     def get_full_url(self, instance):
