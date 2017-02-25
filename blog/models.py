@@ -65,7 +65,7 @@ class Post(models.Model):
             return str(num) + " comments"
     
     # takes the text of the post and replaces the {{REPLACE}} strings with the proper image text
-    def process_image_links(self, body_parts):
+    def process_image_links(self, body_parts, word=None):
         link_string = '<a href="%s"><img src="%s" height="%s" width="%s" class="img-responsive" /></a>'
         for i in range(0,len(body_parts)):
             if i%2 == 0: # skip even pieces because they're not surrounded by replace tokens
@@ -111,6 +111,20 @@ def warm_Post_first_image(sender, instance, **kwargs):
         )
         num_created, failed_to_create = post_img_warmer.warm()
     
+
+# create a proxy post to handle generating a version of the post to send to Wordpress
+class WordpressPost(Post):
+    class Meta:
+        ordering = ['-pub_date']
+        proxy = True
+        
+    def wordpress_body(self):
+        referral = '[Click here](https://www.marthaurion.com%s) to check this post out on my personal website.\n\n' % self.get_absolute_url()
+        body = referral + self.body
+        body_parts = body.split("{{REPLACE}}")
+        image_processed = self.process_image_links(body_parts)
+        return markdown.markdown(image_processed)
+
 
 class Category(MPTTModel):
     title = models.CharField(max_length=200)
