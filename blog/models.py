@@ -86,7 +86,6 @@ class Post(models.Model):
         first_img = self.get_first_image()
         if first_img:
             self.first_image = first_img.full_image
-        
         super(Post, self).save(*args, **kwargs)
 
     # get the first image from the body text
@@ -120,10 +119,7 @@ class WordpressPost(Post):
         
     def wordpress_body(self):
         referral = '[Click here](https://www.marthaurion.com%s) to check this post out on my personal website.\n\n' % self.get_absolute_url()
-        body = referral + self.body
-        body_parts = body.split("{{REPLACE}}")
-        image_processed = self.process_image_links(body_parts)
-        return markdown.markdown(image_processed)
+        return markdown.markdown(referral) + self.body_html
 
 
 class Category(MPTTModel):
