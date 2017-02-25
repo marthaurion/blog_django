@@ -61,21 +61,9 @@ class Post(models.Model):
             img_search = Media.objects.filter(image_name=cur_image)
             if img_search:
                 img = img_search[0] # should be only one
-                height, width = self.get_dimensions(img, word)
-                link_text = link_string % (img.full_image.url, img.scale_image.url, height, width)
+                link_text = link_string % (img.full_image.url, img.scale_image.url, img.scale_image.height, img.scale_image.width)
                 body_parts[i] = link_text
         return "".join(body_parts)
-        
-    def get_dimensions(self, img, word=None):
-        height = img.scale_image.height
-        width = img.scale_image.width
-        if word == None:
-            return (height, width)
-        
-        if height > width:
-            return ('540', '')
-        else:
-            return ('', '640')
         
     # override save so we can add the linked images to the post
     def save(self, *args, **kwargs):
@@ -121,7 +109,7 @@ class WordpressPost(Post):
         referral = '[Click here](https://www.marthaurion.com%s) to check this post out on my personal website.\n\n' % self.get_absolute_url()
         body = referral + self.body
         body_parts = body.split("{{REPLACE}}")
-        image_processed = self.process_image_links(body_parts, 1)
+        image_processed = self.process_image_links(body_parts)
         return markdown.markdown(image_processed)
 
 
