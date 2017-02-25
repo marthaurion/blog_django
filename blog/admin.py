@@ -31,9 +31,10 @@ class PostAdmin(admin.ModelAdmin):
 
 
 @admin.register(WordpressPost)
-class WordpressAdmin(admin.ModelAdmin):
-    fields = ('title', 'get_wordpress_body')
-    readonly_fields = ('title', 'get_wordpress_body')
+class WordpressAdmin(PostAdmin):
+    prepopulated_fields = {}
+    fields = ('title', 'wordpress_body')
+    readonly_fields = ('title', 'wordpress_body')
 
 
 @admin.register(Category)

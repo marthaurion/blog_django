@@ -114,9 +114,10 @@ def warm_Post_first_image(sender, instance, **kwargs):
 # create a proxy post to handle generating a version of the post to send to Wordpress
 class WordpressPost(Post):
     class Meta:
+        ordering = ['-pub_date']
         proxy = True
         
-    def get_wordpress_body(self):
+    def wordpress_body(self):
         referral = '[Click here](https://www.marthaurion.com%s) to check this post out on my personal website.\n\n' % self.get_absolute_url()
         body = referral + self.body
         body_parts = body.split("{{REPLACE}}")
