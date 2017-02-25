@@ -3,7 +3,7 @@ from django.contrib import admin
 from bulk_admin import BulkModelAdmin
 from mptt.admin import MPTTModelAdmin
 
-from .models import Post, Category, Media, Link
+from .models import Post, Category, Media, Link, WordpressPost
 
 # Register your models here.
 
@@ -28,6 +28,12 @@ class PostAdmin(admin.ModelAdmin):
         
     admin_first_image.short_description = 'First Image'
     admin_first_image.allow_tags = True
+
+
+@admin.register(WordpressPost)
+class WordpressAdmin(admin.ModelAdmin):
+    fields = ('title', 'get_wordpress_body')
+    readonly_fields = ('title', 'get_wordpress_body')
 
 
 @admin.register(Category)

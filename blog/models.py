@@ -52,7 +52,7 @@ class Post(models.Model):
         return "/blog/%s/%s/" % (local_pub_date.strftime("%Y/%m/%d"), self.slug)
     
     # takes the text of the post and replaces the {{REPLACE}} strings with the proper image text
-    def process_image_links(self, body_parts):
+    def process_image_links(self, body_parts, word=None):
         link_string = '<a href="%s"><img src="%s" height="%s" width="%s" class="img-responsive" /></a>'
         for i in range(0,len(body_parts)):
             if i%2 == 0: # skip even pieces because they're not surrounded by replace tokens
@@ -61,9 +61,21 @@ class Post(models.Model):
             img_search = Media.objects.filter(image_name=cur_image)
             if img_search:
                 img = img_search[0] # should be only one
-                link_text = link_string % (img.full_image.url, img.scale_image.url, img.scale_image.height, img.scale_image.width)
+                height, width = self.get_dimensions(img, word)
+                link_text = link_string % (img.full_image.url, img.scale_image.url, height, width)
                 body_parts[i] = link_text
         return "".join(body_parts)
+        
+    def get_dimensions(self, img, word=None):
+        height = img.scale_image.height
+        width = img.scale_image.width
+        if word == None:
+            return (height, width)
+        
+        if height > width:
+            return ('540', '')
+        else:
+            return ('', '640')
         
     # override save so we can add the linked images to the post
     def save(self, *args, **kwargs):
@@ -98,6 +110,19 @@ def warm_Post_first_image(sender, instance, **kwargs):
         )
         num_created, failed_to_create = post_img_warmer.warm()
     
+
+# create a proxy post to handle generating a version of the post to send to Wordpress
+class WordpressPost(Post):
+    class Meta:
+        proxy = True
+        
+    def get_wordpress_body(self):
+        referral = '[Click here](https://www.marthaurion.com%s) to check this post out on my personal website.\n\n' % self.get_absolute_url()
+        body = referral + self.body
+        body_parts = body.split("{{REPLACE}}")
+        image_processed = self.process_image_links(body_parts, 1)
+        return markdown.markdown(image_processed)
+
 
 class Category(MPTTModel):
     title = models.CharField(max_length=200)
