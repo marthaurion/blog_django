@@ -75,9 +75,9 @@ class LinkAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('author', 'pub_date', 'text', 'approved', 'notify', )
-    list_filter = ['approved']
-    actions = ['mark_approved', 'mark_not_approved']
+    list_display = ('author', 'pub_date', 'text', 'approved', 'notify', 'spam')
+    list_filter = ['approved', 'spam']
+    actions = ['mark_approved', 'mark_not_approved', 'mark_spam', 'mark_not_spam']
     
     def mark_approved(self, request, queryset):
         for comment in queryset:
@@ -91,11 +91,25 @@ class CommentAdmin(admin.ModelAdmin):
     
     mark_not_approved.short_description = "Unapprove the selected comments"
 
+    def mark_spam(self, request, queryset):
+        for comment in queryset:
+            comment.spam = True
+            comment.save()
+    
+    mark_spam.short_description = "Mark the comments as spammers"
+    
+    def mark_not_spam(self, request, queryset):
+        for comment in queryset:
+            comment.spam = False
+            comment.save()
+    
+    mark_not_spam.short_description = "Mark the comments as safe"
+
 
 @admin.register(Commenter)
 class CommenterAdmin(admin.ModelAdmin):
-    list_display = ('username', 'approved', )
-    list_filter = ['approved']
+    list_display = ('username', 'approved', 'spam')
+    list_filter = ['approved', 'spam']
     actions = ['mark_approved', 'mark_not_approved', 'mark_spam', 'mark_not_spam']
     
     def mark_approved(self, request, queryset):

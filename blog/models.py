@@ -241,7 +241,7 @@ class Comment(MPTTModel):
     author = models.ForeignKey('Commenter', related_name='comments')
     text = models.TextField()
     notify = models.BooleanField(default=False)
-    
+    spam = models.BooleanField(default=False)
     
     class Meta:
         ordering = ['-pub_date']
@@ -273,6 +273,10 @@ class Comment(MPTTModel):
             self.save()
     
     def send_email_notification(self, request, recipients):
+        if self.author.email in recipients: # don't send comments to yourself
+            recipients.remove(self.author.email)
+        if len(recipients) < 1: # if there are no more recipients, quit out
+            return
         subject = "New comment on %s" % self.post.title
         comment_url = request.build_absolute_uri(self.get_absolute_url())
         unsubscribe_url = request.build_absolute_uri(self.get_unsubscribe_url())
