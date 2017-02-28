@@ -7,6 +7,7 @@ from django.utils.timezone import localtime
 from django.db.models import Count
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
+from django.utils.html import urlize
 
 import markdown
 import hashlib
@@ -292,9 +293,14 @@ class Comment(MPTTModel):
         return recipients
     
     def send_notifications(self, request):
+        if self.spam_check(): # don't send notifications for suspected spam
+            return
         self.send_email_notification(request, ["marthaurion@gmail.com"]) # first always send notification to me, the admin
         if self.parent and self.approved:
             self.send_email_notification(request, self.parent.notify_authors(request))
+            
+    def spam_check(self):
+        return False
 
 
 class Commenter(models.Model):

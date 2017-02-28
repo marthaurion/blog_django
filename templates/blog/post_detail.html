@@ -13,13 +13,8 @@
     {% include 'blog/_post_meta.html' %}
     <hr />
     
-    {% load disqus_tags %}
-    {% disqus_show_comments %}
-    
-    {% comment "Soon TM" %}
-        <div id="comment_section">
-        {% include 'blog/_post_comments.html' %}
-        </div>
-    {% endcomment %}
+    <div id="comment_section">
+    {% include 'blog/_post_comments.html' %}
+    </div>
     
 {% endblock %}

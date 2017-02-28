@@ -12,11 +12,7 @@
     <div class="well">
         <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
         <div class="post_date">
-          <p class="text-muted">Published on {{ post.pub_date|date:"F j, Y" }}.
-          
-          {% comment %}
-            <a href="{{ post.get_absolute_url }}#comment_section">{{ post.get_comment_count }}</a></p>
-          {% endcomment %}
+          <p class="text-muted">Published on {{ post.pub_date|date:"F j, Y" }}. <a href="{{ post.get_absolute_url }}#comment_section">{{ post.get_comment_count }}</a></p>
         </div>
         
         <div class="first_image">
