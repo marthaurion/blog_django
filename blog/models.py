@@ -336,33 +336,3 @@ class Commenter(models.Model):
     
     def __str__(self):
         return self.username
-        
-def parent_repair():
-    import json
-    from datetime import datetime, timezone
-    with open('testingmeh2.json', 'r') as handle:
-        parsed = json.load(handle)
-        
-    post_map = {}
-        
-    for post_id in parsed:
-        com_date = datetime.strptime(parsed[post_id]["post_date"], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
-        post_set = Comment.objects.filter(pub_date=com_date)
-        if post_set:
-            post_map[post_id] = post_set[0].pk
-    
-    for post_id in parsed:
-        if 'parent' not in parsed[post_id]:
-            continue
-        if post_id not in post_map:
-            continue
-        comment_set = Comment.objects.filter(pk=post_map[post_id])
-        
-        parent_id = parsed[post_id]['parent']
-        parent_set = Comment.objects.filter(pk=post_map[parent_id])
-        if not comment_set or not parent_set:
-            continue
-        comment = comment_set[0]
-        comment.parent = parent_set[0]
-        comment.save()
-        
