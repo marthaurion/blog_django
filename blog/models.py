@@ -300,6 +300,11 @@ class Comment(MPTTModel):
             self.send_email_notification(request, self.parent.notify_authors(request))
             
     def spam_check(self):
+        approved = self.author.approved
+        email = self.author.email
+        comment_count = Comment.objects.filter(author__email=email).count()
+        if not approved and comment_count > 5: # if you're sending more than 5 comments while not approved, stop email notifications
+            return True
         return False
 
 
