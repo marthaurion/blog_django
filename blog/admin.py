@@ -96,7 +96,7 @@ class CommentAdmin(admin.ModelAdmin):
 class CommenterAdmin(admin.ModelAdmin):
     list_display = ('username', 'approved', )
     list_filter = ['approved']
-    actions = ['mark_approved', 'mark_not_approved']
+    actions = ['mark_approved', 'mark_not_approved', 'mark_spam', 'mark_not_spam']
     
     def mark_approved(self, request, queryset):
         for commenter in queryset:
@@ -109,3 +109,17 @@ class CommenterAdmin(admin.ModelAdmin):
             commenter.unapprove()
     
     mark_not_approved.short_description = "Unapprove the selected users"
+    
+    def mark_spam(self, request, queryset):
+        for commenter in queryset:
+            commenter.spam = True
+            commenter.save()
+    
+    mark_spam.short_description = "Mark the users as spammers"
+    
+    def mark_not_spam(self, request, queryset):
+        for commenter in queryset:
+            commenter.spam = False
+            commenter.save()
+    
+    mark_not_spam.short_description = "Mark the users as safe"

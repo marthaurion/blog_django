@@ -300,6 +300,9 @@ class Comment(MPTTModel):
             self.send_email_notification(request, self.parent.notify_authors(request))
             
     def spam_check(self):
+        if self.author.spam:
+            return True
+        
         approved = self.author.approved
         email = self.author.email
         comment_count = Comment.objects.filter(author__email=email).count()
@@ -313,6 +316,7 @@ class Commenter(models.Model):
     email = models.EmailField()
     website = models.URLField(null=True, blank=True)
     approved = models.BooleanField(default=False)
+    spam = models.BooleanField(default=False)
     
     def approve(self):
         self.approved = True
