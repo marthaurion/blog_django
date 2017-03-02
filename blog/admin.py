@@ -11,7 +11,7 @@ from .models import Post, Category, Media, Link, Comment, Commenter, WordpressPo
 class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = { 'slug': ['title'] }
     search_fields = ['title']
-    list_display = ('title', 'get_full_url', 'pub_date', 'admin_first_image', 'get_wordpress_url')
+    list_display = ('title', 'get_full_url', 'get_wordpress_url', 'pub_date', 'admin_first_image')
     
     # add a link to the blog post on the admin list display to make it easier to preview the post
     def get_full_url(self, instance):
