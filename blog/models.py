@@ -374,7 +374,7 @@ def comment_import():
             author.approved = True
             author.save()
         comment_date = parsed[comment_id]["comment_date"]
-        dt = datetime.strptime(comment_date, "%Y-%m-%d %H:%M:%S%z").replace(tzinfo=timezone.utc)
+        dt = datetime.strptime(comment_date, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
         text = parsed[comment_id]["comment_text"]
         post_id = parsed[comment_id]["post_id"]
         post = Post.objects.get(id=post_id)
