@@ -206,9 +206,6 @@ class PostDetailView(FormMixin, DetailView):
             
         return super(PostDetailView, self).get(request, *args, **kwargs)
     
-    def get_success_url(self):
-        return self.object.get_absolute_url()
-    
     # override initial values for the form to use session values for a commenter if they exist
     def get_initial(self):
         return { 'username': self.request.session.get('comment_username'),
@@ -270,13 +267,11 @@ class PostDetailView(FormMixin, DetailView):
             comment.save()
             
             comment.send_notifications(request)
+            self.success_url = comment.get_absolute_url()
             
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
-            
-    def form_valid(self, form):
-        return super(PostDetailView, self).form_valid(form)
 
 
 class SearchResultsView(PostListMixin, ListView):
