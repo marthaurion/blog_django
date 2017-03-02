@@ -246,7 +246,10 @@ class Comment(MPTTModel):
     imported = models.BooleanField(default=False)
     
     class Meta:
-        ordering = ['-pub_date']
+        ordering = ['pub_date']
+        
+    class MPTTMeta:
+        order_insertion_by = ['pub_date']
         
     def __str__(self):
         return str(self.id)
