@@ -350,3 +350,47 @@ class Commenter(models.Model):
     
     def __str__(self):
         return self.username
+        
+def comment_import():
+    import json
+    from datetime import datetime, timezone
+    with open('commentmap.json', 'r') as handle:
+        parsed = json.load(handle)
+    with open('parentmap.json', 'r') as handle:
+        parents = json.load(handle)
+    comment_map = {}
+
+    for comment_id in parsed:
+        email = parsed[comment_id]["author_email"]
+        authors = Commenter.objects.filter(email=email)
+        if authors:
+            author = authors[0]
+        else:
+            author = Commenter()
+            author.email = email
+            author.username = parsed[comment_id]["author"]
+            if 'author_url' in parsed[comment_id]:
+                author.website = parsed[comment_id]["author_url"]
+            author.approved = True
+            author.save()
+        comment_date = parsed[comment_id]["comment_date"]
+        dt = datetime.strptime(comment_date, "%Y-%m-%d %H:%M:%S%z").replace(tzinfo=timezone.utc)
+        text = parsed[comment_id]["comment_text"]
+        post_id = parsed[comment_id]["post_id"]
+        post = Post.objects.get(id=post_id)
+        comment = Comment()
+        comment.author = author
+        comment.pub_date = dt
+        comment.html_text = text
+        comment.post = post
+        comment.approved = True
+        comment.save()
+
+        comment_map[comment_id] = comment.id
+
+    for comment_id in parents:
+        parent_id = parents[comment_id]
+        comment = Comment.objects.get(id=comment_map[comment_id])
+        parent = Comment.objects.get(id=comment_map[parent_id])
+        comment.parent = parent
+        comment.save()
