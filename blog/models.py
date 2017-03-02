@@ -403,3 +403,32 @@ def comment_import():
         parent = Comment.objects.get(id=comment_map[parent_id])
         comment.parent = parent
         comment.save()
+        
+def parent_map():
+    import json
+    from datetime import datetime, timezone
+    with open('commentmap.json', 'r') as handle:
+        parsed = json.load(handle)
+    with open('parentmap.json', 'r') as handle:
+        parents = json.load(handle)
+    comment_map = {}
+
+    for comment_id in parsed:
+        email = parsed[comment_id]["author_email"]
+        authors = Commenter.objects.filter(email=email)
+        if not authors:
+            continue
+        author = authors[0]
+        comment_date = parsed[comment_id]["comment_date"]
+        dt = datetime.strptime(comment_date, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
+        comments = Comment.objects.filter(pub_date=dt, author=author)
+        if comments:
+            comment = comments[0]
+            comment_map[comment_id] = comment.id
+
+    for comment_id in parents:
+        parent_id = parents[comment_id]
+        comment = Comment.objects.get(id=comment_map[comment_id])
+        parent = Comment.objects.get(id=comment_map[parent_id])
+        comment.parent = parent
+        comment.save()
