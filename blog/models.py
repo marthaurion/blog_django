@@ -239,16 +239,17 @@ class Comment(MPTTModel):
     approved = models.BooleanField(default=False)
     pub_date = models.DateTimeField('date published', default=timezone.now, editable=False)
     author = models.ForeignKey('Commenter', related_name='comments')
-    text = models.TextField()
+    text = models.TextField(blank=True) # form should force this field anyway, so this is just for the admin
     notify = models.BooleanField(default=False)
     spam = models.BooleanField(default=False)
     html_text = models.TextField(blank=True) # creating this field to take wordpress imported comments because they're formatted in html
+    imported = models.BooleanField(default=False)
     
     class Meta:
         ordering = ['-pub_date']
         
     def __str__(self):
-        return self.text
+        return str(self.id)
     
     def get_absolute_url(self):
         base_url = self.post.get_absolute_url()
@@ -431,4 +432,10 @@ def parent_map():
         comment = Comment.objects.get(id=comment_map[comment_id])
         parent = Comment.objects.get(id=comment_map[parent_id])
         comment.parent = parent
+        comment.save()
+        
+def process_comments():
+    for comment in Comment.objects.exclude(html_text__exact=''):
+        comment.imported = True
+        comment.html_text = markdown.markdown(comment.html_text)
         comment.save()
