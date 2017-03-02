@@ -370,14 +370,23 @@ def comment_import():
             author.email = email
             author.username = parsed[comment_id]["author"]
             if 'author_url' in parsed[comment_id]:
-                author.website = parsed[comment_id]["author_url"]
+                url = parsed[comment_id]["author_url"]
             author.approved = True
             author.save()
         comment_date = parsed[comment_id]["comment_date"]
         dt = datetime.strptime(comment_date, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc)
+        comments = Comment.objects.filter(pub_date=dt, author=author)
+        if comments:
+            comment = comments[0]
+            comment_map[comment_id] = comment.id
+            continue
         text = parsed[comment_id]["comment_text"]
         post_id = parsed[comment_id]["post_id"]
-        post = Post.objects.get(id=post_id)
+        posts = Post.objects.filter(id=post_id)
+        if not posts:
+            print(str(post_id))
+            continue
+        post = posts[0]
         comment = Comment()
         comment.author = author
         comment.pub_date = dt
