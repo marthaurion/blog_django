@@ -2,7 +2,6 @@ boto==2.45.0
 Django==1.10.5
 django-anymail==0.8
 django-bulk-admin==0.1.1
-django-disqus==0.5
 django-maintenancemode==0.11.2
 django-mptt==0.8.7
 django-simple-captcha==0.5.3

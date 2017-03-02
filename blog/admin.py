@@ -11,7 +11,7 @@ from .models import Post, Category, Media, Link, Comment, Commenter, WordpressPo
 class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = { 'slug': ['title'] }
     search_fields = ['title']
-    list_display = ('title', 'get_full_url', 'pub_date', 'admin_first_image', )
+    list_display = ('title', 'get_full_url', 'pub_date', 'admin_first_image', 'get_wordpress_url')
     
     # add a link to the blog post on the admin list display to make it easier to preview the post
     def get_full_url(self, instance):
@@ -27,12 +27,20 @@ class PostAdmin(admin.ModelAdmin):
         
     admin_first_image.short_description = 'First Image'
     admin_first_image.allow_tags = True
+    
+    # add a link to open the wordpress admin page
+    def get_wordpress_url(self, instance):
+        return "<a href='/admin/blog/wordpresspost/%d/change/'>/admin/blog/wordpresspost/%d/change/</a>" % (instance.id, instance.id) 
+        
+    get_wordpress_url.short_description = 'Wordpress'
+    get_wordpress_url.allow_tags = True
 
 
 @admin.register(WordpressPost)
 class WordpressAdmin(PostAdmin):
     prepopulated_fields = {}
     fields = ('title', 'wordpress_body')
+    list_display = ('title', 'get_full_url', 'pub_date', 'admin_first_image', )
     readonly_fields = ('title', 'wordpress_body')
 
 
