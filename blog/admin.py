@@ -77,6 +77,7 @@ class LinkAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('author', 'pub_date', 'text', 'approved', 'notify', 'spam')
     list_filter = ['approved', 'spam']
+    search_fields = ['author']
     actions = ['mark_approved', 'mark_not_approved', 'mark_spam', 'mark_not_spam']
     
     def mark_approved(self, request, queryset):
@@ -110,6 +111,7 @@ class CommentAdmin(admin.ModelAdmin):
 class CommenterAdmin(admin.ModelAdmin):
     list_display = ('username', 'approved', 'spam')
     list_filter = ['approved', 'spam']
+    search_fields = ['username']
     actions = ['mark_approved', 'mark_not_approved', 'mark_spam', 'mark_not_spam']
     
     def mark_approved(self, request, queryset):
