@@ -87,6 +87,7 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ['approved', 'spam']
     search_fields = ['author']
     actions = ['mark_approved', 'mark_not_approved', 'mark_spam', 'mark_not_spam']
+    ordering = ['-pub_date']
     
     def mark_approved(self, request, queryset):
         for comment in queryset:
