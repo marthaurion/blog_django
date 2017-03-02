@@ -242,6 +242,7 @@ class Comment(MPTTModel):
     text = models.TextField()
     notify = models.BooleanField(default=False)
     spam = models.BooleanField(default=False)
+    html_text = models.TextField(blank=True) # creating this field to take wordpress imported comments because they're formatted in html
     
     class Meta:
         ordering = ['-pub_date']
