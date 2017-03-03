@@ -352,7 +352,7 @@ class Commenter(models.Model):
     
     def get_image_url(self):
         email_hash = hashlib.md5(self.email.lower().encode('utf-8')).hexdigest()
-        return "https://www.gravatar.com/avatar/%s?s=%s" % (email_hash, str(64))
+        return "https://www.gravatar.com/avatar/%s?s=%s" % (email_hash, str(50))
     
     def __str__(self):
         return self.username
