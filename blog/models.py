@@ -298,6 +298,8 @@ class Comment(MPTTModel):
         msg.send()
         
     def notify_authors(self, request):
+        if not self.notify:
+            return []
         recipients = [self.author.email] # first send the notification to the parent comment's author
         return recipients
     
