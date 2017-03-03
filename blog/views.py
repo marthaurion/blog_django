@@ -220,6 +220,12 @@ class PostDetailView(FormMixin, DetailView):
                 raise Http404()
         return obj
         
+    # add comment notify to context from session
+    def get_context_data(self, **kwargs):
+        context = super(PostDetailView, self).get_context_data(**kwargs)
+        context['comment_notify'] = self.request.session.get('comment_notify')
+        return context
+        
     # override the post function to handle the form values and create a comment
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -262,9 +268,11 @@ class PostDetailView(FormMixin, DetailView):
             if author.approved: # if the author is always approved, mark the comment as approved
                 comment.approved = True
             comment.text = form.cleaned_data['text'] # pull from the form
-            if request.POST.get('notify', False): # if the checkbox is checked, set notify field
-                comment.notify = True
+            comment_notify = bool(request.POST.get('notify', False))
+            comment.notify = comment_notify # if the checkbox is checked, set notify field
             comment.save()
+            
+            request.session['comment_notify'] = comment_notify # log notification setting in the session
             
             comment.send_notifications(request)
             self.success_url = comment.get_absolute_url()

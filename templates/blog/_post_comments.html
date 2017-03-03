@@ -53,7 +53,7 @@
         {% csrf_token %}
         {{ form.as_p }}
         <p><div class="checkbox">
-            <label><input type="checkbox" name="notify" />Notify me with replies</label>
+            <label><input type="checkbox" name="notify" {% if comment_notify %}checked{% endif %}/>Notify me with replies</label>
         </div></p>
         <input type="submit" class="btn btn-primary" value="Post Comment" />
     </form>
