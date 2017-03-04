@@ -1,5 +1,6 @@
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
+from django.contrib.messages.views import SuccessMessageMixin
 
 from blog.views import CommentFormMixin
 from blog.models import Comment
@@ -53,10 +54,11 @@ class BlogrollView(BasePageView):
     page_url = '/blogroll/'
 
 
-class ContactView(FormView):
+class ContactView(SuccessMessageMixin, FormView):
     template_name = 'contact.html'
     form_class = ContactForm
-    success_url = '/messagereceived/'
+    success_url = '/contact/'
+    success_message = "Message sent. I'll get right on that...eventually."
     
     def form_valid(self, form):
         form.send_email()
