@@ -301,7 +301,7 @@ class Comment(MPTTModel):
         order_insertion_by = ['pub_date']
         
     def __str__(self):
-        return str(self.id)
+        return str(self.pk)
     
     def get_absolute_url(self):
         base_url = self.post.get_absolute_url()

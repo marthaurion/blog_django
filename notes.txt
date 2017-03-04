@@ -45,14 +45,6 @@
 
 - added the ability to use {{REPLACE}} in my post body instead of hardcoding the image links.
 
-stuff to do:
-- ?
-
-note: apparently Django 1.10.1 introduced a bug that makes it so the default pub_date for posts will always be used instead of whatever date is passed in from the form. I'm reverting to 1.10.0 to make it work again and will re-evaluate in the next patch when it's released.
-- this is documented in ticket 27186
-
 
 comments left to do:
-- better email notifications
-- notifications should probably be more discerning. like, don't notify if the comment isn't approved
 - maybe add some safeguards against duplicate comments
