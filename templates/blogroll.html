@@ -7,7 +7,7 @@
 {% block content %}
     <h2>Blogroll</h2><br />
     <div class="post_body">
-        <p>So, I created a formal page for these links. Feel free to contact me if you want me to add your blog.</p>
+        <p>So, I created a formal page for these links. If you want me to add your blog to this list, feel free to leave a comment or send me an email through my contact form.</p>
         <p><a href="https://100wordanime.wordpress.com/">100WordAnime</a> - Short posts used to be my style, so it's fun to read them. Such low time commitment! If you're into longer reviews, though, the full-season reviews tend to be lengthier.</p>
         <p><a href="http://www.animenano.com/">Anime Nano</a> - An aggregation of anime blogs for when you're looking for more stuff.</p>
         <p><a href="http://www.freelanceanimeblog.com/">Freelance Anime Blog</a></p>
@@ -20,4 +20,7 @@
     </div>
     <hr />
     
+    <div id="comment_section">
+    {% include 'blog/_post_comments.html' %}
+    </div>
 {% endblock %}

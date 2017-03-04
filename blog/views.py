@@ -190,12 +190,72 @@ class TagListView(PostListMixin, ListView):
         return context
 
 
+class CommentFormMixin(FormMixin):
+    form_class = CommentForm
+    
+    # override initial values for the form to use session values for a commenter if they exist
+    def get_initial(self):
+        return { 'username': self.request.session.get('comment_username'),
+                'email': self.request.session.get('comment_email'),
+                'website': self.request.session.get('comment_website') }
+
+    def comment_check(self, request, form, post=None, page_url=None):
+        form_email = form.cleaned_data['email']
+        form_username = form.cleaned_data['username']
+        form_website = form.cleaned_data['website']
+        commenter = Commenter.objects.filter(email=form_email)
+        if not commenter: # if no commenter is found for the email in the form, create one
+            author = Commenter()
+            author.email = form_email
+            author.username = form_username
+            author.website = form_website
+            author.save()
+        else: # if we find a commenter with the email, use it
+            author = commenter[0]
+            changed = False
+            # if username or website are changed, update them for the author of the comment
+            if form_website and form_website != author.website:
+                author.website = form_website
+                changed = True
+            if form_username and form_username != author.username:
+                author.username = form_username
+                changed = True
+            if changed:
+                author.save()
+        
+        request.session['comment_email'] = author.email  # save commenter information in a session so it can be reused later
+        request.session['comment_username'] = author.username
+        request.session['comment_website'] = author.website
+        
+        comment = Comment()
+        if form.cleaned_data['parent']:
+            parent_id = int(form.cleaned_data['parent'].replace('#comment',''))
+            comment.parent = Comment.objects.get(pk=parent_id)
+        
+        if post:
+            comment.post = post # use the post attached to this view as the post for this comment
+        else:
+            comment.page_url = page_url
+        comment.author = author
+        if author.approved: # if the author is always approved, mark the comment as approved
+            comment.approved = True
+        comment.text = form.cleaned_data['text'] # pull from the form
+        comment_notify = bool(request.POST.get('notify', False))
+        comment.notify = comment_notify # if the checkbox is checked, set notify field
+        comment.save()
+        
+        request.session['comment_notify'] = comment_notify # log notification setting in the session
+        
+        comment.send_notifications(request)
+        self.success_url = comment.get_absolute_url()
+        return self.form_valid(form)
+
+
 # display a single post
-class PostDetailView(FormMixin, DetailView):
+class PostDetailView(CommentFormMixin, DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
     month_format = "%m"
-    form_class = CommentForm
     
     def get(self, request, *args, **kwargs):
         if 'email' in request.GET and 'comment' in request.GET:
@@ -205,12 +265,6 @@ class PostDetailView(FormMixin, DetailView):
                 comment[0].unsubscribe(request.GET['email'])
             
         return super(PostDetailView, self).get(request, *args, **kwargs)
-    
-    # override initial values for the form to use session values for a commenter if they exist
-    def get_initial(self):
-        return { 'username': self.request.session.get('comment_username'),
-                'email': self.request.session.get('comment_email'),
-                'website': self.request.session.get('comment_website') }
     
     # override get object so that it gives a 404 error if you're looking at a post in the future and you're not an admin
     def get_object(self, *args, **kwargs):
@@ -224,6 +278,8 @@ class PostDetailView(FormMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(PostDetailView, self).get_context_data(**kwargs)
         context['comment_notify'] = self.request.session.get('comment_notify')
+        context['comment_list'] = self.object.approved_comments()
+        context['post_comment_url'] = self.object.get_absolute_url()
         return context
         
     # override the post function to handle the form values and create a comment
@@ -231,53 +287,7 @@ class PostDetailView(FormMixin, DetailView):
         self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
-            form_email = form.cleaned_data['email']
-            form_username = form.cleaned_data['username']
-            form_website = form.cleaned_data['website']
-            commenter = Commenter.objects.filter(email=form_email)
-            if not commenter: # if no commenter is found for the email in the form, create one
-                author = Commenter()
-                author.email = form_email
-                author.username = form_username
-                author.website = form_website
-                author.save()
-            else: # if we find a commenter with the email, use it
-                author = commenter[0]
-                changed = False
-                # if username or website are changed, update them for the author of the comment
-                if form_website and form_website != author.website:
-                    author.website = form_website
-                    changed = True
-                if form_username and form_username != author.username:
-                    author.username = form_username
-                    changed = True
-                if changed:
-                    author.save()
-            
-            request.session['comment_email'] = author.email  # save commenter information in a session so it can be reused later
-            request.session['comment_username'] = author.username
-            request.session['comment_website'] = author.website
-            
-            comment = Comment()
-            if form.cleaned_data['parent']:
-                parent_id = int(form.cleaned_data['parent'].replace('#comment',''))
-                comment.parent = Comment.objects.get(pk=parent_id)
-                
-            comment.post = self.object # use the post attached to this view as the post for this comment
-            comment.author = author
-            if author.approved: # if the author is always approved, mark the comment as approved
-                comment.approved = True
-            comment.text = form.cleaned_data['text'] # pull from the form
-            comment_notify = bool(request.POST.get('notify', False))
-            comment.notify = comment_notify # if the checkbox is checked, set notify field
-            comment.save()
-            
-            request.session['comment_notify'] = comment_notify # log notification setting in the session
-            
-            comment.send_notifications(request)
-            self.success_url = comment.get_absolute_url()
-            
-            return self.form_valid(form)
+            return self.comment_check(request, form, self.object)
         else:
             return self.form_invalid(form)
 

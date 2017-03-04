@@ -284,7 +284,8 @@ class Commenter(models.Model):
 
 class Comment(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
-    post = models.ForeignKey(Post, related_name='comments')
+    post = models.ForeignKey(Post, null=True, blank=True, related_name='comments')
+    page_url = models.URLField(null=True, blank=True)
     approved = models.BooleanField(default=False)
     pub_date = models.DateTimeField('date published', default=timezone.now, editable=False)
     author = models.ForeignKey(Commenter, related_name='comments')
@@ -304,11 +305,17 @@ class Comment(MPTTModel):
         return str(self.pk)
     
     def get_absolute_url(self):
-        base_url = self.post.get_absolute_url()
+        if self.post:
+            base_url = self.post.get_absolute_url()
+        else:
+            base_url = self.page_url
         return base_url + '#comment' + str(self.pk)
         
     def get_unsubscribe_url(self):
-        base_url = self.post.get_absolute_url()
+        if self.post:
+            base_url = self.post.get_absolute_url()
+        else:
+            base_url = self.page_url
         unsubscribe_query = '?email=%s&comment=%s' % (self.author.email, str(self.pk))
         return base_url + unsubscribe_query
     
@@ -319,6 +326,14 @@ class Comment(MPTTModel):
     def unapprove(self):
         self.approved = False
         self.save()
+        
+    def get_post_title(self):
+        if self.post:
+            return self.post.title
+        elif self.page_url == '/about/':
+            return 'About'
+        else:
+            return 'Blogroll'
     
     # if the email passed in matches the author, then turn off notifications
     def unsubscribe(self, email):
@@ -331,7 +346,7 @@ class Comment(MPTTModel):
             recipients.remove(self.author.email)
         if len(recipients) < 1: # if there are no more recipients, quit out
             return
-        subject = "New comment on %s" % self.post.title
+        subject = "New comment on %s" % self.get_post_title()
         comment_url = request.build_absolute_uri(self.get_absolute_url())
         unsubscribe_url = request.build_absolute_uri(self.get_unsubscribe_url())
         context = { 'comment_author': self.author.username,

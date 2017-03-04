@@ -1,15 +1,56 @@
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 
+from blog.views import CommentFormMixin
+from blog.models import Comment
+
 from .forms import ContactForm
 
 # Create your views here.
-class AboutView(TemplateView):
+class BasePageView(CommentFormMixin, TemplateView):
+    page_url = '/'
+    
+    def get(self, request, *args, **kwargs):
+        if 'email' in request.GET and 'comment' in request.GET:
+            comment_pk = int(request.GET['comment'])
+            comment = Comment.objects.filter(pk=comment_pk)
+            if len(comment):
+                comment[0].unsubscribe(request.GET['email'])
+            
+        return super().get(request, *args, **kwargs)
+    
+    # override get object so that it gives a 404 error if you're looking at a post in the future and you're not an admin
+    def get_object(self, *args, **kwargs):
+        obj = super().get_object(*args, **kwargs)
+        if obj.pub_date>timezone.now(): # don't show future posts
+            if not self.request.user.is_active and not self.request.user.is_superuser: # only block if not an admin
+                raise Http404()
+        return obj
+        
+    # add comment notify to context from session
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comment_notify'] = self.request.session.get('comment_notify')
+        context['comment_list'] = Comment.objects.filter(approved=True, page_url=self.page_url)
+        context['post_comment_url'] = self.page_url
+        return context
+        
+    # override the post function to handle the form values and create a comment
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return self.comment_check(request, form, page_url=self.page_url)
+        else:
+            return self.form_invalid(form)
+
+class AboutView(BasePageView):
     template_name = 'about.html'
+    page_url = '/about/'
 
 
-class BlogrollView(TemplateView):
+class BlogrollView(BasePageView):
     template_name = 'blogroll.html'
+    page_url = '/blogroll/'
 
 
 class ContactView(FormView):
