@@ -106,7 +106,7 @@ class CommentAdmin(admin.ModelAdmin):
             comment.spam = True
             comment.save()
     
-    mark_spam.short_description = "Mark the comments as spammers"
+    mark_spam.short_description = "Mark the comments as spam"
     
     def mark_not_spam(self, request, queryset):
         for comment in queryset:
@@ -137,14 +137,12 @@ class CommenterAdmin(admin.ModelAdmin):
     
     def mark_spam(self, request, queryset):
         for commenter in queryset:
-            commenter.spam = True
-            commenter.save()
+            commenter.mark_spam()
     
     mark_spam.short_description = "Mark the users as spammers"
     
     def mark_not_spam(self, request, queryset):
         for commenter in queryset:
-            commenter.spam = False
-            commenter.save()
+            commenter.mark_safe()
     
     mark_not_spam.short_description = "Mark the users as safe"

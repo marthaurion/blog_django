@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from django.db import models
+from django.conf import settings
 from django.utils import timezone
 from django.dispatch import receiver
 from django.utils.timezone import localtime
@@ -16,6 +17,8 @@ from mptt.models import MPTTModel, TreeForeignKey
 from taggit.managers import TaggableManager
 from versatileimagefield.fields import VersatileImageField
 from versatileimagefield.image_warmer import VersatileImageFieldWarmer
+
+from .akismet import Akismet
 
 # manager to pull all posts that aren't published in the future
 class PostManager(models.Manager):
@@ -304,13 +307,13 @@ class Comment(MPTTModel):
         return recipients
     
     def send_notifications(self, request):
-        if self.spam_check(): # don't send notifications for suspected spam
+        if self.spam_check(request): # don't send notifications for suspected spam
             return
         self.send_email_notification(request, ["marthaurion@gmail.com"]) # first always send notification to me, the admin
         if self.parent and self.approved:
             self.send_email_notification(request, self.parent.notify_authors(request))
             
-    def spam_check(self):
+    def spam_check(self, request):
         if self.author.spam:
             return True
         
@@ -339,6 +342,20 @@ class Commenter(models.Model):
         self.approved = False
         for comment in Comment.objects.filter(author=self):
             comment.unapprove()
+        self.save()
+        
+    def mark_spam(self):
+        self.spam = True
+        for comment in Comment.objects.filter(author=self):
+            comment.spam = True
+            comment.save()
+        self.save()
+        
+    def mark_safe(self):
+        self.spam = False
+        for comment in Comment.objects.filter(author=self):
+            comment.spam = False
+            comment.save()
         self.save()
     
     def get_commenter_text(self):
