@@ -234,12 +234,62 @@ class Mapping(models.Model):
     dest = models.URLField()
     
     
+class Commenter(models.Model):
+    username = models.CharField(max_length=200)
+    email = models.EmailField()
+    website = models.URLField(null=True, blank=True)
+    approved = models.BooleanField(default=False)
+    spam = models.BooleanField(default=False)
+    
+    def approve(self):
+        self.approved = True
+        for comment in Comment.objects.filter(author=self):
+            comment.approve()
+        self.save()
+    
+    def unapprove(self):
+        self.approved = False
+        for comment in Comment.objects.filter(author=self):
+            comment.unapprove()
+        self.save()
+        
+    def mark_spam(self):
+        self.spam = True
+        for comment in Comment.objects.filter(author=self):
+            comment.spam = True
+            comment.save()
+        self.save()
+        
+    def mark_safe(self):
+        self.spam = False
+        for comment in Comment.objects.filter(author=self):
+            comment.spam = False
+            comment.save()
+        self.save()
+    
+    def get_commenter_text(self):
+        if self.website:
+            return '<a href="%s">%s</a>' % (self.website, self.username)
+        return self.username
+    
+    def get_profile_url(self):
+        email_hash = hashlib.md5(self.email.lower().encode('utf-8')).hexdigest()
+        return "https://www.gravatar.com/%s" % (email_hash)
+    
+    def get_image_url(self):
+        email_hash = hashlib.md5(self.email.lower().encode('utf-8')).hexdigest()
+        return "https://www.gravatar.com/avatar/%s?s=%s" % (email_hash, str(50))
+    
+    def __str__(self):
+        return self.username
+
+
 class Comment(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
-    post = models.ForeignKey('Post', related_name='comments')
+    post = models.ForeignKey(Post, related_name='comments')
     approved = models.BooleanField(default=False)
     pub_date = models.DateTimeField('date published', default=timezone.now, editable=False)
-    author = models.ForeignKey('Commenter', related_name='comments')
+    author = models.ForeignKey(Commenter, related_name='comments')
     text = models.TextField(blank=True) # form should force this field anyway, so this is just for the admin
     notify = models.BooleanField(default=False)
     spam = models.BooleanField(default=False)
@@ -321,53 +371,3 @@ class Comment(MPTTModel):
         if not approved and comment_count > 5: # if you're sending more than 5 comments while not approved, stop email notifications
             return True
         return False
-
-
-class Commenter(models.Model):
-    username = models.CharField(max_length=200)
-    email = models.EmailField()
-    website = models.URLField(null=True, blank=True)
-    approved = models.BooleanField(default=False)
-    spam = models.BooleanField(default=False)
-    
-    def approve(self):
-        self.approved = True
-        for comment in Comment.objects.filter(author=self):
-            comment.approve()
-        self.save()
-    
-    def unapprove(self):
-        self.approved = False
-        for comment in Comment.objects.filter(author=self):
-            comment.unapprove()
-        self.save()
-        
-    def mark_spam(self):
-        self.spam = True
-        for comment in Comment.objects.filter(author=self):
-            comment.spam = True
-            comment.save()
-        self.save()
-        
-    def mark_safe(self):
-        self.spam = False
-        for comment in Comment.objects.filter(author=self):
-            comment.spam = False
-            comment.save()
-        self.save()
-    
-    def get_commenter_text(self):
-        if self.website:
-            return '<a href="%s">%s</a>' % (self.website, self.username)
-        return self.username
-    
-    def get_profile_url(self):
-        email_hash = hashlib.md5(self.email.lower().encode('utf-8')).hexdigest()
-        return "https://www.gravatar.com/%s" % (email_hash)
-    
-    def get_image_url(self):
-        email_hash = hashlib.md5(self.email.lower().encode('utf-8')).hexdigest()
-        return "https://www.gravatar.com/avatar/%s?s=%s" % (email_hash, str(50))
-    
-    def __str__(self):
-        return self.username
