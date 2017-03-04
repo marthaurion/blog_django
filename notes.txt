@@ -48,3 +48,5 @@
 
 comments left to do:
 - maybe add some safeguards against duplicate comments
+- enable bbcode for comments
+- live preview for new comments

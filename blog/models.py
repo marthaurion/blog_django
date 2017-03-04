@@ -19,7 +19,7 @@ from versatileimagefield.image_warmer import VersatileImageFieldWarmer
 # manager to pull all posts that aren't published in the future
 class PostManager(models.Manager):
     def get_queryset(self):
-        return super(PostManager, self).get_queryset().filter(pub_date__lte=timezone.now())
+        return super().get_queryset().filter(pub_date__lte=timezone.now())
 
 # returns either today at 4pm (server time) or tomorrow at 4pm if it's currently after 4pm
 def default_start_time():
@@ -86,7 +86,7 @@ class Post(models.Model):
         first_img = self.get_first_image()
         if first_img:
             self.first_image = first_img.full_image
-        super(Post, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     # get the first image from the body text
     def get_first_image(self):
@@ -183,10 +183,10 @@ class Media(models.Model):
         return link_string % (self.full_image.url, self.scale_image.url, self.scale_image.height, self.scale_image.width)
     
     def save(self, *args, **kwargs):
-        super(Media, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         
         self.scale_image = self.full_image.thumbnail['750x540'].name
-        super(Media, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
     
 @receiver(models.signals.post_save, sender=Media)
 def warm_Media_images(sender, instance, **kwargs):

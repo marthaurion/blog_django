@@ -38,7 +38,7 @@ class PostIndexView(PostListMixin, ArchiveIndexView):
     date_field = 'pub_date'
     
     def get_context_data(self, **kwargs):
-        context = super(PostIndexView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         working_page = 1
         if 'page' in self.kwargs:
             working_page = int(self.kwargs['page'])
@@ -59,7 +59,7 @@ class PostYearView(PostListMixin, YearArchiveView):
     make_object_list = True
     
     def get_context_data(self, **kwargs):
-        context = super(PostYearView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         year = self.kwargs['year']
         
         working_page = 1
@@ -86,7 +86,7 @@ class PostMonthView(PostListMixin, MonthArchiveView):
     make_object_list = True
     
     def get_context_data(self, **kwargs):
-        context = super(PostMonthView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         year = self.kwargs['year']
         month = self.kwargs['month']
         
@@ -114,7 +114,7 @@ class PostDayView(PostListMixin, DayArchiveView):
     make_object_list = True
     
     def get_context_data(self, **kwargs):
-        context = super(PostDayView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         year = self.kwargs['year']
         month = self.kwargs['month']
         day = self.kwargs['day']
@@ -144,7 +144,7 @@ class CategoryListView(PostListMixin, ListView):
         return posts
         
     def get_context_data(self, **kwargs):
-        context = super(CategoryListView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         slug = self.kwargs['slug']
         
         working_page = 1
@@ -170,7 +170,7 @@ class TagListView(PostListMixin, ListView):
         return posts
         
     def get_context_data(self, **kwargs):
-        context = super(TagListView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         slug = self.kwargs['slug']
         
         working_page = 1
@@ -264,11 +264,11 @@ class PostDetailView(CommentFormMixin, DetailView):
             if len(comment):
                 comment[0].unsubscribe(request.GET['email'])
             
-        return super(PostDetailView, self).get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
     
     # override get object so that it gives a 404 error if you're looking at a post in the future and you're not an admin
     def get_object(self, *args, **kwargs):
-        obj = super(PostDetailView, self).get_object(*args, **kwargs)
+        obj = super().get_object(*args, **kwargs)
         if obj.pub_date>timezone.now(): # don't show future posts
             if not self.request.user.is_active and not self.request.user.is_superuser: # only block if not an admin
                 raise Http404()
@@ -276,7 +276,7 @@ class PostDetailView(CommentFormMixin, DetailView):
         
     # add comment notify to context from session
     def get_context_data(self, **kwargs):
-        context = super(PostDetailView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['comment_notify'] = self.request.session.get('comment_notify')
         context['comment_list'] = self.object.approved_comments()
         context['post_comment_url'] = self.object.get_absolute_url()
@@ -309,7 +309,7 @@ class SearchResultsView(PostListMixin, ListView):
         return posts
         
     def get_context_data(self, **kwargs):
-        context = super(SearchResultsView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         
         working_page = 1
         if 'page' in self.kwargs:
