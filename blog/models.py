@@ -1,18 +1,16 @@
 from datetime import timedelta
 
 from django.db import models
-from django.conf import settings
 from django.utils import timezone
 from django.dispatch import receiver
 from django.utils.timezone import localtime
-from django.db.models import Count
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import urlize
 
 import markdown
-import hashlib
 import pytz
+import hashlib
 from mptt.models import MPTTModel, TreeForeignKey
 from taggit.managers import TaggableManager
 from versatileimagefield.fields import VersatileImageField
