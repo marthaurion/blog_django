@@ -55,7 +55,6 @@ INSTALLED_APPS = (
     'blog',
     'taggit',
     'storages',
-    'disqus',
     'maintenancemode',
     'bulk_admin',
     'django.contrib.sitemaps',
@@ -97,8 +96,6 @@ TEMPLATES = [
         },
     },
 ]
-
-DISQUS_WEBSITE_SHORTNAME = 'marthaurion'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
@@ -146,8 +143,6 @@ AWS_STORAGE_BUCKET_NAME = 'marthblog'
 
 AWS_ACCESS_KEY_ID = get_secret("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = get_secret("AWS_SECRET_ACCESS_KEY")
-
-DISQUS_API_KEY = get_secret('DISQUS_API_KEY')
 
 VERSATILEIMAGEFIELD_SETTINGS = {
     'create_images_on_demand': False,
