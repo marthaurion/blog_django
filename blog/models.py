@@ -18,8 +18,6 @@ from taggit.managers import TaggableManager
 from versatileimagefield.fields import VersatileImageField
 from versatileimagefield.image_warmer import VersatileImageFieldWarmer
 
-from .akismet import Akismet
-
 # manager to pull all posts that aren't published in the future
 class PostManager(models.Manager):
     def get_queryset(self):
