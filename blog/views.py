@@ -242,6 +242,8 @@ class CommentFormMixin(FormMixin):
         comment.text = form.cleaned_data['text'] # pull from the form
         comment_notify = bool(request.POST.get('notify', False))
         comment.notify = comment_notify # if the checkbox is checked, set notify field
+        if author.spam:
+            comment.spam = True
         comment.save()
         
         request.session['comment_notify'] = comment_notify # log notification setting in the session
