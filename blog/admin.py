@@ -53,6 +53,13 @@ class CategoryAdmin(MPTTModelAdmin):
 class MediaAdmin(BulkModelAdmin):
     search_fields = ['image_name']
     list_display = ('image_name', 'pub_date', 'admin_url', 'admin_thumbnail', 'admin_full', )
+    bulk_upload_fields = ('full_image', )
+
+    def generate_data_for_file(self, request, field_name, field_file, index):
+        if field_name == 'full_image':
+            index_string = '{0:02d}'.format(index+1)
+            return dict(image_name=index_string)
+        return super().generate_data_for_file(request, field_name, field_file, index)
     
     def admin_url(self, instance):
         return "<a href='%s'>%s</a>" % (instance.get_blog_url(), instance.get_blog_url())
