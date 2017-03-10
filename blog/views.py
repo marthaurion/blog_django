@@ -253,7 +253,7 @@ class CommentFormMixin(FormMixin):
         if settings.DEV_SERVER: # can't set up celery on cloud9, so running the standard email
             comment.send_notifications(request_info)
         else:
-            send_email.delay(request_info)
+            send_email.delay(comment.pk, request_info)
         
         self.success_url = comment.get_absolute_url()
         return self.form_valid(form)
