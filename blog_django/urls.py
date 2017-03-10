@@ -48,7 +48,7 @@ urlpatterns = [
     url(r'^$', PostIndexView.as_view(), name='index'),
 ]
 
-if settings.DEBUG and not settings.MAINTENANCE_MODE: # there is a debug mode for production, but it turns on maintenance mode
+if settings.DEV_SERVER: # there is a debug mode for production, but it turns on maintenance mode
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     
     import debug_toolbar  # if we're on the dev server, include urls for debug toolbar

@@ -341,18 +341,17 @@ class Comment(MPTTModel):
             self.notify = False
             self.save()
     
-    def send_email_notification(self, request, recipients):
+    def send_email_notification(self, info_dict, recipients):
         if self.author.email in recipients: # don't send comments to yourself
             recipients.remove(self.author.email)
         if len(recipients) < 1: # if there are no more recipients, quit out
             return
         subject = "New comment on %s" % self.get_post_title()
-        comment_url = request.build_absolute_uri(self.get_absolute_url())
-        unsubscribe_url = request.build_absolute_uri(self.get_unsubscribe_url())
+        comment_url = info_dict['url']
         context = { 'comment_author': self.author.username,
                     'comment_text': self.text,
                     'comment_url': comment_url,
-                    'unsubscribe_url': unsubscribe_url
+                    'unsubscribe_url': info_dict['unsubscribe']
         }
         body = "Check out the reply to your comment at %s" % comment_url
         html_body = render_to_string('blog/comment_body.html', context)
@@ -361,20 +360,20 @@ class Comment(MPTTModel):
         msg.attach_alternative(html_body, "text/html")
         msg.send()
         
-    def notify_authors(self, request):
+    def notify_authors(self):
         if not self.notify:
             return []
         recipients = [self.author.email] # first send the notification to the parent comment's author
         return recipients
     
-    def send_notifications(self, request):
-        if self.spam_check(request): # don't send notifications for suspected spam
+    def send_notifications(self, info_dict):
+        if self.spam_check(): # don't send notifications for suspected spam
             return
-        self.send_email_notification(request, ["marthaurion@gmail.com"]) # first always send notification to me, the admin
+        self.send_email_notification(info_dict, ["marthaurion@gmail.com"]) # first always send notification to me, the admin
         if self.parent and self.approved:
-            self.send_email_notification(request, self.parent.notify_authors(request))
+            self.send_email_notification(info_dict, self.parent.notify_authors())
             
-    def spam_check(self, request):
+    def spam_check(self):
         if self.author.spam:
             return True
         
@@ -384,3 +383,9 @@ class Comment(MPTTModel):
         if not approved and comment_count > 5: # if you're sending more than 5 comments while not approved, stop email notifications
             return True
         return False
+        
+    def get_request_info(self, request):
+        info_dict = {}
+        info_dict['url'] = request.build_absolute_uri(self.get_absolute_url())
+        info_dict['unsubscribe'] = request.build_absolute_uri(self.get_unsubscribe_url())
+        return info_dict

@@ -52,6 +52,11 @@ comments left to do:
 - live preview for new comments
 
 
+notes on celery:
+- rabbitmq backend
+- set up celeryd for the backend
+- use most of the defaults
+
 
 if I need to replace the jquery in the future, this is the code:
 function replyForm(me, parent){

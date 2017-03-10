@@ -14,6 +14,7 @@ from taggit.models import Tag
 
 from .models import Post, Category, Media, Comment, Commenter
 from .forms import CommentForm
+from .tasks import send_email
 
 
 class MediaDetailView(DetailView):
@@ -248,7 +249,12 @@ class CommentFormMixin(FormMixin):
         
         request.session['comment_notify'] = comment_notify # log notification setting in the session
         
-        comment.send_notifications(request)
+        request_info = comment.get_request_info(request)
+        if settings.DEV_SERVER: # can't set up celery on cloud9, so running the standard email
+            comment.send_notifications(request_info)
+        else:
+            send_email.delay(request_info)
+        
         self.success_url = comment.get_absolute_url()
         return self.form_valid(form)
 
