@@ -17,5 +17,3 @@ MEDIA_URL = "https://%s/%s/" % (AWS_CLOUDFRONT_DOMAIN, MEDIAFILES_LOCATION)
 DEFAULT_FILE_STORAGE = 'blog_django.custom_storages.MediaStorage'
 
 CELERY_BROKER_URL = get_secret("BROKER_URL")
-
-DEV_SERVER = False

@@ -53,7 +53,7 @@ comments left to do:
 
 
 notes on celery:
-- rabbitmq backend
+- rabbitmq backend - standard install with vhost blog and tag blog
 - set up celeryd for the backend
 - use most of the defaults
 
