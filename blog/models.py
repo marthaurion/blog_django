@@ -11,6 +11,7 @@ from django.utils.html import urlize
 import markdown
 import pytz
 import hashlib
+import uuid
 from mptt.models import MPTTModel, TreeForeignKey
 from taggit.managers import TaggableManager
 from versatileimagefield.fields import VersatileImageField
@@ -294,6 +295,7 @@ class Comment(MPTTModel):
     spam = models.BooleanField(default=False)
     html_text = models.TextField(blank=True) # creating this field to take wordpress imported comments because they're formatted in html
     imported = models.BooleanField(default=False)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     
     class Meta:
         ordering = ['pub_date']
