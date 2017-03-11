@@ -1,12 +1,15 @@
 from datetime import timedelta
 
 from django.db import models
+from django.conf import settings
 from django.utils import timezone
 from django.dispatch import receiver
 from django.utils.timezone import localtime
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import urlize
+from django.core.exceptions import ImproperlyConfigured
+from django.contrib.sites.models import Site
 
 import markdown
 import pytz
@@ -16,6 +19,8 @@ from mptt.models import MPTTModel, TreeForeignKey
 from taggit.managers import TaggableManager
 from versatileimagefield.fields import VersatileImageField
 from versatileimagefield.image_warmer import VersatileImageFieldWarmer
+
+from akismet import Akismet
 
 # manager to pull all posts that aren't published in the future
 class PostManager(models.Manager):
@@ -369,25 +374,41 @@ class Comment(MPTTModel):
         return recipients
     
     def send_notifications(self, info_dict):
-        if self.spam_check(): # don't send notifications for suspected spam
+        if self.spam_check(info_dict): # don't send notifications for suspected spam
             return
         self.send_email_notification(info_dict, ["marthaurion@gmail.com"]) # first always send notification to me, the admin
         if self.parent and self.approved:
             self.send_email_notification(info_dict, self.parent.notify_authors())
             
-    def spam_check(self):
+    def spam_check(self, info_dict):
         if self.author.spam:
             return True
         
         approved = self.author.approved
-        email = self.author.email
-        comment_count = Comment.objects.filter(author__email=email).count()
-        if not approved and comment_count > 5: # if you're sending more than 5 comments while not approved, stop email notifications
-            return True
+        if not approved: # for unapproved comments, do an akismet check
+            current_domain = Site.objects.get_current().domain
+            akismet = Akismet(settings.AKISMET_KEY, 'http://{0}'.format(current_domain))
+        
+            data = dict(user_ip=info_dict['remote_addr'],
+                        user_agent=info_dict['user_agent'],
+                        comment_author=self.author.username,
+                        comment_author_email=self.author.email)
+            is_spam = akismet.check(info_dict['remote_addr'],
+                                    info_dict['user_agent'],
+                                    comment_author=self.author.username,
+                                    comment_author_email=self.author.email,
+                                    comment_author_url=self.author.website,
+                                    comment_content=self.text)
+            if is_spam:
+                self.author.mark_spam()
+            return is_spam
+
         return False
         
     def get_request_info(self, request):
         info_dict = {}
         info_dict['url'] = request.build_absolute_uri(self.get_absolute_url())
         info_dict['unsubscribe'] = request.build_absolute_uri(self.get_unsubscribe_url())
+        info_dict['remote_addr'] = request.META.get('REMOTE_ADDR')
+        info_dict['user_agent'] = request.META.get('HTTP_USER_AGENT')
         return info_dict

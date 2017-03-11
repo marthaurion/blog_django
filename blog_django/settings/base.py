@@ -210,3 +210,5 @@ LOGGING = {
         },
     }
 }
+
+AKISMET_KEY = get_secret('AKISMET_KEY')
