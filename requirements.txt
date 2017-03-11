@@ -2,6 +2,7 @@ amqp==2.1.4
 billiard==3.5.0.2
 boto==2.45.0
 celery==4.0.2
+contextlib2==0.5.4
 Django==1.10.5
 django-anymail==0.8
 django-bulk-admin==0.1.1
@@ -20,6 +21,7 @@ Pillow==4.0.0
 psycopg2==2.6.2
 python-akismet==0.3.0
 pytz==2016.10
+raven==6.0.0
 six==1.10.0
 sqlparse==0.2.2
 vine==1.1.3
