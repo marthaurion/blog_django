@@ -385,25 +385,19 @@ class Comment(MPTTModel):
             return True
         
         approved = self.author.approved
-        if not approved: # for unapproved comments, do an akismet check
-            current_domain = Site.objects.get_current().domain
-            akismet = Akismet(settings.AKISMET_KEY, 'http://{0}'.format(current_domain))
-        
-            data = dict(user_ip=info_dict['remote_addr'],
-                        user_agent=info_dict['user_agent'],
-                        comment_author=self.author.username,
-                        comment_author_email=self.author.email)
-            is_spam = akismet.check(info_dict['remote_addr'],
-                                    info_dict['user_agent'],
-                                    comment_author=self.author.username,
-                                    comment_author_email=self.author.email,
-                                    comment_author_url=self.author.website,
-                                    comment_content=self.text)
-            if is_spam:
-                self.author.mark_spam()
-            return is_spam
-
-        return False
+        if approved:
+            return False
+        current_domain = Site.objects.get_current().domain
+        akismet = Akismet(settings.AKISMET_KEY, 'http://{0}'.format(current_domain))
+        is_spam = akismet.check(info_dict['remote_addr'],
+                                info_dict['user_agent'],
+                                comment_author=self.author.username,
+                                comment_author_email=self.author.email,
+                                comment_author_url=self.author.website,
+                                comment_content=self.text)
+        if is_spam:
+            self.author.mark_spam()
+        return is_spam
         
     def get_request_info(self, request):
         info_dict = {}
