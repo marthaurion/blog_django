@@ -63,6 +63,7 @@ INSTALLED_APPS = (
     'mptt',
     'anymail',
     'raven.contrib.django.raven_compat',
+    'precise_bbcode',
 )
 
 MIDDLEWARE_CLASSES = (

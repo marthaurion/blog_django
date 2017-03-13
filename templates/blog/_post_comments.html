@@ -21,11 +21,7 @@
                     {% endif %}
                 </h4>
                 <a href="{{ node.get_absolute_url }}"><small class="text-muted">{{ node.pub_date }}</small></a>
-                {% if node.imported %}
-                    {{ node.html_text|safe }}
-                {% else %}
-                    <p>{{ node.text|escape|urlize|linebreaksbr }}</p>
-                {% endif %}
+                <p>{{ node.html_text|safe }}</p>
                 <p><a href="#comment{{ node.pk }}" class="comment-reply-link">Reply</a></p>
             {% if not node.is_leaf_node and node.level < 2 %}
                 {{ children }}

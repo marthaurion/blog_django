@@ -19,7 +19,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 from taggit.managers import TaggableManager
 from versatileimagefield.fields import VersatileImageField
 from versatileimagefield.image_warmer import VersatileImageFieldWarmer
-
+from precise_bbcode.bbcode import get_parser
 from akismet import Akismet
 
 # manager to pull all posts that aren't published in the future
@@ -202,23 +202,6 @@ def warm_Media_images(sender, instance, **kwargs):
         image_attr='full_image'
     )
     num_created, failed_to_create = media_img_warmer.warm()
-    
-# gets used if we need to populate the first image field for every model in the database
-def populate_first_image():
-    for post in Post.published.all():
-        first = post.get_first_image()
-        if first:
-            post.first_image = first
-            post.save()
-
-
-def warm_all_media():
-    media_img_warmer = VersatileImageFieldWarmer(
-        instance_or_queryset=Media.objects.all(),
-        rendition_key_set='scaled_image',
-        image_attr='full_image'
-    )
-    num_created, failed_to_create = media_img_warmer.warm()
 
 
 class Link(models.Model):
@@ -299,7 +282,6 @@ class Comment(MPTTModel):
     notify = models.BooleanField(default=False)
     spam = models.BooleanField(default=False)
     html_text = models.TextField(blank=True) # creating this field to take wordpress imported comments because they're formatted in html
-    imported = models.BooleanField(default=False)
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     
     class Meta:
@@ -341,6 +323,12 @@ class Comment(MPTTModel):
             return 'About'
         else:
             return 'Blogroll'
+            
+    def save(self, *args, **kwargs): # override save to parse bbcode first
+        if self.text:
+            parser = get_parser()
+            self.html_text = parser.render(self.text)
+        super().save(*args, **kwargs)
     
     # if the email passed in matches the author, then turn off notifications
     def unsubscribe(self, email):
@@ -388,7 +376,8 @@ class Comment(MPTTModel):
         if approved:
             return False
         current_domain = Site.objects.get_current().domain
-        akismet = Akismet(settings.AKISMET_KEY, 'http://{0}'.format(current_domain))
+        user_agent = 'Marth Blog/0.0.1'
+        akismet = Akismet(settings.AKISMET_KEY, 'http://{0}'.format(current_domain), user_agent)
         is_spam = akismet.check(info_dict['remote_addr'],
                                 info_dict['user_agent'],
                                 comment_author=self.author.username,
