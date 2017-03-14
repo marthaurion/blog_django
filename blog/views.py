@@ -271,7 +271,6 @@ class PostDetailView(CommentFormMixin, DetailView):
             comment = Comment.objects.filter(pk=comment_pk)
             if len(comment):
                 comment[0].unsubscribe(request.GET['email'])
-            
         return super().get(request, *args, **kwargs)
     
     # override get object so that it gives a 404 error if you're looking at a post in the future and you're not an admin

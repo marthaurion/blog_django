@@ -186,11 +186,17 @@ LOGGING = {
                       '%(process)d %(thread)d %(message)s'
         },
     },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
     'handlers': {
         'sentry': {
             'level': 'ERROR', # To capture more than ERROR, change to WARNING, INFO, etc.
+            'filters': ['require_debug_false'], # don't record debug errors in sentry
             'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
-            'tags': {'custom-tag': 'x'},
+            'formatter': 'verbose'
         },
         'console': {
             'level': 'DEBUG',
@@ -199,6 +205,10 @@ LOGGING = {
         }
     },
     'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+        },
         'django.db.backends': {
             'level': 'ERROR',
             'handlers': ['console'],
@@ -206,12 +216,12 @@ LOGGING = {
         },
         'raven': {
             'level': 'DEBUG',
-            'handlers': ['console'],
+            'handlers': ['sentry'],
             'propagate': False,
         },
         'sentry.errors': {
             'level': 'DEBUG',
-            'handlers': ['console'],
+            'handlers': ['sentry'],
             'propagate': False,
         },
     },
