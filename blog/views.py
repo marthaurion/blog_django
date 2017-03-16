@@ -310,9 +310,6 @@ class SearchResultsView(PostListMixin, ListView):
             params=(query,),
             order_by=('-rank',)
         )
-        #posts = Post.published.annotate(
-            #search=SearchVector('title', 'body_html'),
-        #).filter(search=query)
         return posts
         
     def get_context_data(self, **kwargs):

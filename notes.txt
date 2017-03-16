@@ -46,45 +46,14 @@
 - added the ability to use {{REPLACE}} in my post body instead of hardcoding the image links.
 
 
-comments left to do:
+left to do:
 - maybe add some safeguards against duplicate comments
-- enable bbcode for comments
-- live preview for new comments
+- consider running urlize on html after running bbcode parser
+- live preview for new comments?
+- might be able to use generic foreign keys for comments https://medium.com/cravedev/how-we-used-generic-relations-to-add-comments-to-model-instances-b48c2509dc27#.qgomouhov
 
 
 notes on celery:
 - rabbitmq backend - standard install with vhost blog and tag blog
 - set up celeryd for the backend
 - use most of the defaults
-
-
-if I need to replace the jquery in the future, this is the code:
-function replyForm(me, parent){
-    var commentForm = document.getElementById('comment-form');
-    document.getElementById("comment-form-parent").value = parent;
-    document.getElementById("cancel-reply").removeAttribute("hidden");
-    insertAfter(commentForm, me);
-}
-
-function cancelReply(){
-    var commentForm = document.getElementById('comment-form');
-    var commentList = document.getElementById('comment-list');
-    document.getElementById("comment-form-parent").value = '';
-    document.getElementById("cancel-reply").setAttribute("hidden", "");
-    insertAfter(commentForm, commentList);
-}
-
-function insertAfter(newElement,targetElement) {
-    //target is what you want it to go after. Look for this elements parent.
-    var parent = targetElement.parentNode;
-
-    //if the parents lastchild is the targetElement...
-    if(parent.lastchild == targetElement) {
-    //add the newElement after the target element.
-    parent.appendChild(newElement);
-    } 
-    else {
-    // else the target has siblings, insert the new element between the target and    it's next sibling.
-     parent.insertBefore(newElement, targetElement.nextSibling);
-    }
-}

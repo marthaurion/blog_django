@@ -22,7 +22,7 @@
                 </h4>
                 <a href="{{ node.get_absolute_url }}"><small class="text-muted">{{ node.pub_date }}</small></a>
                 <p>{{ node.html_text|safe }}</p>
-                <p><a href="#comment{{ node.pk }}" class="comment-reply-link">Reply</a></p>
+                <p><a href="#comment{{ node.pk }}" onclick="replyForm(this, {{ node.pk }})">Reply</a></p>
             {% if not node.is_leaf_node and node.level < 2 %}
                 {{ children }}
                 </div>
@@ -44,10 +44,37 @@
 
 <div class="well" id="comment-form">
     <h4><strong>Leave a comment</strong></h4>
-    <p id='cancel-reply' hidden><a href="#comment-form" class='comment-reply-cancel'>Cancel Reply to Comment</a></p>
+    <p id='cancel-reply' hidden><a href="#comment-form" onclick="cancelReply()">Cancel Reply to Comment</a></p>
     <form class="form-group" action="{{ post_comment_url }}" method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form.non_field_errors }}
+        <p>
+            {{ form.username.errors }}
+            <label for="{{ form.username.id_for_label }}">Name:</label>
+            {{ form.username }}
+        </p>
+        <p>
+            {{ form.email.errors }}
+            <label for="{{ form.email.id_for_label }}">Email:</label>
+            {{ form.email }}
+        </p>
+        <p>
+            {{ form.website.errors }}
+            <label for="{{ form.website.id_for_label }}">Website:</label>
+            {{ form.website }}
+        </p>
+        <p>
+            {{ form.text.errors }}
+            <label for="{{ form.text.id_for_label }}">Comment:</label>
+            <p class="pull-right">
+                <a href="javascript:void(insertBBCode('b'))" class="btn btn-primary btn-xs">b</a>
+                <a href="javascript:void(insertBBCode('i'))" class="btn btn-primary btn-xs">i</a>
+                <a href="javascript:void(insertBBCode('u'))" class="btn btn-primary btn-xs">u</a>
+                <a href="javascript:void(insertBBCode('quote'))" class="btn btn-primary btn-xs">quote</a>
+            </p>
+            {{ form.text }}
+        </p>
+        {{ form.parent }}
         <p><div class="checkbox">
             <label><input type="checkbox" name="notify" {% if comment_notify %}checked{% endif %}/>Notify me with replies</label>
         </div></p>
