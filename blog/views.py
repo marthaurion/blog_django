@@ -45,7 +45,9 @@ class PostIndexView(PostListMixin, ListView):
     ordering = '-pub_date'
     
     def get_queryset(self):
-        return super().get_queryset().filter(pub_date__lte=timezone.now())
+        return Post.published.select_related('category').annotate(
+                            num_comments=models.Count(models.Case(
+                            models.When(comments__approved=True, then=1))))
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -150,7 +152,9 @@ class CategoryListView(PostListMixin, ListView):
     def get_queryset(self):
         category = get_object_or_404(Category, slug=self.kwargs['slug'])
         category_list = category.get_descendants(include_self=True)
-        posts = Post.published.filter(category__in=category_list)
+        posts = Post.published.filter(category__in=category_list).select_related('category').annotate(
+                                                num_comments=models.Count(models.Case(
+                                                models.When(comments__approved=True, then=1))))
         return posts
         
     def get_context_data(self, **kwargs):
@@ -176,7 +180,9 @@ class CategoryListView(PostListMixin, ListView):
 # display all posts for a tag
 class TagListView(PostListMixin, ListView):
     def get_queryset(self):
-        posts = Post.published.filter(tags__slug__in=[self.kwargs['slug']])
+        posts = Post.published.filter(tags__slug__in=[self.kwargs['slug']]).select_related('category').annotate(
+                                                num_comments=models.Count(models.Case(
+                                                models.When(comments__approved=True, then=1))))
         return posts
         
     def get_context_data(self, **kwargs):
