@@ -132,7 +132,6 @@ class Category(MPTTModel):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
-    #parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     active = models.BooleanField(default=False)
 
     class MPTTMeta:
@@ -207,7 +206,7 @@ def warm_Media_images(sender, instance, **kwargs):
 class Link(models.Model):
     title = models.CharField(max_length=150)
     url = models.URLField()
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField(blank=True)
     
     class Meta:
         ordering = ['title']
@@ -224,7 +223,7 @@ class Mapping(models.Model):
 class Commenter(models.Model):
     username = models.CharField(max_length=200)
     email = models.EmailField()
-    website = models.URLField(null=True, blank=True)
+    website = models.URLField(blank=True)
     approved = models.BooleanField(default=False)
     spam = models.BooleanField(default=False)
     
@@ -274,7 +273,7 @@ class Commenter(models.Model):
 class Comment(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
     post = models.ForeignKey(Post, null=True, blank=True, related_name='comments')
-    page_url = models.URLField(null=True, blank=True)
+    page_url = models.URLField(blank=True)
     approved = models.BooleanField(default=False)
     pub_date = models.DateTimeField('date published', default=timezone.now, editable=False)
     author = models.ForeignKey(Commenter, related_name='comments')
