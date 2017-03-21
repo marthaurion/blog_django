@@ -7,39 +7,37 @@
   <h2>{{ page_header }}</h2>
   <hr />
 {% endif %}
-{% if post_list %}
-  {% for post in post_list %}
-    <div class="well">
-        <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
-        <div class="post_date">
-          <p class="text-muted">Published on {{ post.pub_date|date:"F j, Y" }}. <a href="{{ post.get_absolute_url }}#comment_section">{{ post.get_comment_count }}</a></p>
-        </div>
-        
-        <div class="first_image">
-          {% with first_img=post.first_image %}
-            {% if first_img %}
-              {% with img_thumb=first_img.thumbnail.200x200 %}
-              <img class="img-responsive" src="{{ img_thumb }}" alt="{{ post.title }}" height="{{ img_thumb.height }}" width="{{ img_thumb.width }}"/>
-              {% endwith %}
-            {% endif %}
-          {% endwith %}
-        </div>
-        
-        <div class="post_body">
-          {{ post.excerpt|safe }}
-        </div>
-    
-        {% include 'blog/_post_meta.html' %}
-        
-    </div>
+{% for post in post_list %}
+  <div class="well">
+      <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+      <div class="post_date">
+        <p class="text-muted">Published on {{ post.pub_date|date:"F j, Y" }}. <a href="{{ post.get_absolute_url }}#comment_section">{{ post.get_comment_count }}</a></p>
+      </div>
+      
+      <div class="first_image">
+        {% with first_img=post.first_image %}
+          {% if first_img %}
+            {% with img_thumb=first_img.thumbnail.200x200 %}
+            <img class="img-responsive" src="{{ img_thumb }}" alt="{{ post.title }}" height="{{ img_thumb.height }}" width="{{ img_thumb.width }}"/>
+            {% endwith %}
+          {% endif %}
+        {% endwith %}
+      </div>
+      
+      <div class="post_body">
+        {{ post.excerpt|safe }}
+      </div>
   
-      <hr />
-  {% endfor %}
-{% else %}
+      {% include 'blog/_post_meta.html' %}
+      
+  </div>
+
+    <hr />
+{% empty %}
   <h3>No posts here.</h3>
   <br />
   <p>Well, this is awkward.</p>
-{% endif %}
+{% endfor %}
 
 {% if search %}
   {% include 'blog/_search_paginator.html' %}

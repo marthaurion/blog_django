@@ -269,7 +269,7 @@ class PostDetailView(CommentFormMixin, DetailView):
         if 'email' in request.GET and 'comment' in request.GET:
             comment_pk = int(request.GET['comment'])
             comment = Comment.objects.filter(pk=comment_pk)
-            if len(comment):
+            if comment:
                 comment[0].unsubscribe(request.GET['email'])
         return super().get(request, *args, **kwargs)
     
