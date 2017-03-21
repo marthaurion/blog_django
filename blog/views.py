@@ -9,6 +9,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormMixin
 from django.views.generic.list import ListView
 from django.views.generic.dates import ArchiveIndexView, YearArchiveView, MonthArchiveView, DayArchiveView
+from django.db import models
 
 from taggit.models import Tag
 
@@ -31,6 +32,11 @@ class PostListMixin(object):
     allow_empty = True
     context_object_name = 'post_list'
     template_name = 'blog/post_index.html'
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        return queryset.select_related('category').annotate(num_comments=models.Count(models.Case(
+                                                models.When(comments__approved=True, then=1))))
 
 
 # display every published post
