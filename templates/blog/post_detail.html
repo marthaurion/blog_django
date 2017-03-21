@@ -10,7 +10,16 @@
         {{ post.body_html|safe }}
     </div>
     <hr />
-    {% include 'blog/_post_meta.html' %}
+
+    <div class="meta">
+        <p>Posted in: <a href="{{ post.category.get_absolute_url }}">{{ post.category.title }}</a></p>
+        <p>
+        {% for tag in post.tags.all %}
+          <a href="/blog/tag/{{ tag.slug }}/"><span class="label label-default blog-tag">{{ tag.name }}</span></a>
+        {% endfor %}
+        </p>
+    </div>
+
     <hr />
     
     <div id="comment_section">
