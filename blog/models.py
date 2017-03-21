@@ -64,7 +64,7 @@ class Post(models.Model):
         return self.comments.filter(approved=True)
         
     def get_comment_count(self):
-        num = len(self.approved_comments())
+        num = self.approved_comments().count()
         if num == 0:
             return "No comments"
         else:
