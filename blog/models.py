@@ -274,7 +274,7 @@ class Comment(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
     post = models.ForeignKey(Post, null=True, blank=True, related_name='comments')
     page_url = models.URLField(blank=True)
-    approved = models.BooleanField(default=False)
+    approved = models.BooleanField(default=False, db_index=True)
     pub_date = models.DateTimeField('date published', default=timezone.now, editable=False)
     author = models.ForeignKey(Commenter, related_name='comments')
     text = models.TextField(blank=True) # form should force this field anyway, so this is just for the admin
