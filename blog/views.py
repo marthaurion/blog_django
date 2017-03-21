@@ -32,11 +32,6 @@ class PostListMixin(object):
     allow_empty = True
     context_object_name = 'post_list'
     template_name = 'blog/post_index.html'
-    
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        return queryset.select_related('category').annotate(num_comments=models.Count(models.Case(
-                                                models.When(comments__approved=True, then=1))))
 
 
 # display every published post
