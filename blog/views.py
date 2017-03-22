@@ -315,6 +315,8 @@ class PostDetailView(CommentFormMixin, DetailView):
 
 
 class SearchResultsView(PostListMixin, ListView):
+    template_name = 'blog/search_index.html'
+    
     def get_queryset(self):
         query = self.request.GET.get('q')
         
@@ -325,7 +327,8 @@ class SearchResultsView(PostListMixin, ListView):
             params=(query,),
             order_by=('-rank',)
         )
-        return posts
+        return posts.annotate(num_comments=models.Count(models.Case(
+                            models.When(comments__approved=True, then=1))))
         
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -67,7 +67,76 @@
             </div> <!-- end #content -->
 
             <div id="sidebar" class="col-md-4 col-sm-12">
-                {% include '_sidebar.html' %}
+                <div class="sidebar-module">
+                    <div class="btn-group btn-group-justified">
+                        <a href="#" class="btn btn-default" onclick="setActiveStyleSheet('dark')">Dark</a>
+                        <a href="#" class="btn btn-primary" onclick="setActiveStyleSheet('light')">Light</a>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <div class="sidebar-module">
+                    <h4><strong>Follow on Wordpress</strong></h4>
+                    <p>If you prefer to follow me on Wordpress to keep up with my posts, I post to <a href="https://marthaurion.wordpress.com">this Wordpress blog</a> for every post here, so follow me there.</p>
+                </div>
+                
+                <div class="sidebar-module">
+                    <h4><strong>Search</strong></h4>
+                    <form id="searchform" action="{% url 'blog_search_list' %}" method="get" accept-charset="utf-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search" name="q" id="srch-term">
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                {% if categories %}
+                <div class="sidebar-module">
+                    <h4><strong>Categories</strong></h4>
+                    {% load mptt_tags %}
+                    <ul class="list-unstyled">
+                        {% recursetree categories %}
+                            {{ node.get_display|safe }}
+                            {% if not node.is_leaf_node %}
+                                <ul id="{{ node.id }}" class="list-unstyled collapse{{ node.get_active_string }}">
+                                    {{ children }}
+                                </ul>
+                            {% endif %}
+                        {% endrecursetree %}
+                    </ul>
+                </div>
+                {% endif %}
+                
+                <div class="sidebar-module">
+                    <h4><strong>Blogroll</strong></h4>
+                    <ul class="list-unstyled">
+                        <li><a href="https://100wordanime.wordpress.com/">100WordAnime</a></li>
+                        <li><a href="http://www.animenano.com/">Anime Nano</a></li>
+                        <li><a href="http://www.freelanceanimeblog.com/">Freelance Anime Blog</a></li>
+                        <li><a href="https://theholybookofhappypeach.wordpress.com/">Happy Peach</a></li>
+                        <li><a href="https://deluscar.wordpress.com/">Kai's Anime Blog</a></li>
+                        <li><a href="http://marthaurion.wordpress.com/">Marth's Wordpress Blog</a></li>
+                        <li><a href="http://nightsworn.blogspot.com/">Nightsworn's Blog</a></li>
+                        <li><a href="https://nichinichichan.wordpress.com/">Nishi Nishi-chan</a></li>
+                        <li><a href="http://wanabrar.com/blog/">Wanabrar</a></li>
+                        <li><a href="https://yaharibento.wordpress.com/">Yahari Bento</a></li>
+                    </ul>
+                </div>
+                
+                <div class="sidebar-module">
+                    <h4><strong>Email Subscriptions</strong></h4>
+                    <form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open('https://feedburner.google.com/fb/a/mailverify?uri=marthaurion/rzFS', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true">
+                        <p>Enter your email address and get a notification for each new post.</p>
+                        <p><input type="text" class="form-control" name="email" placeholder="Email Address" /></p>
+                        <input type="hidden" value="marthaurion/rzFS" name="uri"/>
+                        <input type="hidden" name="loc" value="en_US"/>
+                        <button type="submit" class="btn btn-default">Subscribe</button>
+                        <p>Delivered by <a href="https://feedburner.google.com" target="_blank">FeedBurner</a></p>
+                    </form>
+                </div>
             </div> <!-- end #sidebar -->
 
             </div> <!-- end #row -->
