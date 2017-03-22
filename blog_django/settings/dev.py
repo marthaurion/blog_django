@@ -15,6 +15,7 @@ MIDDLEWARE_CLASSES += (
 
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': 'blog_django.misc.show_toolbar',
+    'RESULTS_CACHE_SIZE': 20,
 }
 
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
@@ -41,5 +42,3 @@ DEBUG_TOOLBAR_PANELS = [
     'template_profiler_panel.panels.template.TemplateProfilerPanel',
     'template_timings_panel.panels.TemplateTimings.TemplateTimings',
 ]
-
-DEBUG_TOOLBAR_CONFIG['RESULTS_CACHE_SIZE'] = 20

@@ -36,7 +36,7 @@ class PostListMixin(object):
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.select_related('category').annotate(num_comments=models.Count(models.Case(
-                                                models.When(comments__approved=True, then=1))))
+                                                models.When(comments__approved=True, then=1)))).prefetch_related('tags')
 
 
 # display every published post
@@ -47,7 +47,7 @@ class PostIndexView(PostListMixin, ListView):
     def get_queryset(self):
         return Post.published.select_related('category').annotate(
                             num_comments=models.Count(models.Case(
-                            models.When(comments__approved=True, then=1))))
+                            models.When(comments__approved=True, then=1)))).prefetch_related('tags')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -154,7 +154,7 @@ class CategoryListView(PostListMixin, ListView):
         category_list = category.get_descendants(include_self=True)
         posts = Post.published.filter(category__in=category_list).select_related('category').annotate(
                                                 num_comments=models.Count(models.Case(
-                                                models.When(comments__approved=True, then=1))))
+                                                models.When(comments__approved=True, then=1)))).prefetch_related('tags')
         return posts
         
     def get_context_data(self, **kwargs):
@@ -182,7 +182,7 @@ class TagListView(PostListMixin, ListView):
     def get_queryset(self):
         posts = Post.published.filter(tags__slug__in=[self.kwargs['slug']]).select_related('category').annotate(
                                                 num_comments=models.Count(models.Case(
-                                                models.When(comments__approved=True, then=1))))
+                                                models.When(comments__approved=True, then=1)))).prefetch_related('tags')
         return posts
         
     def get_context_data(self, **kwargs):
@@ -300,7 +300,7 @@ class PostDetailView(CommentFormMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['comment_notify'] = self.request.session.get('comment_notify')
-        context['comment_list'] = self.object.approved_comments()
+        context['comment_list'] = self.object.approved_comments().select_related('author')
         context['post_comment_url'] = self.object.get_absolute_url()
         return context
         
