@@ -6,6 +6,7 @@ DEBUG = True
 INSTALLED_APPS += (
     'debug_toolbar',
     'template_profiler_panel',
+    'template_timings_panel',
 )
 
 MIDDLEWARE_CLASSES += (
@@ -38,4 +39,5 @@ DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.logging.LoggingPanel',
     'debug_toolbar.panels.redirects.RedirectsPanel',
     'template_profiler_panel.panels.template.TemplateProfilerPanel',
+    'template_timings_panel.panels.TemplateTimings.TemplateTimings',
 ]
