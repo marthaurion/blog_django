@@ -41,3 +41,5 @@ DEBUG_TOOLBAR_PANELS = [
     'template_profiler_panel.panels.template.TemplateProfilerPanel',
     'template_timings_panel.panels.TemplateTimings.TemplateTimings',
 ]
+
+DEBUG_TOOLBAR_CONFIG['RESULTS_CACHE_SIZE'] = 20
