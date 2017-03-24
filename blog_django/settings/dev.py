@@ -9,7 +9,7 @@ INSTALLED_APPS += (
     'template_timings_panel',
 )
 
-MIDDLEWARE_CLASSES += (
+MIDDLEWARE += (
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 

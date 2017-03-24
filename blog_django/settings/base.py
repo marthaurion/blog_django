@@ -56,7 +56,7 @@ INSTALLED_APPS = (
     'blog',
     'taggit',
     'storages',
-    'maintenancemode',
+    'maintenance_mode',
     'bulk_admin',
     'django.contrib.sitemaps',
     'versatileimagefield',
@@ -66,17 +66,16 @@ INSTALLED_APPS = (
     'precise_bbcode',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-    'maintenancemode.middleware.MaintenanceModeMiddleware',
+    'maintenance_mode.middleware.MaintenanceModeMiddleware',
 )
 
 ROOT_URLCONF = 'blog_django.urls'
@@ -120,6 +119,8 @@ DATABASES = {
 }
 
 MAINTENANCE_MODE = False
+
+MAINTENANCE_MODE_IGNORE_SUPERUSER = True
 
 MAINTENANCE_IGNORE_URLS = (
     r'^/admin/*',
