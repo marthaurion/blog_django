@@ -77,11 +77,12 @@ class Post(models.Model):
             if i%2 == 0: # skip even pieces because they're not surrounded by replace tokens
                 continue
             cur_image = body_parts[i]
-            img_search = Media.objects.filter(image_name=cur_image)
-            if img_search:
-                img = img_search[0] # should be only one
+            try:
+                img = Media.objects.get(image_name=cur_image)
                 link_text = link_string % (img.full_image.url, img.scale_image.url, img.scale_image.height, img.scale_image.width)
                 body_parts[i] = link_text
+            except (Media.MultipleObjectsReturned, Media.DoesNotExist):
+                pass # maybe consider putting a log statement here
         return "".join(body_parts)
         
     # override save so we can add the linked images to the post
@@ -99,9 +100,11 @@ class Post(models.Model):
         body_parts = self.body.split("{{REPLACE}}", 2) # only split twice because we're getting the first image, which is the second piece
         if len(body_parts) > 1:
             img_name = body_parts[1]
-            img_search = Media.objects.filter(image_name=img_name) # find the image model
-            if img_search:
-                return img_search[0] # should be only one
+            try:
+                img = Media.objects.get(image_name=img_name) # find the image model
+                return img
+            except (Media.MultipleObjectsReturned, Media.DoesNotExist):
+                pass # maybe consider putting a log statement here
         return None
         
         

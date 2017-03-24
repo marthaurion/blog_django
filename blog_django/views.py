@@ -1,6 +1,8 @@
+from django.http import Http404
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 from django.contrib.messages.views import SuccessMessageMixin
+from django.utils import timezone
 
 from blog.views import CommentFormMixin
 from blog.models import Comment
@@ -14,10 +16,11 @@ class BasePageView(CommentFormMixin, TemplateView):
     def get(self, request, *args, **kwargs):
         if 'email' in request.GET and 'comment' in request.GET:
             comment_pk = int(request.GET['comment'])
-            comment = Comment.objects.filter(pk=comment_pk)
-            if len(comment):
-                comment[0].unsubscribe(request.GET['email'])
-            
+            try:
+                comment = Comment.objects.get(pk=comment_pk)
+                comment.unsubscribe(request.GET['email'])
+            except (Comment.MultipleObjectsReturned, Comment.DoesNotExist):
+                pass # again, might want to log here
         return super().get(request, *args, **kwargs)
     
     # override get object so that it gives a 404 error if you're looking at a post in the future and you're not an admin

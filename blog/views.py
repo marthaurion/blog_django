@@ -168,7 +168,7 @@ class CategoryListView(PostListMixin, ListView):
         if 'page' in self.kwargs:
             working_page = int(self.kwargs['page'])
         
-        category = Category.objects.get(slug=slug)
+        category = Category.objects.get(slug=slug) # maybe I should have some safeguards on this
         title = "Posts for Category: " + category.title
         page_header = title
         if working_page > 1:
@@ -195,7 +195,7 @@ class TagListView(PostListMixin, ListView):
         if 'page' in self.kwargs:
             working_page = int(self.kwargs['page'])
         
-        tag = Tag.objects.get(slug=slug)
+        tag = Tag.objects.get(slug=slug) # maybe I should have some safeguards on this
         title = "Posts for Tag: " + tag.name
         page_header = title
         if working_page > 1:
@@ -221,15 +221,8 @@ class CommentFormMixin(FormMixin):
         form_email = form.cleaned_data['email']
         form_username = form.cleaned_data['username']
         form_website = form.cleaned_data['website']
-        commenter = Commenter.objects.filter(email=form_email)
-        if not commenter: # if no commenter is found for the email in the form, create one
-            author = Commenter()
-            author.email = form_email
-            author.username = form_username
-            author.website = form_website
-            author.save()
-        else: # if we find a commenter with the email, use it
-            author = commenter[0]
+        try:
+            author = Commenter.objects.get(email=form_email)
             changed = False
             # if username or website are changed, update them for the author of the comment
             if form_website and form_website != author.website:
@@ -240,6 +233,15 @@ class CommentFormMixin(FormMixin):
                 changed = True
             if changed:
                 author.save()
+        except Commenter.DoesNotExist: # if no commenter is found for the email in the form, create one
+            author = Commenter()
+            author.email = form_email
+            author.username = form_username
+            author.website = form_website
+            author.save()
+        except Commenter.MultipleObjectsReturned: # probably shouldn't happen, but here just in case
+            # probably log something here
+            return self.form_invalid(form)
         
         request.session['comment_email'] = author.email  # save commenter information in a session so it can be reused later
         request.session['comment_username'] = author.username
@@ -248,7 +250,10 @@ class CommentFormMixin(FormMixin):
         comment = Comment()
         if form.cleaned_data['parent']:
             parent_id = int(form.cleaned_data['parent'].replace('#comment',''))
-            comment.parent = Comment.objects.get(pk=parent_id)
+            try:
+                comment.parent = Comment.objects.get(pk=parent_id)
+            except (Comment.MultipleObjectsReturned, Comment.DoesNotExist):
+                pass # again, might want to log here
         
         if post:
             comment.post = post # use the post attached to this view as the post for this comment
@@ -285,9 +290,11 @@ class PostDetailView(CommentFormMixin, DetailView):
     def get(self, request, *args, **kwargs):
         if 'email' in request.GET and 'comment' in request.GET:
             comment_pk = int(request.GET['comment'])
-            comment = Comment.objects.filter(pk=comment_pk)
-            if comment:
-                comment[0].unsubscribe(request.GET['email'])
+            try:
+                comment = Comment.objects.get(pk=comment_pk)
+                comment.unsubscribe(request.GET['email'])
+            except (Comment.MultipleObjectsReturned, Comment.DoesNotExist):
+                pass # again, might want to log here
         return super().get(request, *args, **kwargs)
     
     # override get object so that it gives a 404 error if you're looking at a post in the future and you're not an admin
