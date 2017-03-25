@@ -1,0 +1,14 @@
+{% extends "admin/change_form.html" %}
+
+{% load i18n admin_static admin_modify %}
+
+{% block title %}Wordpress{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <h3>Title</h3>
+    <p>{{ post.title }}</p>
+    <h3>Body</h3>
+    <p>{{ post.wordpress_body }}</p>
+</div>
+{% endblock %}

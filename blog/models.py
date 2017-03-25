@@ -111,6 +111,10 @@ class Post(models.Model):
                 logger.error('No media found for image name: %s' % img_name)
         return None
         
+    def wordpress_body(self):
+        referral = '[Click here](https://www.marthaurion.com%s) to check this post out on my personal website.\n\n' % self.get_absolute_url()
+        return markdown.markdown(referral) + self.body_html
+        
         
 @receiver(models.signals.post_save, sender=Post)
 def warm_Post_first_image(sender, instance, **kwargs):
@@ -122,17 +126,6 @@ def warm_Post_first_image(sender, instance, **kwargs):
             image_attr='full_image'
         )
         num_created, failed_to_create = post_img_warmer.warm()
-    
-
-# create a proxy post to handle generating a version of the post to send to Wordpress
-class WordpressPost(Post):
-    class Meta:
-        ordering = ['-pub_date']
-        proxy = True
-        
-    def wordpress_body(self):
-        referral = '[Click here](https://www.marthaurion.com%s) to check this post out on my personal website.\n\n' % self.get_absolute_url()
-        return markdown.markdown(referral) + self.body_html
 
 
 class Category(MPTTModel):

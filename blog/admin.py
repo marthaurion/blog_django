@@ -8,7 +8,7 @@ from django.template.response import TemplateResponse
 
 from mptt.admin import MPTTModelAdmin
 
-from .models import Post, Category, Media, Link, Comment, Commenter, WordpressPost
+from .models import Post, Category, Media, Link, Comment, Commenter
 from .forms import BulkMediaForm
 
 # Register your models here.
@@ -17,7 +17,7 @@ from .forms import BulkMediaForm
 class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = { 'slug': ['title'] }
     search_fields = ['title']
-    list_display = ('title', 'get_full_url', 'get_wordpress_url', 'pub_date', 'admin_first_image')
+    list_display = ('title', 'get_full_url', 'pub_date', 'admin_first_image', 'wordpress_action')
     
     # add a link to the blog post on the admin list display to make it easier to preview the post
     def get_full_url(self, instance):
@@ -34,20 +34,31 @@ class PostAdmin(admin.ModelAdmin):
     admin_first_image.short_description = 'First Image'
     admin_first_image.allow_tags = True
     
-    # add a link to open the wordpress admin page
-    def get_wordpress_url(self, instance):
-        return "<a href='/admin/blog/wordpresspost/%d/change/'>/admin/blog/wordpresspost/%d/change/</a>" % (instance.id, instance.id) 
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            url(
+                r'^(?P<post_id>.+)/wordpress/$',
+                self.admin_site.admin_view(self.process_wordpress),
+                name='post_wordpress',
+            ),
+        ]
+        return custom_urls + urls
         
-    get_wordpress_url.short_description = 'Wordpress'
-    get_wordpress_url.allow_tags = True
-
-
-@admin.register(WordpressPost)
-class WordpressAdmin(PostAdmin):
-    prepopulated_fields = {}
-    fields = ('title', 'wordpress_body')
-    list_display = ('title', 'get_full_url', 'pub_date', 'admin_first_image', )
-    readonly_fields = ('title', 'wordpress_body')
+    def process_wordpress(self, request, post_id):
+        post = self.get_object(request, post_id)
+        context = self.admin_site.each_context(request)
+        context['opts'] = self.model._meta
+        context['post'] = post
+        return TemplateResponse(request, 'admin/blog/wordpress.html', context)
+        
+    def wordpress_action(self, obj):
+        return format_html(
+            '<a class="button" href="{}">View Wordpress</a>',
+            reverse('admin:post_wordpress', args=[obj.pk])
+        )
+    wordpress_action.short_description = 'View Wordpress Post'
+    wordpress_action.allow_tags = True
 
 
 @admin.register(Category)
