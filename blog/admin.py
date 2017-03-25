@@ -17,7 +17,7 @@ from .forms import BulkMediaForm
 class PostAdmin(admin.ModelAdmin):
     prepopulated_fields = { 'slug': ['title'] }
     search_fields = ['title']
-    list_display = ('title', 'get_full_url', 'pub_date', 'admin_first_image', 'wordpress_action')
+    list_display = ('title', 'get_full_url', 'wordpress_action', 'pub_date', 'admin_first_image', )
     
     # add a link to the blog post on the admin list display to make it easier to preview the post
     def get_full_url(self, instance):
@@ -54,10 +54,10 @@ class PostAdmin(admin.ModelAdmin):
         
     def wordpress_action(self, obj):
         return format_html(
-            '<a class="button" href="{}">View Wordpress</a>',
+            '<a class="button" href="{}">View Wordpress Post</a>',
             reverse('admin:post_wordpress', args=[obj.pk])
         )
-    wordpress_action.short_description = 'View Wordpress Post'
+    wordpress_action.short_description = 'Wordpress'
     wordpress_action.allow_tags = True
 
 
