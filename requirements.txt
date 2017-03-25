@@ -6,7 +6,6 @@ contextlib2==0.5.4
 Django==1.10.6
 django-anymail==0.8
 django-appconf==1.0.2
-django-bulk-admin==0.1.1
 django-maintenance-mode==0.6.1
 django-mptt==0.8.7
 django-precise-bbcode==1.2.7

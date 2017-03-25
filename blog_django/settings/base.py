@@ -57,7 +57,6 @@ INSTALLED_APPS = (
     'taggit',
     'storages',
     'maintenance_mode',
-    'bulk_admin',
     'django.contrib.sitemaps',
     'versatileimagefield',
     'mptt',

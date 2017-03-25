@@ -1,9 +1,15 @@
 from django.contrib import admin
+from django.core.urlresolvers import reverse
+from django.utils.html import format_html
+from django.conf.urls import url
+from django import forms
+from django.http import HttpResponseRedirect
+from django.template.response import TemplateResponse
 
-from bulk_admin import BulkModelAdmin
 from mptt.admin import MPTTModelAdmin
 
 from .models import Post, Category, Media, Link, Comment, Commenter, WordpressPost
+from .forms import BulkMediaForm
 
 # Register your models here.
 
@@ -50,16 +56,16 @@ class CategoryAdmin(MPTTModelAdmin):
 
 
 @admin.register(Media)
-class MediaAdmin(BulkModelAdmin):
+class MediaAdmin(admin.ModelAdmin):
     search_fields = ['image_name']
     list_display = ('image_name', 'pub_date', 'admin_url', 'admin_thumbnail', 'admin_full', )
     bulk_upload_fields = ('full_image', )
+    change_list_template = 'admin/blog/bulk_upload_list.html'
 
     def generate_data_for_file(self, request, field_name, field_file, index):
         if field_name == 'full_image':
             index_string = '{0:02d}'.format(index+1)
             return dict(image_name=index_string)
-        return super().generate_data_for_file(request, field_name, field_file, index)
     
     def admin_url(self, instance):
         return "<a href='%s'>%s</a>" % (instance.get_blog_url(), instance.get_blog_url())
@@ -81,6 +87,48 @@ class MediaAdmin(BulkModelAdmin):
         
     admin_full.short_description = 'Full Image'
     admin_full.allow_tags = True
+    
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            url(
+                r'^bulk-upload/$',
+                self.admin_site.admin_view(self.process_bulk_upload),
+                name='bulk_upload',
+            ),
+        ]
+        return custom_urls + urls
+    
+    def process_bulk_upload(self, request, *args, **kwargs):
+        if request.method != 'POST':
+            form = BulkMediaForm()
+        else:
+            form = BulkMediaForm(request.POST, request.FILES)
+            if form.is_valid():
+                counter = 0
+                base_name = form.cleaned_data['name']
+                for img in request.FILES.getlist('images'):
+                    counter += 1
+                    new_med = Media()
+                    new_med.image_name = base_name + '-{0:02d}'.format(counter)
+                    new_med.full_image = img
+                    new_med.save()
+                self.message_user(request, "Success")
+            else:
+                self.message_user(request, "Error occurred")
+            url = reverse(
+                'admin:blog_media_changelist',
+                current_app=self.admin_site.name,
+            )
+            return HttpResponseRedirect(url)
+        context = self.admin_site.each_context(request)
+        context['opts'] = self.model._meta
+        context['form'] = form
+        return TemplateResponse(
+            request,
+            'admin/blog/bulk_upload.html',
+            context,
+        )
     
     
 @admin.register(Link)
