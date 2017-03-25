@@ -15,12 +15,16 @@ import markdown
 import pytz
 import hashlib
 import uuid
+import logging
 from mptt.models import MPTTModel, TreeForeignKey
 from taggit.managers import TaggableManager
 from versatileimagefield.fields import VersatileImageField
 from versatileimagefield.image_warmer import VersatileImageFieldWarmer
 from precise_bbcode.bbcode import get_parser
 from akismet import Akismet
+
+
+logger = logging.getLogger(__name__)
 
 # manager to pull all posts that aren't published in the future
 class PostManager(models.Manager):
@@ -82,7 +86,7 @@ class Post(models.Model):
                 link_text = link_string % (img.full_image.url, img.scale_image.url, img.scale_image.height, img.scale_image.width)
                 body_parts[i] = link_text
             except (Media.MultipleObjectsReturned, Media.DoesNotExist):
-                pass # maybe consider putting a log statement here
+                logger.error('No media found for image name: %s' % cur_image)
         return "".join(body_parts)
         
     # override save so we can add the linked images to the post
@@ -104,7 +108,7 @@ class Post(models.Model):
                 img = Media.objects.get(image_name=img_name) # find the image model
                 return img
             except (Media.MultipleObjectsReturned, Media.DoesNotExist):
-                pass # maybe consider putting a log statement here
+                logger.error('No media found for image name: %s' % img_name)
         return None
         
         

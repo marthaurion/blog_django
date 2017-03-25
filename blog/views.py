@@ -11,11 +11,16 @@ from django.views.generic.list import ListView
 from django.views.generic.dates import YearArchiveView, MonthArchiveView, DayArchiveView
 from django.db import models
 
+import logging
+
 from taggit.models import Tag
 
 from .models import Post, Category, Media, Comment, Commenter
 from .forms import CommentForm
 from .tasks import send_email
+
+
+logger = logging.getLogger(__name__)
 
 
 class MediaDetailView(DetailView):
@@ -240,7 +245,7 @@ class CommentFormMixin(FormMixin):
             author.website = form_website
             author.save()
         except Commenter.MultipleObjectsReturned: # probably shouldn't happen, but here just in case
-            # probably log something here
+            logger.error('Multiple commenters found for email: %s' % form_email)
             return self.form_invalid(form)
         
         request.session['comment_email'] = author.email  # save commenter information in a session so it can be reused later
@@ -253,7 +258,7 @@ class CommentFormMixin(FormMixin):
             try:
                 comment.parent = Comment.objects.get(pk=parent_id)
             except (Comment.MultipleObjectsReturned, Comment.DoesNotExist):
-                pass # again, might want to log here
+                logger.error('Invalid parent comment id: %d' % parent_id)
         
         if post:
             comment.post = post # use the post attached to this view as the post for this comment
@@ -294,7 +299,7 @@ class PostDetailView(CommentFormMixin, DetailView):
                 comment = Comment.objects.get(pk=comment_pk)
                 comment.unsubscribe(request.GET['email'])
             except (Comment.MultipleObjectsReturned, Comment.DoesNotExist):
-                pass # again, might want to log here
+                logger.error('Email unsubscribe failed for comment: %d' % comment_pk)
         return super().get(request, *args, **kwargs)
     
     # override get object so that it gives a 404 error if you're looking at a post in the future and you're not an admin

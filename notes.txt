@@ -52,7 +52,6 @@ left to do:
 - live preview for new comments?
 - might be able to use generic foreign keys for comments https://medium.com/cravedev/how-we-used-generic-relations-to-add-comments-to-model-instances-b48c2509dc27#.qgomouhov
 - look for any situations where a queryset is used in a conditional and see if exists or get make more sense
-- for the places where i use try/except, consider logging an error or something
 
 
 notes on celery:
