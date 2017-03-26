@@ -34,7 +34,7 @@
                     <li {% block nav-blogroll %}{% endblock %}><a href="{% url 'blogroll' %}">Blogroll</a></li>
                     <li {% block nav-contact %}{% endblock %}><a href="{% url 'contact' %}">Contact</a></li>
                     <li><a href="/blog/category/editorial">Editorials</a></li>
-                    <li><a href="/blog/category/reviews">Reviews</a></li>
+                    <li {% block nav-reviews %}{% endblock %}><a href="{% url 'reviews' %}">Reviews</a></li>
                 </ul>
                 
                 <ul class="nav navbar-nav navbar-right" id="menu-icons">

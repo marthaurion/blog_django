@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>{{ flatpage.title }}</h2><br />
+    <div class="post_body">
+        {{ flatpage.content|safe }}
+    </div>
+    
+    <hr />
+    
+    <div id="comment_section">
+    {% include 'blog/_post_comments.html' %}
+    </div>
+{% endblock %}

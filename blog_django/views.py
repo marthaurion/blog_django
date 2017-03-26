@@ -3,11 +3,15 @@ from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.utils import timezone
+from django.contrib.flatpages.models import FlatPage
+import logging
 
 from blog.views import CommentFormMixin
 from blog.models import Comment
 
 from .forms import ContactForm
+
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 class BasePageView(CommentFormMixin, TemplateView):
@@ -22,14 +26,6 @@ class BasePageView(CommentFormMixin, TemplateView):
             except (Comment.MultipleObjectsReturned, Comment.DoesNotExist):
                 pass # again, might want to log here
         return super().get(request, *args, **kwargs)
-    
-    # override get object so that it gives a 404 error if you're looking at a post in the future and you're not an admin
-    def get_object(self, *args, **kwargs):
-        obj = super().get_object(*args, **kwargs)
-        if obj.pub_date>timezone.now(): # don't show future posts
-            if not self.request.user.is_active and not self.request.user.is_superuser: # only block if not an admin
-                raise Http404()
-        return obj
         
     # add comment notify to context from session
     def get_context_data(self, **kwargs):
@@ -37,6 +33,11 @@ class BasePageView(CommentFormMixin, TemplateView):
         context['comment_notify'] = self.request.session.get('comment_notify')
         context['comment_list'] = Comment.objects.filter(approved=True, page_url=self.page_url)
         context['post_comment_url'] = self.page_url
+        try:
+            page = FlatPage.objects.get(url=self.page_url)
+            context['flatpage'] = page
+        except(FlatPage.MultipleObjectsReturned, FlatPage.DoesNotExist):
+            logger.error('Flatpage query failed: %s' % self.page_url)
         return context
         
     # override the post function to handle the form values and create a comment
@@ -48,13 +49,18 @@ class BasePageView(CommentFormMixin, TemplateView):
             return self.form_invalid(form)
 
 class AboutView(BasePageView):
-    template_name = 'about.html'
+    template_name = 'flatpages/about.html'
     page_url = '/about/'
 
 
 class BlogrollView(BasePageView):
-    template_name = 'blogroll.html'
+    template_name = 'flatpages/blogroll.html'
     page_url = '/blogroll/'
+    
+    
+class ReviewsView(BasePageView):
+    template_name = 'flatpages/reviews.html'
+    page_url = '/reviews/'
 
 
 class ContactView(SuccessMessageMixin, FormView):
@@ -66,7 +72,3 @@ class ContactView(SuccessMessageMixin, FormView):
     def form_valid(self, form):
         form.send_email()
         return super().form_valid(form)
-
-
-class ContactSuccessView(TemplateView):
-    template_name = 'contact_success.html'

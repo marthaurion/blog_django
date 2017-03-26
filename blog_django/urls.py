@@ -26,7 +26,7 @@ from blog.views import PostIndexView
 from blog import urls as blog_urls
 
 from .sitemaps import StaticViewSitemap, BlogSitemap, IndexSitemap, MediaSitemap
-from .views import AboutView, BlogrollView, ContactView, ContactSuccessView
+from .views import AboutView, BlogrollView, ContactView, ReviewsView
 
 sitemaps = {
     'home': IndexSitemap,
@@ -41,7 +41,7 @@ urlpatterns = [
     url(r'^about/$', AboutView.as_view(), name='about'),
     url(r'^contact/$', ContactView.as_view(), name='contact'),
     url(r'^blogroll/$', BlogrollView.as_view(), name='blogroll'),
-    url(r'^messagereceived/$', ContactSuccessView.as_view(), name='thanks'),
+    url(r'^reviews/$', ReviewsView.as_view(), name='reviews'),
     url(r'^sitemap\.xml$', sitemap_views.index, {'sitemaps': sitemaps}),
     url(r'^sitemap-(?P<section>.+)\.xml$', sitemap_views.sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     url(r'^captcha/', include(captcha_urls)),
