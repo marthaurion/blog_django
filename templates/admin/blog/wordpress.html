@@ -7,8 +7,8 @@
 {% block content %}
 <div id="content-main">
     <h3>Title</h3>
-    <p>{{ post.title }}</p>
+    <input type="text" readonly value="{{ post.title }}">
     <h3>Body</h3>
-    <p>{{ post.wordpress_body }}</p>
+    <textarea style="width:610px;height:180px;" readonly>{{ post.wordpress_body }}</textarea>
 </div>
 {% endblock %}
