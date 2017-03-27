@@ -70,7 +70,6 @@ class CategoryAdmin(MPTTModelAdmin):
 class MediaAdmin(admin.ModelAdmin):
     search_fields = ['image_name']
     list_display = ('image_name', 'pub_date', 'admin_url', 'admin_thumbnail', 'admin_full', )
-    bulk_upload_fields = ('full_image', )
     change_list_template = 'admin/blog/bulk_upload_list.html'
 
     def generate_data_for_file(self, request, field_name, field_file, index):
