@@ -47,7 +47,6 @@
 
 
 left to do:
-- maybe add some safeguards against duplicate comments
 - consider running urlize on html after running bbcode parser
 - live preview for new comments?
 - might be able to use generic foreign keys for comments https://medium.com/cravedev/how-we-used-generic-relations-to-add-comments-to-model-instances-b48c2509dc27#.qgomouhov

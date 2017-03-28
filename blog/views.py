@@ -222,7 +222,7 @@ class CommentFormMixin(FormMixin):
                 'email': self.request.session.get('comment_email'),
                 'website': self.request.session.get('comment_website') }
 
-    def comment_check(self, request, form, post=None, page_url=None):
+    def comment_check(self, request, form, post=None, page_url=''):
         form_email = form.cleaned_data['email']
         form_username = form.cleaned_data['username']
         form_website = form.cleaned_data['website']
@@ -252,27 +252,32 @@ class CommentFormMixin(FormMixin):
         request.session['comment_username'] = author.username
         request.session['comment_website'] = author.website
         
-        comment = Comment()
+        # prep comment fields before creating the new comment
+        parent = None
         if form.cleaned_data['parent']:
             parent_id = int(form.cleaned_data['parent'].replace('#comment',''))
             try:
-                comment.parent = Comment.objects.get(pk=parent_id)
+                parent = Comment.objects.get(pk=parent_id)
             except (Comment.MultipleObjectsReturned, Comment.DoesNotExist):
                 logger.error('Invalid parent comment id: %d' % parent_id)
-        
-        if post:
-            comment.post = post # use the post attached to this view as the post for this comment
-        else:
-            comment.page_url = page_url
-        comment.author = author
-        if author.approved: # if the author is always approved, mark the comment as approved
-            comment.approved = True
-        comment.text = form.cleaned_data['text'] # pull from the form
         comment_notify = bool(request.POST.get('notify', False))
-        comment.notify = comment_notify # if the checkbox is checked, set notify field
-        if author.spam:
-            comment.spam = True
-        comment.save()
+        
+        search_time = timezone.now()-datetime.timedelta(seconds=10)
+        # try to find the same comment in the last 10 seconds or create a new one otherwise
+        comment, created = Comment.objects.get_or_create(
+            parent=parent,
+            post=post, # this will be None if it's a page
+            page_url=page_url, # this will be an empty string if it's a post
+            pub_date__gt=search_time,
+            text=form.cleaned_data['text'],
+            author=author,
+            approved=author.approved,
+            notify=comment_notify,
+            spam=author.spam
+        )
+        self.success_url = comment.get_absolute_url()
+        if not created: # if this is a duplicate, return without notification
+            return self.form_valid(form)
         
         request.session['comment_notify'] = comment_notify # log notification setting in the session
         
@@ -281,8 +286,6 @@ class CommentFormMixin(FormMixin):
             comment.send_notifications(request_info)
         else:
             send_email.delay(comment.pk, request_info)
-        
-        self.success_url = comment.get_absolute_url()
         return self.form_valid(form)
 
 
