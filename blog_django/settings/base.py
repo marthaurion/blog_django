@@ -61,7 +61,6 @@ INSTALLED_APPS = (
     'versatileimagefield',
     'mptt',
     'anymail',
-    'raven.contrib.django.raven_compat',
     'precise_bbcode',
 )
 
