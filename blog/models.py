@@ -275,7 +275,7 @@ class Comment(MPTTModel):
     post = models.ForeignKey(Post, null=True, blank=True, related_name='comments')
     page_url = models.URLField(blank=True)
     approved = models.BooleanField(default=False, db_index=True)
-    pub_date = models.DateTimeField('date published', default=timezone.now, editable=False)
+    pub_date = models.DateTimeField('date published', default=timezone.now, editable=False, db_index=True)
     author = models.ForeignKey(Commenter, related_name='comments')
     text = models.TextField(blank=True) # form should force this field anyway, so this is just for the admin
     notify = models.BooleanField(default=False)

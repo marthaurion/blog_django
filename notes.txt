@@ -51,6 +51,7 @@ left to do:
 - live preview for new comments?
 - might be able to use generic foreign keys for comments https://medium.com/cravedev/how-we-used-generic-relations-to-add-comments-to-model-instances-b48c2509dc27#.qgomouhov
 - time zone magic
+- create celery tasks to publish posts to facebook/twitter
 
 
 notes on celery:
