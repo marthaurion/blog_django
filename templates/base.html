@@ -126,24 +126,6 @@
                     </ul>
                 </div>
                 
-                {% if recent_comments.exists %}
-                <div class="sidebar-module">
-                    <h4><strong>Recent Comments</strong></h4>
-                    <ul class="media-list">
-                    {% for comment in recent_comments %}
-                        <li class="media"><div class="media-left">
-                            <img class="media-object" src="{{ comment.author.get_image_url }}" alt="testing" height="40" width="40" />
-                        </div>
-                        <div class="media-body">
-                        <h4 class="media-heading">
-                            {{ comment.author.get_commenter_text|safe }} on <a href="{{ comment.get_absolute_url }}">{{ comment.post.title }}</a>
-                        </h4>
-                        </div></li>
-                    {% endfor %}
-                    </ul>
-                </div>
-                {% endif %}
-                
                 <div class="sidebar-module">
                     <h4><strong>Email Subscriptions</strong></h4>
                     <form action="https://feedburner.google.com/fb/a/mailverify" method="post" target="popupwindow" onsubmit="window.open('https://feedburner.google.com/fb/a/mailverify?uri=marthaurion/rzFS', 'popupwindow', 'scrollbars=yes,width=550,height=520');return true">
