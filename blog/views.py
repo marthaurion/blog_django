@@ -43,8 +43,7 @@ class PostListMixin(object):
         return self.annotate_queryset(queryset.select_related('category'))
                                                 
     def annotate_queryset(self, queryset):
-        return queryset.annotate(num_comments=models.Count(models.Case(
-                            models.When(comments__approved=True, then=1)))).prefetch_related('tags')
+        return queryset.prefetch_related('tags')
 
 
 # display every published post
