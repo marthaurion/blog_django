@@ -156,7 +156,7 @@ class Category(MPTTModel):
         if self.is_leaf_node():
             prefix = '&#8212; &nbsp;'
         else:
-            prefix = '<a class="collapsible" href="#%s">%s</a> &nbsp;' % (self.pk, prefix_character)
+            prefix = '<a class="collapsible" href="#cat%s">%s</a> &nbsp;' % (self.pk, prefix_character)
         return '<li>%s<a href="%s">%s</a></li>\n' % (prefix, self.get_absolute_url(), self.title)
     
     def get_active_string(self):
