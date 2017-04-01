@@ -40,19 +40,17 @@ class PostListMixin(object):
     
     def get_queryset(self):
         queryset = super().get_queryset()
-        return self.annotate_queryset(queryset.select_related('category'))
+        return self.build_post_queryset(queryset)
                                                 
-    def annotate_queryset(self, queryset):
-        return queryset.prefetch_related('tags')
+    def build_post_queryset(self, queryset):
+        return queryset.defer('body', 'body_html').select_related('category').prefetch_related('tags')
 
 
 # display every published post
 class PostIndexView(PostListMixin, ListView):
     model = Post
     ordering = '-pub_date'
-    
-    def get_queryset(self):
-        return Post.published.select_related('category')
+    queryset = Post.published.all()
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -66,7 +64,7 @@ class PostIndexView(PostListMixin, ListView):
         
         context['page_title'] = title
         context['base_url'] = '/blog/'
-        context['post_list'] = self.annotate_queryset(context['post_list'])
+        context['post_list'] = self.build_post_queryset(context['post_list'])
         return context
 
 
@@ -93,7 +91,7 @@ class PostYearView(PostListMixin, YearArchiveView):
         context['page_title'] = title
         context['page_header'] = page_header
         context['base_url'] = '/blog/'+year+'/'
-        context['post_list'] = self.annotate_queryset(context['post_list'])
+        context['post_list'] = self.build_post_queryset(context['post_list'])
         return context
 
 
@@ -122,7 +120,7 @@ class PostMonthView(PostListMixin, MonthArchiveView):
         context['page_title'] = title
         context['page_header'] = page_header
         context['base_url'] = '/blog/'+year+'/'+month+'/'
-        context['post_list'] = self.annotate_queryset(context['post_list'])
+        context['post_list'] = self.build_post_queryset(context['post_list'])
         return context
 
 
@@ -152,7 +150,7 @@ class PostDayView(PostListMixin, DayArchiveView):
         context['page_title'] = title
         context['page_header'] = page_header
         context['base_url'] = '/blog/'+year+'/'+month+'/'+day+'/'
-        context['post_list'] = self.annotate_queryset(context['post_list'])
+        context['post_list'] = self.build_post_queryset(context['post_list'])
         return context
 
 
@@ -161,7 +159,7 @@ class CategoryListView(PostListMixin, ListView):
     def get_queryset(self):
         category = get_object_or_404(Category, slug=self.kwargs['slug'])
         category_list = category.get_descendants(include_self=True)
-        posts = Post.published.filter(category__in=category_list).select_related('category')
+        posts = Post.published.filter(category__in=category_list)
         return posts
         
     def get_context_data(self, **kwargs):
@@ -181,14 +179,14 @@ class CategoryListView(PostListMixin, ListView):
         context['page_title'] = title
         context['page_header'] = page_header
         context['base_url'] = '/blog/category/'+slug+'/'
-        context['post_list'] = self.annotate_queryset(context['post_list'])
+        context['post_list'] = self.build_post_queryset(context['post_list'])
         return context
 
 
 # display all posts for a tag
 class TagListView(PostListMixin, ListView):
     def get_queryset(self):
-        posts = Post.published.filter(tags__slug__in=[self.kwargs['slug']]).select_related('category')
+        posts = Post.published.filter(tags__slug__in=[self.kwargs['slug']])
         return posts
         
     def get_context_data(self, **kwargs):
@@ -208,7 +206,7 @@ class TagListView(PostListMixin, ListView):
         context['page_title'] = title
         context['page_header'] = page_header
         context['base_url'] = '/blog/tag/'+slug+'/'
-        context['post_list'] = self.annotate_queryset(context['post_list'])
+        context['post_list'] = self.build_post_queryset(context['post_list'])
         return context
 
 
