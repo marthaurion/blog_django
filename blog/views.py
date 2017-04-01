@@ -50,7 +50,9 @@ class PostListMixin(object):
 class PostIndexView(PostListMixin, ListView):
     model = Post
     ordering = '-pub_date'
-    queryset = Post.published.all()
+    
+    def get_queryset(self):
+        return Post.published.all()
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
