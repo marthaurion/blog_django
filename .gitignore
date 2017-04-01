@@ -8,4 +8,4 @@ media/
 raw_files/
 gulpfile.js
 migrations/
-.~c9
+*.~c9
