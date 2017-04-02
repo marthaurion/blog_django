@@ -1,6 +1,6 @@
 from django.http import Http404
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import FormView
+from django.views.generic.edit import FormView, FormMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.utils import timezone
 from django.contrib.flatpages.models import FlatPage
@@ -14,7 +14,7 @@ from .forms import ContactForm
 logger = logging.getLogger(__name__)
 
 # Create your views here.
-class BasePageView(CommentFormMixin, TemplateView):
+class BasePageView(CommentFormMixin, FormMixin, TemplateView):
     page_url = '/'
     
     def get(self, request, *args, **kwargs):
