@@ -304,7 +304,7 @@ class Comment(MPTTModel):
             base_url = self.post.get_absolute_url()
         else:
             base_url = self.page_url
-        unsubscribe_query = '?email=%s&comment=%s' % (self.author.email, str(self.pk))
+        unsubscribe_query = '?email=%s&comment=%s' % (self.author.email, str(self.uuid))
         return base_url + unsubscribe_query
     
     def approve(self):

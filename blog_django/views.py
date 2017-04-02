@@ -19,12 +19,12 @@ class BasePageView(CommentFormMixin, FormMixin, TemplateView):
     
     def get(self, request, *args, **kwargs):
         if 'email' in request.GET and 'comment' in request.GET:
-            comment_pk = int(request.GET['comment'])
+            comment_uuid = request.GET['comment']
             try:
-                comment = Comment.objects.get(pk=comment_pk)
+                comment = Comment.objects.get(uuid=comment_uuid)
                 comment.unsubscribe(request.GET['email'])
             except (Comment.MultipleObjectsReturned, Comment.DoesNotExist):
-                pass # again, might want to log here
+                logger.error('Email unsubscribe failed for comment: %d' % comment_uuid)
         return super().get(request, *args, **kwargs)
         
     # add comment notify to context from session

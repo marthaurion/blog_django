@@ -298,12 +298,12 @@ class PostDetailView(CommentFormMixin, FormMixin, DetailView):
     
     def get(self, request, *args, **kwargs):
         if 'email' in request.GET and 'comment' in request.GET:
-            comment_pk = int(request.GET['comment'])
+            comment_uuid = request.GET['comment']
             try:
-                comment = Comment.objects.get(pk=comment_pk)
+                comment = Comment.objects.get(uuid=comment_uuid)
                 comment.unsubscribe(request.GET['email'])
             except (Comment.MultipleObjectsReturned, Comment.DoesNotExist):
-                logger.error('Email unsubscribe failed for comment: %d' % comment_pk)
+                logger.error('Email unsubscribe failed for comment: %d' % comment_uuid)
         return super().get(request, *args, **kwargs)
     
     # override get object so that it gives a 404 error if you're looking at a post in the future and you're not an admin
