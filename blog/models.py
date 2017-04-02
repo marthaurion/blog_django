@@ -10,6 +10,7 @@ from django.template.loader import render_to_string
 from django.utils.html import urlize
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.sites.models import Site
+from django.contrib.flatpages.models import FlatPage
 
 import markdown
 import pytz
@@ -318,10 +319,12 @@ class Comment(MPTTModel):
     def get_post_title(self):
         if self.post:
             return self.post.title
-        elif self.page_url == '/about/':
-            return 'About'
-        else:
-            return 'Blogroll'
+        # if post isn't set, it's a page, so try to find it
+        try:
+            page = FlatPage.objects.get(url=self.page_url)
+            return page.title
+        except(FlatPage.DoesNotExist, FlatPage.MultipleObjectsReturned):
+            logger.error('FlatPage query error: %s' % self.page_url)
             
     def save(self, *args, **kwargs): # override save to parse bbcode first
         if self.text:
