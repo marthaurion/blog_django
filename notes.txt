@@ -50,9 +50,12 @@ left to do:
 - consider running urlize on html after running bbcode parser
 - live preview for new comments?
 - might be able to use generic foreign keys for comments https://medium.com/cravedev/how-we-used-generic-relations-to-add-comments-to-model-instances-b48c2509dc27#.qgomouhov
-- time zone magic
 - create celery tasks to publish posts to facebook/twitter
-- consider deferring fields in list queries
+- consider deferring fields in querysets
+- maintain multiple requirements files for dev/prod in a requirements folder instead
+- create a custom tag solution
+- use jinja2 (need to find a way to make the debug toolbar work)
+- restructuredtext for documentation
 
 notes on celery:
 - rabbitmq backend - standard install with vhost blog and tag blog

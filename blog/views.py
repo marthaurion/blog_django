@@ -158,9 +158,11 @@ class PostDayView(PostListMixin, DayArchiveView):
 
 # display all posts for a category
 class CategoryListView(PostListMixin, ListView):
+    post_category = None
+    
     def get_queryset(self):
-        category = get_object_or_404(Category, slug=self.kwargs['slug'])
-        category_list = category.get_descendants(include_self=True)
+        self.post_category = get_object_or_404(Category, slug=self.kwargs['slug'])
+        category_list = self.post_category.get_descendants(include_self=True)
         posts = Post.published.filter(category__in=category_list)
         return posts
         
@@ -172,7 +174,7 @@ class CategoryListView(PostListMixin, ListView):
         if 'page' in self.kwargs:
             working_page = int(self.kwargs['page'])
         
-        category = Category.objects.get(slug=slug) # maybe I should have some safeguards on this
+        category = self.post_category
         title = "Posts for Category: " + category.title
         page_header = title
         if working_page > 1:
@@ -199,7 +201,7 @@ class TagListView(PostListMixin, ListView):
         if 'page' in self.kwargs:
             working_page = int(self.kwargs['page'])
         
-        tag = Tag.objects.get(slug=slug) # maybe I should have some safeguards on this
+        tag = get_object_or_404(Tag, slug=slug)
         title = "Posts for Tag: " + tag.name
         page_header = title
         if working_page > 1:
@@ -212,7 +214,7 @@ class TagListView(PostListMixin, ListView):
         return context
 
 
-class CommentFormMixin(FormMixin):
+class CommentFormMixin(object):
     form_class = CommentForm
     
     # override initial values for the form to use session values for a commenter if they exist
@@ -289,7 +291,7 @@ class CommentFormMixin(FormMixin):
 
 
 # display a single post
-class PostDetailView(CommentFormMixin, DetailView):
+class PostDetailView(CommentFormMixin, FormMixin, DetailView):
     model = Post
     template_name = 'blog/post_detail.html'
     month_format = "%m"
