@@ -202,18 +202,6 @@ def warm_Media_images(sender, instance, **kwargs):
         image_attr='full_image'
     )
     num_created, failed_to_create = media_img_warmer.warm()
-
-
-class Link(models.Model):
-    title = models.CharField(max_length=150)
-    url = models.URLField()
-    description = models.TextField(blank=True)
-    
-    class Meta:
-        ordering = ['title']
-    
-    def __str__(self):
-        return self.title
         
         
 class Mapping(models.Model):

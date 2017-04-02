@@ -8,7 +8,7 @@ from django.template.response import TemplateResponse
 
 from mptt.admin import MPTTModelAdmin
 
-from .models import Post, Category, Media, Link, Comment, Commenter
+from .models import Post, Category, Media, Comment, Commenter
 from .forms import BulkMediaForm
 
 # Register your models here.
@@ -139,12 +139,7 @@ class MediaAdmin(admin.ModelAdmin):
             'admin/blog/bulk_upload.html',
             context,
         )
-    
-    
-@admin.register(Link)
-class LinkAdmin(admin.ModelAdmin):
-    pass
-
+        
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
