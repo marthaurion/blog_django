@@ -288,6 +288,13 @@ class CommentFormMixin(object):
         else:
             send_email.delay(comment.pk, request_info)
         return self.form_valid(form)
+        
+    def unsubscribe_comment(self, uuid, email):
+        try:
+            comment = Comment.objects.get(uuid=uuid)
+            comment.unsubscribe(email)
+        except (Comment.MultipleObjectsReturned, Comment.DoesNotExist):
+            logger.error('Email unsubscribe failed for comment: %d' % uuid)
 
 
 # display a single post
@@ -298,12 +305,7 @@ class PostDetailView(CommentFormMixin, FormMixin, DetailView):
     
     def get(self, request, *args, **kwargs):
         if 'email' in request.GET and 'comment' in request.GET:
-            comment_uuid = request.GET['comment']
-            try:
-                comment = Comment.objects.get(uuid=comment_uuid)
-                comment.unsubscribe(request.GET['email'])
-            except (Comment.MultipleObjectsReturned, Comment.DoesNotExist):
-                logger.error('Email unsubscribe failed for comment: %d' % comment_uuid)
+            self.unsubscribe_comment(request.GET['comment'], request.GET['email'])
         return super().get(request, *args, **kwargs)
     
     # override get object so that it gives a 404 error if you're looking at a post in the future and you're not an admin

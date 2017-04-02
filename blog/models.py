@@ -273,7 +273,7 @@ class Commenter(models.Model):
 class Comment(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
     post = models.ForeignKey(Post, null=True, blank=True, related_name='comments')
-    page_url = models.URLField(blank=True)
+    page_url = models.CharField(max_length=100, blank=True)
     approved = models.BooleanField(default=False, db_index=True)
     pub_date = models.DateTimeField('date published', default=timezone.now, editable=False, db_index=True)
     author = models.ForeignKey(Commenter, related_name='comments')
