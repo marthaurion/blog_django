@@ -19,10 +19,11 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sitemaps import GenericSitemap
 from django.contrib.sitemaps import views as sitemap_views
+from django.views.generic.base import RedirectView
 
 from captcha import urls as captcha_urls
 
-from blog.views import PostIndexView, TagListView
+from blog.views import PostIndexView
 from blog import urls as blog_urls
 
 from .sitemaps import StaticViewSitemap, BlogSitemap, IndexSitemap, MediaSitemap
@@ -45,8 +46,10 @@ urlpatterns = [
     url(r'^sitemap\.xml$', sitemap_views.index, {'sitemaps': sitemaps}),
     url(r'^sitemap-(?P<section>.+)\.xml$', sitemap_views.sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     url(r'^captcha/', include(captcha_urls)),
-    url(r'^tag/(?P<slug>[-\w]+)/$', TagListView.as_view()),
-    url(r'^tag/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', TagListView.as_view()),
+    url(r'^tag/(?P<url>.+)/$', RedirectView.as_view(url="/blog/tag/%(url)s")),  # some catch alls to reduce 404 errors
+    url(r'^page/(?P<url>.+)/$', RedirectView.as_view(url="/blog/page/%(url)s")),
+    url(r'^(?P<year>\d{4})/$', RedirectView.as_view(url="/blog/%(year)s")),
+    url(r'^(?P<year>\d{4})/(?P<url>.+)/$', RedirectView.as_view(url="/blog/%(year)s/%(url)s")),
     url(r'^$', PostIndexView.as_view(), name='index'),
 ]
 
