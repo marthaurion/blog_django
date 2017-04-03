@@ -22,7 +22,7 @@ from django.contrib.sitemaps import views as sitemap_views
 
 from captcha import urls as captcha_urls
 
-from blog.views import PostIndexView
+from blog.views import PostIndexView, TagListView, CategoryListView
 from blog import urls as blog_urls
 
 from .sitemaps import StaticViewSitemap, BlogSitemap, IndexSitemap, MediaSitemap
@@ -45,6 +45,10 @@ urlpatterns = [
     url(r'^sitemap\.xml$', sitemap_views.index, {'sitemaps': sitemaps}),
     url(r'^sitemap-(?P<section>.+)\.xml$', sitemap_views.sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     url(r'^captcha/', include(captcha_urls)),
+    url(r'^category/(?P<slug>[-\w]+)/$', CategoryListView.as_view()),
+    url(r'^category/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', CategoryListView.as_view()),
+    url(r'^tag/(?P<slug>[-\w]+)/$', TagListView.as_view()),
+    url(r'^tag/(?P<slug>[-\w]+)/page/(?P<page>\d+)/$', TagListView.as_view()),
     url(r'^$', PostIndexView.as_view(), name='index'),
 ]
 
