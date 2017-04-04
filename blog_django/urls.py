@@ -27,7 +27,7 @@ from blog.views import PostIndexView
 from blog import urls as blog_urls
 
 from .sitemaps import StaticViewSitemap, BlogSitemap, IndexSitemap, MediaSitemap
-from .views import AboutView, BlogrollView, ContactView, ReviewsView
+from .views import AboutView, BlogrollView, ContactView, ReviewsView, CategoryRedirectView
 
 sitemaps = {
     'home': IndexSitemap,
@@ -46,10 +46,12 @@ urlpatterns = [
     url(r'^sitemap\.xml$', sitemap_views.index, {'sitemaps': sitemaps}),
     url(r'^sitemap-(?P<section>.+)\.xml$', sitemap_views.sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     url(r'^captcha/', include(captcha_urls)),
-    url(r'^tag/(?P<url>.+)/$', RedirectView.as_view(url="/blog/tag/%(url)s")),  # some catch alls to reduce 404 errors
-    url(r'^page/(?P<url>.+)/$', RedirectView.as_view(url="/blog/page/%(url)s")),
-    url(r'^(?P<year>\d{4})/$', RedirectView.as_view(url="/blog/%(year)s")),
-    url(r'^(?P<year>\d{4})/(?P<url>.+)/$', RedirectView.as_view(url="/blog/%(year)s/%(url)s")),
+    url(r'^tag/(?P<url>.+)/$', RedirectView.as_view(url="/blog/tag/%(url)s", permanent=True)),  # some catch alls to reduce 404 errors
+    url(r'^page/(?P<url>.+)/$', RedirectView.as_view(url="/blog/page/%(url)s", permanent=True)),
+    url(r'^(?P<year>\d{4})/$', RedirectView.as_view(url="/blog/%(year)s", permanent=True)),
+    url(r'^(?P<year>\d{4})/(?P<url>.+)/$', RedirectView.as_view(url="/blog/%(year)s/%(url)s", permanent=True)),
+    url(r'^category/(?P<url>.+)/page/(?P<page>\d+)/$', CategoryRedirectView.as_view()),
+    url(r'^category/(?P<url>.+)/$', CategoryRedirectView.as_view()),
     url(r'^$', PostIndexView.as_view(), name='index'),
 ]
 

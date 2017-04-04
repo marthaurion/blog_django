@@ -1,5 +1,5 @@
 from django.http import Http404
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, RedirectView
 from django.views.generic.edit import FormView, FormMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.utils import timezone
@@ -67,3 +67,16 @@ class ContactView(SuccessMessageMixin, FormView):
     def form_valid(self, form):
         form.send_email()
         return super().form_valid(form)
+        
+class CategoryRedirectView(RedirectView):
+    permanent = True
+    
+    def get_redirect_url(self, *args, **kwargs):
+        if 'url' not in kwargs:
+            return super().get_redirect_url(*args, **kwargs)
+        processed_url = kwargs['url'].split('?')[0] # remove the query string
+        if '/' in processed_url:
+            processed_url = processed_url.split('/')[-1]
+        if 'page' in kwargs:
+            processed_url += '/page/' + kwargs['page']
+        return '/blog/category/' + processed_url
