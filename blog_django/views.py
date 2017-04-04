@@ -75,6 +75,11 @@ class CategoryRedirectView(RedirectView):
         if 'url' not in kwargs:
             return super().get_redirect_url(*args, **kwargs)
         processed_url = kwargs['url'].split('?')[0] # remove the query string
+        if processed_url == 'anime':
+            if 'page' in kwargs:
+                return '/blog/page/' + kwargs['page']
+            else:
+                return '/blog/'
         if '/' in processed_url:
             processed_url = processed_url.split('/')[-1]
         if 'page' in kwargs:
