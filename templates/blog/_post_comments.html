@@ -46,7 +46,7 @@
     <h4><strong>Leave a comment</strong></h4>
     <p id='cancel-reply' hidden><a href="#comment-form" onclick="cancelReply()">Cancel Reply to Comment</a></p>
     {% if comment_username %}
-        <p id="comment_collapse"><strong>Commenting as</strong>: {{ comment_username }} <a id="comment_collapse_link" href="#">Change</a></p>
+        <p id="comment_collapse"><strong>Commenting as</strong>: {{ comment_username }} <a href="#comment_form" onclick="handleChangeClick()">Change</a></p>
     {% endif %}
     <form action="{{ post_comment_url }}" method="post">
         {% csrf_token %}
