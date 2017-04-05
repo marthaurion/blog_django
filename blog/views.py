@@ -320,6 +320,11 @@ class PostDetailView(CommentFormMixin, FormMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['comment_notify'] = self.request.session.get('comment_notify')
+        context['comment_username'] = self.request.session.get('comment_username')
+        if context['comment_username']:
+            context['comment_hidden'] = ' hidden'
+        else:
+            context['comment_hidden'] = ''
         context['comment_list'] = self.object.approved_comments().select_related('author')
         context['post_comment_url'] = self.object.get_absolute_url()
         return context

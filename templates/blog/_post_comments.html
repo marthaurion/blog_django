@@ -45,20 +45,23 @@
 <div class="well" id="comment-form">
     <h4><strong>Leave a comment</strong></h4>
     <p id='cancel-reply' hidden><a href="#comment-form" onclick="cancelReply()">Cancel Reply to Comment</a></p>
+    {% if comment_username %}
+        <p id="comment_collapse"><strong>Commenting as</strong>: {{ comment_username }} <a id="comment_collapse_link" href="#">Change</a></p>
+    {% endif %}
     <form action="{{ post_comment_url }}" method="post">
         {% csrf_token %}
         {{ form.non_field_errors }}
-        <div class="form-group">
+        <div id="comment_group_name" class="form-group"{{ comment_hidden }}>
             {{ form.username.errors }}
             <label for="{{ form.username.id_for_label }}">Name:</label>
             {{ form.username }}
         </div>
-        <div class="form-group">
+        <div id="comment_group_email" class="form-group"{{ comment_hidden }}>
             {{ form.email.errors }}
             <label for="{{ form.email.id_for_label }}">Email:</label>
             {{ form.email }}
         </div>
-        <div class="form-group">
+        <div id="comment_group_website" class="form-group"{{ comment_hidden }}>
             {{ form.website.errors }}
             <label for="{{ form.website.id_for_label }}">Website:</label>
             {{ form.website }}
