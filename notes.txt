@@ -56,6 +56,7 @@ left to do:
 - use jinja2 (need to find a way to make the debug toolbar work)
 - write tests
 - restructuredtext for documentation
+- when pulling from session, hide the username boxes and stuff for comments
 
 notes on celery:
 - rabbitmq backend - standard install with vhost blog and tag blog
