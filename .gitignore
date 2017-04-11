@@ -5,7 +5,6 @@ config.json
 static/
 node_modules/
 media/
-raw_files/
 gulpfile.js
 migrations/
 *.~c9

@@ -1,0 +1,112 @@
+#content h2 {
+  margin-bottom: 0px;
+}
+
+@media (max-width: 991px) {
+  .post_body {
+    clear: left;
+  }
+}
+.post_body p {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.post_body li {
+  font-size: 18px;
+}
+
+.post_body img {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.banner {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.banner img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.post_date {
+  color: #949289;
+}
+.meta {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  clear: left;
+}
+
+.sidebar-module {
+  font-size: 18px;
+  margin-top: 20px;
+}
+
+.sidebar-module ul > ul {
+  padding-left: 20px;
+}
+
+.first_image {
+  margin: 10px;
+  float: left;
+}
+
+.blog-tag {
+  font-size: 100%;
+}
+
+#menu-icons a {
+  margin: 14px 5px;
+  padding: 0px;
+}
+
+@media (max-width: 767px) {
+  #menu-icons li {
+    display: inline-block;
+  }
+  
+  #menu-icons a {
+    margin: 0px 0px 0px 15px;
+  }
+}
+
+/*
+ * Open dropdowns on hover instead of click.
+ */
+@media (min-width: 768px) {
+  .dropdown:hover {
+    background: #e7e7e7;
+  }
+  .dropdown:hover > .dropdown-menu {
+    display: block;
+  }
+}
+
+/*
+ * The following is needed since the dropdowns are <div> elements instead
+ * of <a> elements
+ */
+.nav > li > div {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+  cursor: default;
+}
+.navbar-nav > li > div {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  line-height: 20px;
+}
+.navbar-default .navbar-nav > li > div {
+  color: rgb(119, 119, 119);
+}
+.navbar-collapse.collapse {
+  display: none;
+}
+.dropdown-open {
+  background: #e7e7e7;
+}
