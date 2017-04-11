@@ -54,7 +54,7 @@ class PostAdmin(admin.ModelAdmin):
         
     def wordpress_action(self, obj):
         return format_html(
-            '<a class="button" href="{}">View Wordpress Post</a>',
+            '<a class="button" href="{}">View</a>',
             reverse('admin:post_wordpress', args=[obj.pk])
         )
     wordpress_action.short_description = 'Wordpress'
