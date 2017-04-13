@@ -1,5 +1,6 @@
 from versatileimagefield.image_warmer import VersatileImageFieldWarmer
 from precise_bbcode.bbcode import get_parser
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from .models import Post, Media, Comment
 
@@ -24,3 +25,17 @@ def convert_all_comments():
     for comment in Comment.objects.exclude(text__exact=''):
         comment.html_text = parser.render(comment.text)
         comment.save()
+        
+
+class PostPaginator(Paginator):
+    def validate_number(self, number):  # overwrite validation so it allows empty pages all the time
+        try:
+            number = int(number)
+        except (TypeError, ValueError):
+            raise PageNotAnInteger('That page number is not an integer')
+        if number < 1:
+            raise EmptyPage('That page number is less than 1')
+        if not self.allow_empty_first_page:
+            if number > self.num_pages:
+                raise EmptyPage('That page contains no results')
+        return number

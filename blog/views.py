@@ -18,6 +18,7 @@ from taggit.models import Tag
 from .models import Post, Category, Media, Comment, Commenter
 from .forms import CommentForm
 from .tasks import send_email
+from .helpers import PostPaginator
 
 
 logger = logging.getLogger(__name__)
@@ -35,6 +36,7 @@ class MediaDetailView(DetailView):
 class PostListMixin(object):
     paginate_by = 10
     allow_empty = True
+    paginator_class = PostPaginator
     context_object_name = 'post_list'
     template_name = 'blog/post_index.html'
     
