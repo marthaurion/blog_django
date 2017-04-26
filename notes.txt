@@ -56,6 +56,8 @@ left to do:
 - use jinja2 (need to find a way to make the debug toolbar work)
 - write tests
 - restructuredtext for documentation
+- maybe consider removing categories from main index views
+- consider moving comments functionality into its own app
 
 notes on celery:
 - rabbitmq backend - standard install with vhost blog and tag blog
