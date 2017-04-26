@@ -55,7 +55,7 @@ class PostListMixin(object):
         return self.build_post_queryset(queryset)
                                                 
     def build_post_queryset(self, queryset):
-        return queryset.defer('body', 'body_html').select_related('category').prefetch_related('tags')
+        return queryset.defer('body', 'body_html').select_related('category')
 
 
 # display every published post
@@ -382,7 +382,4 @@ class SearchResultsView(PostListMixin, ListView):
         context['page_header'] = page_header
         context['search'] = True
         context['query'] = self.request.GET.get('q')
-        context['post_list'] = context['post_list'].annotate(
-                            num_comments=models.Count(models.Case(
-                            models.When(comments__approved=True, then=1))))
         return context
