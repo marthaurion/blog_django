@@ -70,7 +70,7 @@ class Commenter(models.Model):
 
 class Comment(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
-    post = models.ForeignKey(Post, null=True, blank=True, related_name='new_comments')
+    post = models.ForeignKey(Post, null=True, blank=True, related_name='comments')
     page_url = models.CharField(max_length=100, blank=True)
     approved = models.BooleanField(default=False, db_index=True)
     pub_date = models.DateTimeField('date published', default=timezone.now, editable=False, db_index=True)
@@ -148,7 +148,7 @@ class Comment(MPTTModel):
                     'unsubscribe_url': info_dict['unsubscribe']
         }
         body = "Check out the reply to your comment at %s" % comment_url
-        html_body = render_to_string('blog/comment_body.html', context)
+        html_body = render_to_string('comments/comment_body.html', context)
         msg = EmailMultiAlternatives(subject=subject, from_email="marth@mail.marthaurion.com",
                                     to=recipients, body=body)
         msg.attach_alternative(html_body, "text/html")
