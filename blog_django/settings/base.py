@@ -54,6 +54,7 @@ INSTALLED_APPS = (
     'django.contrib.postgres',
     'captcha',
     'blog',
+    'comments',
     'taggit',
     'storages',
     'maintenance_mode',

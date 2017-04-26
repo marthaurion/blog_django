@@ -6,8 +6,8 @@ from django.utils import timezone
 from django.contrib.flatpages.models import FlatPage
 import logging
 
-from blog.views import CommentFormMixin
-from blog.models import Comment
+from comments.views import CommentFormMixin
+from comments.models import Comment
 
 from .forms import ContactForm
 

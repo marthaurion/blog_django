@@ -1,26 +1,27 @@
 from datetime import timedelta
 
 from django.db import models
-from django.conf import settings
 from django.utils import timezone
 from django.dispatch import receiver
 from django.utils.timezone import localtime
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
-from django.utils.html import urlize
-from django.core.exceptions import ImproperlyConfigured
-from django.contrib.sites.models import Site
-from django.contrib.flatpages.models import FlatPage
 
 import markdown
 import pytz
-import hashlib
-import uuid
 import logging
 from mptt.models import MPTTModel, TreeForeignKey
 from taggit.managers import TaggableManager
 from versatileimagefield.fields import VersatileImageField
 from versatileimagefield.image_warmer import VersatileImageFieldWarmer
+
+
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.contrib.sites.models import Site
+from django.contrib.flatpages.models import FlatPage
+import hashlib
+import uuid
+from mptt.models import MPTTModel, TreeForeignKey
 from precise_bbcode.bbcode import get_parser
 from akismet import Akismet
 
@@ -66,7 +67,7 @@ class Post(models.Model):
         return "/blog/%s/%s/" % (local_pub_date.strftime("%Y/%m/%d"), self.slug)
     
     def approved_comments(self):
-        return self.comments.filter(approved=True)
+        return self.new_comments.filter(approved=True)
         
     def get_comment_count(self):
         num = self.approved_comments().count()
@@ -208,7 +209,7 @@ class Mapping(models.Model):
     source = models.URLField()
     dest = models.URLField()
     
-    
+
 class Commenter(models.Model):
     username = models.CharField(max_length=200)
     email = models.EmailField()
