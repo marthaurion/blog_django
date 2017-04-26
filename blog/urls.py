@@ -1,7 +1,12 @@
 from django.conf.urls import include, url
 
 from .feeds import LatestEntriesFeed
-from .views import PostDetailView, TagListView, CategoryListView, PostIndexView, PostYearView, PostMonthView, PostDayView, SearchResultsView, MediaDetailView
+from .views import PostDetailView, TagListView, CategoryListView, PostIndexView, PostYearView, PostMonthView, PostDayView, SearchResultsView, MediaDetailView, PostViewSet
+from rest_framework.routers import DefaultRouter
+
+# Create a router and register our viewsets with it.
+router = DefaultRouter()
+router.register(r'posts', PostViewSet)
 
 
 urlpatterns = [
@@ -21,4 +26,5 @@ urlpatterns = [
     url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/$', PostDayView.as_view()),
     url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/page/(?P<page>\d+)/$', PostDayView.as_view()),
     url(r'^(?P<year>\d{4})/(?P<month>\d{2})/(?P<day>\d{2})/(?P<slug>[-\w]+)/$', PostDetailView.as_view()),
+    url(r'^api/', include(router.urls)),
 ]

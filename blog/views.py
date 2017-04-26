@@ -14,6 +14,8 @@ from django.db import models
 import logging
 
 from taggit.models import Tag
+from rest_framework import viewsets
+from .serializers import PostSerializer
 
 from .models import Post, Category, Media, Comment, Commenter
 from .forms import CommentForm
@@ -21,7 +23,15 @@ from .tasks import send_email
 from .helpers import PostPaginator
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)\
+
+
+class PostViewSet(viewsets.ModelViewSet):
+    """
+    This viewset automatically provides `list` and `detail` actions.
+    """
+    queryset = Post.published.all()
+    serializer_class = PostSerializer
 
 
 class MediaDetailView(DetailView):

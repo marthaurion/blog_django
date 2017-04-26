@@ -62,6 +62,7 @@ INSTALLED_APPS = (
     'mptt',
     'anymail',
     'precise_bbcode',
+    'rest_framework',
 )
 
 MIDDLEWARE = (
