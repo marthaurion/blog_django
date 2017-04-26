@@ -102,7 +102,7 @@
                         {% recursetree categories %}
                             {{ node.get_display|safe }}
                             {% if not node.is_leaf_node %}
-                                <ul id="cat{{ node.id }}" class="list-unstyled collapse {{ node.get_active_string }}">
+                                <ul id="cat-{{ node.slug }}" class="list-unstyled collapse {{ node.get_active_string }}">
                                     {{ children }}
                                 </ul>
                             {% endif %}
