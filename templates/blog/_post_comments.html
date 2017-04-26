@@ -3,9 +3,9 @@
     <ul class="media-list" id="comment-list">
     {% recursetree comment_list %}
         {% if not node.is_child_node %}
-            <li class="media" id="comment{{ node.pk }}">
+            <li class="media" id="comment{{ node.uuid }}">
         {% else %}
-            <div class="media" id="comment{{ node.pk }}">
+            <div class="media" id="comment{{ node.uuid }}">
         {% endif %}
             <div class="media-left">
                 <a href="{{ node.author.get_profile_url }}">
@@ -22,7 +22,7 @@
                 </h4>
                 <a href="{{ node.get_absolute_url }}"><small class="text-muted">{{ node.pub_date }}</small></a>
                 <p>{{ node.html_text|safe }}</p>
-                <p><a href="#comment{{ node.pk }}" onclick="replyForm(this, {{ node.pk }})">Reply</a></p>
+                <p><a href="#comment{{ node.uuid }}" onclick="replyForm(this, '{{ node.uuid }}')">Reply</a></p>
             {% if not node.is_leaf_node and node.level < 2 %}
                 {{ children }}
                 </div>

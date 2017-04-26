@@ -268,9 +268,9 @@ class CommentFormMixin(object):
         # prep comment fields before creating the new comment
         parent = None
         if form.cleaned_data['parent']:
-            parent_id = int(form.cleaned_data['parent'].replace('#comment',''))
+            parent_id = form.cleaned_data['parent'].replace('#comment','')
             try:
-                parent = Comment.objects.get(pk=parent_id)
+                parent = Comment.objects.get(uuid=parent_id)
             except (Comment.MultipleObjectsReturned, Comment.DoesNotExist):
                 logger.error('Invalid parent comment id: %d' % parent_id)
         comment_notify = bool(request.POST.get('notify', False))
