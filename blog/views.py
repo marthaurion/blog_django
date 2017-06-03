@@ -13,14 +13,14 @@ import logging
 
 from taggit.models import Tag
 from rest_framework import viewsets
-from .serializers import PostSerializer
+from .serializers import PostDetailSerializer
 
 from comments.views import CommentFormMixin
 from .models import Post, Category, Media
 from .helpers import PostPaginator
 
 
-logger = logging.getLogger(__name__)\
+logger = logging.getLogger(__name__)
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -28,7 +28,7 @@ class PostViewSet(viewsets.ModelViewSet):
     This viewset automatically provides `list` and `detail` actions.
     """
     queryset = Post.published.all()
-    serializer_class = PostSerializer
+    serializer_class = PostDetailSerializer
 
 
 class MediaDetailView(DetailView):

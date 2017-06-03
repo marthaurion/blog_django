@@ -4,7 +4,7 @@ from .models import Post
 from comments.serializers import CommentSerializer
 
 
-class PostSerializer(serializers.ModelSerializer):
+class PostDetailSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True, required=False)
     category = serializers.StringRelatedField()
     tags = serializers.StringRelatedField(many=True)
