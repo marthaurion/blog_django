@@ -15,7 +15,7 @@
         <p>Posted in: <a href="{{ post.category.get_absolute_url }}">{{ post.category.title }}</a></p>
         <p>
         {% for tag in post.tags.all %}
-          <a href="/blog/tag/{{ tag.slug }}/"><span class="label label-default blog-tag">{{ tag.name }}</span></a>
+          <a href="/blog/tag/{{ tag.slug }}/"><span class="badge badge-pill badge-dark blog-tag">{{ tag.name }}</span></a>
         {% endfor %}
         </p>
     </div>

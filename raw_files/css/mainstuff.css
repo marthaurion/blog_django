@@ -49,6 +49,10 @@
   font-size: 100%;
 }
 
+.blog-tag:hover {
+  text-decoration: underline;
+}
+
 #menu-icons a {
   margin: 14px 5px;
   padding: 0px;
