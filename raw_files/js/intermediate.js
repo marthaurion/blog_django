@@ -70,11 +70,11 @@ function handleClick()
   var child_field = document.getElementById(collapse_target);
   if(this.textContent == '[+]') {
     this.textContent = '[−]';
-    child_field.className += "in";
+    child_field.className = child_field.className.replace(/\bcollapse\b/ , '' );
   }
   else {
     this.textContent = '[+]';
-    child_field.className = child_field.className.replace( /\bin\b/ , '' );
+    child_field.className += "collapse";
   }
   return false;
 }
@@ -88,10 +88,8 @@ function replyForm(me, parent){
     document.getElementById("comment-form-parent").value = parent;
     document.getElementById("cancel-reply").removeAttribute("hidden");
     insertAfter(commentForm, me);
-    event.preventDefault();
     var commentText = document.getElementById('comment-form-text');
     commentText.selectionStart = commentText.selectionEnd = commentText.value.length;
-    return false;
 }
 
 function cancelReply(){
@@ -150,7 +148,6 @@ var toggle = document.getElementsByClassName('navbar-toggle')[0],
 // Toggle if navbar menu is open or closed
 function toggleMenu() {
     collapse.classList.toggle('collapse');
-    collapse.classList.toggle('in');
 }
 
 // Close all dropdown menus
@@ -164,7 +161,7 @@ function closeMenus() {
 // Add click handling to dropdowns
 for (var i = 0; i < dropdowns.length; i++) {
     dropdowns[i].addEventListener('click', function() {
-        if (document.body.clientWidth < 768) {
+        if (document.body.clientWidth < 992) {
             var open = this.classList.contains('open');
             closeMenus();
             if (!open) {
@@ -177,12 +174,17 @@ for (var i = 0; i < dropdowns.length; i++) {
 
 // Close dropdowns when screen becomes big enough to switch to open by hover
 function closeMenusOnResize() {
-    if (document.body.clientWidth >= 768) {
-        closeMenus();
-        collapse.classList.add('collapse');
-        collapse.classList.remove('in');
+    if (document.body.clientWidth < 992) {
+      collapse.classList.add('collapse');
+    }
+    else {
+      closeMenus();
+      collapse.classList.remove('collapse');
     }
 }
+
+window.addEventListener('resize', closeMenusOnResize, false);
+toggle.addEventListener('click', toggleMenu, false);
 
 function handleChangeClick()
 {

@@ -22,16 +22,6 @@
   padding-bottom: 10px;
 }
 
-.banner {
-  margin-top: 10px;
-  margin-bottom: 20px;
-}
-.banner img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
 .post_date {
   color: #949289;
 }
@@ -109,4 +99,13 @@
 }
 .dropdown-open {
   background: #e7e7e7;
+}
+
+/* Allow button groups to span the entire block */
+.btn-group.special {
+  display: flex;
+}
+
+.special .btn {
+  flex: 1
 }

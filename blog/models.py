@@ -65,7 +65,7 @@ class Post(models.Model):
     
     # takes the text of the post and replaces the {{REPLACE}} strings with the proper image text
     def process_image_links(self, body_parts, word=None):
-        link_string = '<a href="%s"><img src="%s" height="%s" width="%s" class="img-responsive" /></a>'
+        link_string = '<a href="%s"><img src="%s" height="%s" width="%s" class="img-fluid" /></a>'
         for i in range(0,len(body_parts)):
             if i%2 == 0: # skip even pieces because they're not surrounded by replace tokens
                 continue
@@ -149,8 +149,8 @@ class Category(MPTTModel):
         return '<li>%s<a href="%s">%s</a></li>\n' % (prefix, self.get_absolute_url(), self.title)
     
     def get_active_string(self):
-        if self.active:
-            return "in"
+        if not self.active:
+            return "collapse"
         return ""
         
 class Media(models.Model):

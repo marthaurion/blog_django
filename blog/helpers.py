@@ -18,7 +18,11 @@ def warm_all_media():
         image_attr='full_image'
     )
     num_created, failed_to_create = media_img_warmer.warm()
-        
+    
+# save every post to trigger image replacement
+def save_all_posts():
+    for post in Post.published.all():
+        post.save()
 
 class PostPaginator(Paginator):
     def validate_number(self, number):  # overwrite validation so it allows empty pages all the time
