@@ -65,7 +65,7 @@ class Post(models.Model):
     
     # takes the text of the post and replaces the {{REPLACE}} strings with the proper image text
     def process_image_links(self, body_parts, word=None):
-        link_string = '<a href="%s"><img src="%s" height="%s" width="%s" class="img-fluid" /></a>'
+        link_string = '<div class="text-center"><a href="%s"><img src="%s" height="%s" width="%s" class="img-fluid" /></a></div>'
         for i in range(0,len(body_parts)):
             if i%2 == 0: # skip even pieces because they're not surrounded by replace tokens
                 continue

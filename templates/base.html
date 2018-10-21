@@ -18,7 +18,8 @@
 <body>
 <div id="wrapper">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
+        <div class="container-fluid col-md-9 col-xs-12">
+            <a class="navbar-brand" href="/">Marth's Anime Blog</a>
             <button type="button" class="navbar-toggle navbar-toggler" data-toggle="collapse" data-target="#marthbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -42,12 +43,11 @@
         </div>
     </nav>
 
-    <div id="page-wrapper">
-        <div class="container mt-3">
+    <div id="page-wrapper" class="container-fluid col-md-8 col-xs-12">
+        <div class="container-fluid mt-3">
             {% for message in messages %}
             <div class="alert alert-{% if message.tags %}{{ message.tags }}{% else %}success{% endif %}">{{ message }}</div>
             {% endfor %}
-            <h2>Marth's Anime Blog</h2>
         </div>
         
         <div class="container">
@@ -56,13 +56,13 @@
             </div>
             <hr>
         </div>
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
             <div id="content" class="col-md-8 col-sm-12">
                 {% block content %}{% endblock %}
             </div> <!-- end #content -->
 
-            <div id="sidebar" class="col-md-4 col-sm-12">
+            <div id="sidebar" class="col-md-3 col-sm-12">
                 <div class="sidebar-module">
                     <div class="btn-group special">
                         <a href="#" class="btn btn-secondary btn-lg" onclick="setActiveStyleSheet('dark')">Dark</a>
