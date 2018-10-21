@@ -5,7 +5,7 @@
 {% block nav-contact %} active{% endblock %}
 
 {% block content %}
-    <h2>Contact</h2><br />
+    <h3>Contact</h3><br />
     <form action="{% url 'contact' %}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}

@@ -4,13 +4,13 @@
 
 {% block content %}
 {% if page_header %}
-  <h2>{{ page_header }}</h2>
+  <h3>{{ page_header }}</h3>
   <hr />
 {% endif %}
 {% for post in post_list %}
   <div class="card">
       <div class="card-body">
-        <h2 class="card-title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h2>
+        <h3 class="card-title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
         <!--<div class="post_date">-->
           <p class="card-subtitle mb-2 text-muted">Published on {{ post.pub_date|date:"F j, Y" }}. <a href="{{ post.get_absolute_url }}#comment_section">{{ post.get_comment_count }}</a></p>
         <!--</div>-->
