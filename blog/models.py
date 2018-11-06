@@ -65,15 +65,23 @@ class Post(models.Model):
     
     # takes the text of the post and replaces the {{REPLACE}} strings with the proper image text
     def process_image_links(self, body_parts, word=None):
-        link_string = '<div class="text-center"><a href="%s"><img src="%s" height="%s" width="%s" class="img-fluid" /></a></div>'
         for i in range(0,len(body_parts)):
             if i%2 == 0: # skip even pieces because they're not surrounded by replace tokens
                 continue
             cur_image = body_parts[i]
+            if "|" in cur_image: # look for pipe delimiter for alt text embedded within the replace string
+                img_name_pieces = cur_image.split("|")
+                img_name = img_name_pieces[0]
+                img_alt = img_name_pieces[1]
+            else: # if it's not there, use the image name as alt text
+                img_name = cur_image
+                img_alt = cur_image
             try:
-                img = Media.objects.get(image_name=cur_image)
-                link_text = link_string % (img.full_image.url, img.scale_image.url, img.scale_image.height, img.scale_image.width)
-                body_parts[i] = link_text
+                img = Media.objects.get(image_name=img_name)
+                if img.alt_text is None or (img.alt_text == img.image_name and img.alt_text != img_alt):
+                    img.alt_text = img_alt
+                    img.save()
+                body_parts[i] = img.get_link_html()
             except (Media.MultipleObjectsReturned, Media.DoesNotExist):
                 logger.error('No media found for image name: %s' % cur_image)
         return "".join(body_parts)
@@ -158,6 +166,7 @@ class Media(models.Model):
     pub_date = models.DateTimeField('date published', default=timezone.now, editable=False)
     full_image = VersatileImageField(upload_to="full/%Y/%m/%d", max_length=400)
     scale_image = VersatileImageField(max_length=400, editable=False)
+    alt_text = models.CharField(max_length=200, null=True, blank=True)
     
     class Meta:
         verbose_name_plural = "media"
@@ -170,11 +179,14 @@ class Media(models.Model):
         return "/blog/media/"+self.image_name
         
     def get_link_html(self):
-        link_string = '<a href="%s"><img src="%s" height="%s" width="%s" class="img-responsive" /></a>'
         if self.full_image is None or self.scale_image is None:
             return '<img src="#" alt="Image not found" />'
-        link_string = '<a href="%s"><img src="%s" height="%s" width="%s" class="img-responsive" /></a>'
-        return link_string % (self.full_image.url, self.scale_image.url, self.scale_image.height, self.scale_image.width)
+        link_string = '<div class="text-center"><a href="%s"><img src="%s" height="%s" width="%s" class="img-fluid" alt="%s" /></a></div>'
+        if self.alt_text is None:
+            img_alt = self.image_name
+        else:
+            img_alt = self.alt_text
+        return link_string % (self.full_image.url, self.scale_image.url, self.scale_image.height, self.scale_image.width, img_alt)
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
