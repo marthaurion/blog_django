@@ -101,6 +101,8 @@ class Post(models.Model):
         body_parts = self.body.split("{{REPLACE}}", 2) # only split twice because we're getting the first image, which is the second piece
         if len(body_parts) > 1:
             img_name = body_parts[1]
+            if "|" in img_name:
+                img_name = img_name.split("|")[0]
             try:
                 img = Media.objects.get(image_name=img_name) # find the image model
                 return img
