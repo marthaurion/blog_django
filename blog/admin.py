@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import reverse, re_path, path
+from django.urls import reverse, path
 from django.utils.html import format_html
 from django import forms
 from django.http import HttpResponseRedirect
@@ -34,8 +34,8 @@ class PostAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            re_path(
-                r'^(?P<post_id>.+)/wordpress/$',
+            path(
+                '<post_id>/wordpress/',
                 self.admin_site.admin_view(self.process_wordpress),
                 name='post_wordpress',
             ),

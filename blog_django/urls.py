@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf import settings
-from django.urls import path, re_path, include
+from django.urls import path, include
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sitemaps import GenericSitemap
@@ -46,12 +46,12 @@ urlpatterns = [
     path('sitemap.xml', sitemap_views.index, {'sitemaps': sitemaps}),
     path('sitemap-<section>.xml', sitemap_views.sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('captcha/', include(captcha_urls)),
-    re_path(r'^tag/(?P<url>.+)/$', RedirectView.as_view(url="/blog/tag/%(url)s", permanent=True)),  # some catch alls to reduce 404 errors
-    re_path(r'^page/(?P<url>.+)/$', RedirectView.as_view(url="/blog/page/%(url)s", permanent=True)),
-    re_path(r'^(?P<year>\d{4})/$', RedirectView.as_view(url="/blog/%(year)s", permanent=True)),
-    re_path(r'^(?P<year>\d{4})/(?P<url>.+)/$', RedirectView.as_view(url="/blog/%(year)s/%(url)s", permanent=True)),
-    re_path(r'^category/(?P<url>.+)/page/(?P<page>\d+)/$', CategoryRedirectView.as_view()),
-    re_path(r'^category/(?P<url>.+)/$', CategoryRedirectView.as_view()),
+    path('tag/<url>/', RedirectView.as_view(url="/blog/tag/%(url)s", permanent=True)),  # some catch alls to reduce 404 errors
+    path('page/<url>/', RedirectView.as_view(url="/blog/page/%(url)s", permanent=True)),
+    path('<int:year>/', RedirectView.as_view(url="/blog/%(year)s", permanent=True)),
+    path('<int:year>/<url>/', RedirectView.as_view(url="/blog/%(year)s/%(url)s", permanent=True)),
+    path('category/<url>/page/<page>/', CategoryRedirectView.as_view()),
+    path('category/<url>/', CategoryRedirectView.as_view()),
     path('', PostIndexView.as_view(), name='index'),
 ]
 

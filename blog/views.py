@@ -57,7 +57,7 @@ class PostIndexView(PostListMixin, ListView):
         context = super().get_context_data(**kwargs)
         working_page = 1
         if 'page' in self.kwargs:
-            working_page = int(self.kwargs['page'])
+            working_page = self.kwargs['page']
         
         title = "Marth's Anime Blog"
         if working_page > 1:
@@ -81,9 +81,9 @@ class PostYearView(PostListMixin, YearArchiveView):
         
         working_page = 1
         if 'page' in self.kwargs:
-            working_page = int(self.kwargs['page'])
+            working_page = self.kwargs['page']
         
-        dt = datetime.datetime(int(year), 1, 1)
+        dt = datetime.datetime(year, 1, 1)
         title = "Posts from " + dt.strftime('%Y')
         page_header = title
         if working_page > 1:
@@ -91,7 +91,7 @@ class PostYearView(PostListMixin, YearArchiveView):
         
         context['page_title'] = title
         context['page_header'] = page_header
-        context['base_url'] = '/blog/'+year+'/'
+        context['base_url'] = '/blog/%d/' % (year)
         context['post_list'] = self.build_post_queryset(context['post_list'])
         return context
 
@@ -112,7 +112,7 @@ class PostMonthView(PostListMixin, MonthArchiveView):
         if 'page' in self.kwargs:
             working_page = int(self.kwargs['page'])
         
-        dt = datetime.datetime(int(year), int(month), 1)
+        dt = datetime.datetime(year, month, 1)
         title = "Posts from " + dt.strftime('%B %Y')
         page_header = title
         if working_page > 1:
@@ -120,7 +120,7 @@ class PostMonthView(PostListMixin, MonthArchiveView):
         
         context['page_title'] = title
         context['page_header'] = page_header
-        context['base_url'] = '/blog/'+year+'/'+month+'/'
+        context['base_url'] = '/blog/%d/%d/' % (year, month)
         context['post_list'] = self.build_post_queryset(context['post_list'])
         return context
 
@@ -140,9 +140,9 @@ class PostDayView(PostListMixin, DayArchiveView):
         
         working_page = 1
         if 'page' in self.kwargs:
-            working_page = int(self.kwargs['page'])
+            working_page = self.kwargs['page']
         
-        dt = datetime.datetime(int(year), int(month), int(day))
+        dt = datetime.datetime(year, month, day)
         title = "Posts from " + dt.strftime('%B %d, %Y')
         page_header = title
         if working_page > 1:
@@ -150,7 +150,7 @@ class PostDayView(PostListMixin, DayArchiveView):
         
         context['page_title'] = title
         context['page_header'] = page_header
-        context['base_url'] = '/blog/'+year+'/'+month+'/'+day+'/'
+        context['base_url'] = '/blog/%d/%d/%d/' % (year, month, day)
         context['post_list'] = self.build_post_queryset(context['post_list'])
         return context
 
@@ -171,7 +171,7 @@ class CategoryListView(PostListMixin, ListView):
         
         working_page = 1
         if 'page' in self.kwargs:
-            working_page = int(self.kwargs['page'])
+            working_page = self.kwargs['page']
         
         category = self.post_category
         title = "Posts for Category: " + category.title
@@ -181,7 +181,7 @@ class CategoryListView(PostListMixin, ListView):
             
         context['page_title'] = title
         context['page_header'] = page_header
-        context['base_url'] = '/blog/category/'+slug+'/'
+        context['base_url'] = '/blog/category/%s/' % (slug)
         context['post_list'] = self.build_post_queryset(context['post_list'])
         return context
 
@@ -198,7 +198,7 @@ class TagListView(PostListMixin, ListView):
         
         working_page = 1
         if 'page' in self.kwargs:
-            working_page = int(self.kwargs['page'])
+            working_page = self.kwargs['page']
         
         tag = get_object_or_404(Tag, slug=slug)
         title = "Posts for Tag: " + tag.name
@@ -208,7 +208,7 @@ class TagListView(PostListMixin, ListView):
             
         context['page_title'] = title
         context['page_header'] = page_header
-        context['base_url'] = '/blog/tag/'+slug+'/'
+        context['base_url'] = '/blog/tag/%s/' % (slug)
         context['post_list'] = self.build_post_queryset(context['post_list'])
         return context
 
@@ -275,7 +275,7 @@ class SearchResultsView(PostListMixin, ListView):
         
         working_page = 1
         if 'page' in self.kwargs:
-            working_page = int(self.kwargs['page'])
+            working_page = self.kwargs['page']
         
         title = "Search Results"
         page_header = title
