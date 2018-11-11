@@ -1,6 +1,6 @@
 amqp==2.1.4
 billiard==3.5.0.2
-boto3==1.4.4
+boto3==1.12.42
 celery==4.0.2
 contextlib2==0.5.5
 Django==2.0.9
