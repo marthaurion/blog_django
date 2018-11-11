@@ -69,12 +69,12 @@ class Commenter(models.Model):
 
 
 class Comment(MPTTModel):
-    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
-    post = models.ForeignKey(Post, null=True, blank=True, related_name='comments')
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children', db_index=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True, related_name='comments')
     page_url = models.CharField(max_length=100, blank=True)
     approved = models.BooleanField(default=False, db_index=True)
     pub_date = models.DateTimeField('date published', default=timezone.now, editable=False, db_index=True)
-    author = models.ForeignKey(Commenter, related_name='comments')
+    author = models.ForeignKey(Commenter, on_delete=models.CASCADE, related_name='comments')
     text = models.TextField(blank=True) # form should force this field anyway, so this is just for the admin
     notify = models.BooleanField(default=False)
     spam = models.BooleanField(default=False)

@@ -130,7 +130,7 @@ def warm_Post_first_image(sender, instance, **kwargs):
 class Category(MPTTModel):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
-    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children', db_index=True)
     active = models.BooleanField(default=False)
 
     class MPTTMeta:

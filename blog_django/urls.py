@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include(blog_urls))
 """
 from django.conf import settings
-from django.conf.urls import include, url
+from django.urls import path, re_path, include
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sitemaps import GenericSitemap
@@ -37,22 +37,22 @@ sitemaps = {
 }
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
-    url(r'^blog/', include(blog_urls)),
-    url(r'^about/$', AboutView.as_view(), name='about'),
-    url(r'^contact/$', ContactView.as_view(), name='contact'),
-    url(r'^blogroll/$', BlogrollView.as_view(), name='blogroll'),
-    url(r'^reviews/$', ReviewsView.as_view(), name='reviews'),
-    url(r'^sitemap\.xml$', sitemap_views.index, {'sitemaps': sitemaps}),
-    url(r'^sitemap-(?P<section>.+)\.xml$', sitemap_views.sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-    url(r'^captcha/', include(captcha_urls)),
-    url(r'^tag/(?P<url>.+)/$', RedirectView.as_view(url="/blog/tag/%(url)s", permanent=True)),  # some catch alls to reduce 404 errors
-    url(r'^page/(?P<url>.+)/$', RedirectView.as_view(url="/blog/page/%(url)s", permanent=True)),
-    url(r'^(?P<year>\d{4})/$', RedirectView.as_view(url="/blog/%(year)s", permanent=True)),
-    url(r'^(?P<year>\d{4})/(?P<url>.+)/$', RedirectView.as_view(url="/blog/%(year)s/%(url)s", permanent=True)),
-    url(r'^category/(?P<url>.+)/page/(?P<page>\d+)/$', CategoryRedirectView.as_view()),
-    url(r'^category/(?P<url>.+)/$', CategoryRedirectView.as_view()),
-    url(r'^$', PostIndexView.as_view(), name='index'),
+    path('admin/', admin.site.urls),
+    path('blog/', include(blog_urls)),
+    path('about/', AboutView.as_view(), name='about'),
+    path('contact/', ContactView.as_view(), name='contact'),
+    path('blogroll/', BlogrollView.as_view(), name='blogroll'),
+    path('reviews/', ReviewsView.as_view(), name='reviews'),
+    path('sitemap.xml', sitemap_views.index, {'sitemaps': sitemaps}),
+    path('sitemap-<section>.xml', sitemap_views.sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('captcha/', include(captcha_urls)),
+    re_path(r'^tag/(?P<url>.+)/$', RedirectView.as_view(url="/blog/tag/%(url)s", permanent=True)),  # some catch alls to reduce 404 errors
+    re_path(r'^page/(?P<url>.+)/$', RedirectView.as_view(url="/blog/page/%(url)s", permanent=True)),
+    re_path(r'^(?P<year>\d{4})/$', RedirectView.as_view(url="/blog/%(year)s", permanent=True)),
+    re_path(r'^(?P<year>\d{4})/(?P<url>.+)/$', RedirectView.as_view(url="/blog/%(year)s/%(url)s", permanent=True)),
+    re_path(r'^category/(?P<url>.+)/page/(?P<page>\d+)/$', CategoryRedirectView.as_view()),
+    re_path(r'^category/(?P<url>.+)/$', CategoryRedirectView.as_view()),
+    path('', PostIndexView.as_view(), name='index'),
 ]
 
 if settings.DEV_SERVER: # there is a debug mode for production, but it turns on maintenance mode
@@ -60,5 +60,5 @@ if settings.DEV_SERVER: # there is a debug mode for production, but it turns on 
     
     import debug_toolbar  # if we're on the dev server, include urls for debug toolbar
     urlpatterns += [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
+        path('__debug__/', include(debug_toolbar.urls)),
     ]

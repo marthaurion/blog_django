@@ -1,7 +1,6 @@
 from django.contrib import admin
-from django.core.urlresolvers import reverse
+from django.urls import reverse, re_path, path
 from django.utils.html import format_html
-from django.conf.urls import url
 from django import forms
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
@@ -21,23 +20,21 @@ class PostAdmin(admin.ModelAdmin):
     
     # add a link to the blog post on the admin list display to make it easier to preview the post
     def get_full_url(self, instance):
-        return "<a href='%s'>%s</a>" % (instance.get_absolute_url(), instance.get_absolute_url())
+        return format_html("<a href='{}'>{}</a>", instance.get_absolute_url(), instance.get_absolute_url())
     get_full_url.short_description = 'Link'
-    get_full_url.allow_tags = True
     
     # show the first image on the admin list so we can make sure it gets set
     def admin_first_image(self, instance):
         if not instance.first_image:
-            return u'None'
-        return u'<img src="%s" height="150" />' % (instance.first_image.url)
+            return 'None'
+        return format_html('<img src="{}" height="150" />', instance.first_image.url)
         
     admin_first_image.short_description = 'First Image'
-    admin_first_image.allow_tags = True
     
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            url(
+            re_path(
                 r'^(?P<post_id>.+)/wordpress/$',
                 self.admin_site.admin_view(self.process_wordpress),
                 name='post_wordpress',
@@ -58,7 +55,6 @@ class PostAdmin(admin.ModelAdmin):
             reverse('admin:post_wordpress', args=[obj.pk])
         )
     wordpress_action.short_description = 'Wordpress'
-    wordpress_action.allow_tags = True
 
 
 @admin.register(Category)
@@ -78,31 +74,28 @@ class MediaAdmin(admin.ModelAdmin):
             return dict(image_name=index_string)
     
     def admin_url(self, instance):
-        return "<a href='%s'>%s</a>" % (instance.get_blog_url(), instance.get_blog_url())
+        return format_html("<a href='{}'>{}</a>", instance.get_blog_url(), instance.get_blog_url())
         
     admin_url.short_description = 'Image URL'
-    admin_url.allow_tags = True
     
     # this stuff is to show a preview of the image in the admin list
     def admin_thumbnail(self, instance):
         if not instance.scale_image:
-            return u'None'
-        return u'<img src="%s" height="150" />' % (instance.scale_image.url)
+            return 'None'
+        return format_html('<img src="{}" height="150" />',instance.scale_image.url)
         
     admin_thumbnail.short_description = 'Image'
-    admin_thumbnail.allow_tags = True
     
     def admin_full(self, instance):
-        return u'<img src="%s" height="150" />' % (instance.full_image.url)
+        return format_html('<img src="{}" height="150" />', instance.full_image.url)
         
     admin_full.short_description = 'Full Image'
-    admin_full.allow_tags = True
     
     def get_urls(self):
         urls = super().get_urls()
         custom_urls = [
-            url(
-                r'^bulk-upload/$',
+            path(
+                'bulk-upload/',
                 self.admin_site.admin_view(self.process_bulk_upload),
                 name='bulk_upload',
             ),
