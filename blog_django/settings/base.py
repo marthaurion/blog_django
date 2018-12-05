@@ -152,6 +152,8 @@ AWS_STORAGE_BUCKET_NAME = 'marthblog'
 AWS_ACCESS_KEY_ID = get_secret("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = get_secret("AWS_SECRET_ACCESS_KEY")
 
+AWS_DEFAULT_ACL = None
+
 VERSATILEIMAGEFIELD_SETTINGS = {
     'create_images_on_demand': False,
     'jpeg_resize_quality': 90,
