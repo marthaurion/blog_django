@@ -9,6 +9,10 @@ INSTALLED_APPS += (
     'template_timings_panel',
 )
 
+ALLOWED_HOSTS += (
+    '8872d80890d9476ea1b102d76ebec173.vfs.cloud9.us-east-1.amazonaws.com',
+)
+
 MIDDLEWARE += (
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 )

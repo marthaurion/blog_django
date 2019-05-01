@@ -79,7 +79,7 @@ MIDDLEWARE = (
 
 ROOT_URLCONF = 'blog_django.urls'
 
-ALLOWED_HOSTS = ['.marthaurion.com', 'blank-django-marthaurion.c9users.io', '.codebecauseican.com', 'localhost']
+ALLOWED_HOSTS = ['.marthaurion.com', '.codebecauseican.com', 'localhost']
 
 TEMPLATES = [
     {
